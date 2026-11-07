@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin - Customers</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/admin-shell.css" />
+<style>body{font-family:Poppins;padding:20px}table{width:100%;border-collapse:collapse}th,td{padding:8px;border:1px solid #eee}</style>
+</head>
+<body>
+<h1>Customers</h1>
+<table><thead><tr><th>Email</th><th>Name</th><th>Phone</th><th>Action</th></tr></thead><tbody id="list"></tbody></table>
+<script>
+const token=localStorage.getItem('authToken'); if(!token){alert('Sign in');location.href='/login.html'}
+async function load(){ const res=await fetch('/api/admin/users',{headers:{'Authorization':'Bearer '+token}}); const users=await res.json(); const customers=users.filter(u=>u.role==='customer'); document.getElementById('list').innerHTML=customers.map(c=>`<tr data-id="${c._id}"><td>${c.email}</td><td>${c.name||''}</td><td>${c.phone||''}</td><td><button class="del">Delete</button></td></tr>`).join(''); document.querySelectorAll('.del').forEach(b=>b.addEventListener('click',async e=>{if(!confirm('Delete customer?'))return; const id=e.target.closest('tr').dataset.id; await fetch('/api/admin/users/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+token}}); load();})); }
+load();
+</script>
+<script src="/admin-shell.js"></script>
+</body>
+</html>

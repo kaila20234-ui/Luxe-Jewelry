@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile Settings - Jewelry Store</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/styles.css">
+    <style>
+        .settings-container {
+            max-width: 900px;
+            margin: 30px auto;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+
+        .settings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .settings-header h1 {
+            font-size: 28px;
+            color: #333;
+            margin: 0;
+        }
+
+        .back-button {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .back-button:hover {
+            background: #5a6268;
+        }
+
+        .settings-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+            font-weight: 500;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="password"],
+        select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        input[type="text"]:focus,
+        input[type="email"]:focus,
+        input[type="tel"]:focus,
+        input[type="password"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #d4af37;
+            box-shadow: 0 0 5px rgba(212, 175, 55, 0.3);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .form-row.full {
+            grid-template-columns: 1fr;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .btn-primary {
+            background: #d4af37;
+            color: #333;
+        }
+
+        .btn-primary:hover {
+            background: #c99a27;
+        }
+
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #d0d0d0;
+        }
+
+        .alert {
+            padding: 12px 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #666;
+        }
+
+        @media (max-width: 600px) {
+            .settings-container {
+                padding: 15px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .settings-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="settings-container">
+        <div class="settings-header">
+            <h1>Profile Settings</h1>
+            <button class="back-button" onclick="goBack()">← Back to Dashboard</button>
+        </div>
+
+        <!-- Personal Information Section -->
+        <div class="settings-section">
+            <h2 class="section-title">Personal Information</h2>
+            <div class="alert" id="personalAlert"></div>
+            
+            <form id="personalForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName">First Name</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="gender">Gender</label>
+                        <select id="gender" name="gender">
+                            <option value="">Select Gender</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">Save Changes</button>
+                    <button type="button" class="btn-secondary" onclick="resetPersonalForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Address Information Section -->
+        <div class="settings-section" data-section="address">
+            <h2 class="section-title">Address Information</h2>
+            <div class="alert" id="addressAlert"></div>
+
+            <form id="addressForm">
+                <div class="form-row full">
+                    <div class="form-group">
+                        <label for="street">Street Address</label>
+                        <input type="text" id="street" name="street" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="state">State/Province</label>
+                        <input type="text" id="state" name="state" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="zip">Postal/Zip Code</label>
+                        <input type="text" id="zip" name="zip" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="country">Country</label>
+                        <input type="text" id="country" name="country" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">Save Address</button>
+                    <button type="button" class="btn-secondary" onclick="resetAddressForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Security Section -->
+        <div class="settings-section">
+            <h2 class="section-title">Security & Password</h2>
+            <div class="alert" id="securityAlert"></div>
+
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password</label>
+                    <input type="password" id="currentPassword" name="currentPassword" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="newPassword">New Password</label>
+                        <input type="password" id="newPassword" name="newPassword" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <input type="password" id="confirmPassword" name="confirmPassword" required>
+                    </div>
+                </div>
+
+                <div class="button-group">
+                    <button type="submit" class="btn-primary">Change Password</button>
+                    <button type="button" class="btn-secondary" onclick="resetPasswordForm()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const authToken = localStorage.getItem('authToken');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+        console.log('[PROFILE-SETTINGS] Page loaded');
+        console.log('[PROFILE-SETTINGS] Auth token:', authToken ? 'Present' : 'Missing');
+        console.log('[PROFILE-SETTINGS] User:', user);
+
+        // Check if user is authenticated
+        if (!authToken) {
+            console.log('[PROFILE-SETTINGS] No auth token found, redirecting to login');
+            window.location.href = '/customer-login.html';
+        }
+
+        // Load user data on page load
+        window.addEventListener('load', function() {
+            loadProfileData();
+            
+            // Check if user clicked 'Address' from dropdown - scroll to address section
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('section') === 'address' || window.location.hash === '#address') {
+                setTimeout(() => {
+                    const addressSection = document.querySelector('[data-section="address"]');
+                    if (addressSection) {
+                        addressSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 500);
+            }
+        });
+
+        function loadProfileData() {
+            console.log('[PROFILE-SETTINGS] Loading profile data...');
+            
+            fetch('/api/customer/profile', {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('[PROFILE-SETTINGS] Profile data received:', data);
+                
+                if (data.success) {
+                    // Handle both nested (data.user) and flat (data directly contains user) responses
+                    const userProfile = data.user || data.data?.user || data;
+                    console.log('[PROFILE-SETTINGS] User profile extracted:', userProfile);
+                    
+                    // Parse full name into first and last name
+                    const fullName = userProfile.name || '';
+                    const nameParts = fullName.split(' ');
+                    const firstName = nameParts[0] || '';
+                    const lastName = nameParts.slice(1).join(' ') || '';
+                    
+                    // Populate personal info
+                    document.getElementById('firstName').value = firstName;
+                    document.getElementById('lastName').value = lastName;
+                    document.getElementById('email').value = userProfile.email || '';
+                    document.getElementById('phone').value = userProfile.phone || '';
+                    document.getElementById('gender').value = userProfile.gender || '';
+
+                    // Load addresses
+                    if (userProfile._id) {
+                        loadAddressData(userProfile._id);
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('[PROFILE-SETTINGS] Error loading profile:', err);
+                showAlert('personalAlert', 'Error loading profile data', 'error');
+            });
+        }
+
+        function loadAddressData(userId) {
+            console.log('[PROFILE-SETTINGS] Loading address data...');
+            
+            fetch('/api/customer/addresses', {
+                headers: {
+                    'Authorization': `Bearer ${authToken}`
+                }
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('[PROFILE-SETTINGS] Address data received:', data);
+                
+                if (data.success) {
+                    let addresses = data.addresses || data.data || [];
+                    if (Array.isArray(addresses) && addresses.length > 0) {
+                        const address = addresses[0];
+                        console.log('[PROFILE-SETTINGS] First address:', address);
+                        document.getElementById('street').value = address.street || '';
+                        document.getElementById('city').value = address.city || '';
+                        document.getElementById('state').value = address.state || '';
+                        document.getElementById('zip').value = address.zip || address.zipcode || '';
+                        document.getElementById('country').value = address.country || '';
+                    }
+                }
+            })
+            .catch(err => {
+                console.error('[PROFILE-SETTINGS] Error loading addresses:', err);
+            });
+        }
+
+        // Personal Information Form
+        document.getElementById('personalForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('[PROFILE-SETTINGS] Submitting personal form...');
+
+            const formData = {
+                firstName: document.getElementById('firstName').value,
+                lastName: document.getElementById('lastName').value,
+                phone: document.getElementById('phone').value,
+                gender: document.getElementById('gender').value
+            };
+
+            console.log('[PROFILE-SETTINGS] Form data:', formData);
+
+            fetch('/api/customer/profile', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('[PROFILE-SETTINGS] Update response:', data);
+                
+                if (data.success) {
+                    showAlert('personalAlert', 'Personal information updated successfully!', 'success');
+                    // Update localStorage
+                    const updatedUser = { ...user, ...formData };
+                    localStorage.setItem('user', JSON.stringify(updatedUser));
+                } else {
+                    showAlert('personalAlert', data.message || 'Error updating profile', 'error');
+                }
+            })
+            .catch(err => {
+                console.error('[PROFILE-SETTINGS] Error updating profile:', err);
+                showAlert('personalAlert', 'Error updating profile', 'error');
+            });
+        });
+
+        // Address Form
+        document.getElementById('addressForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('[PROFILE-SETTINGS] Submitting address form...');
+
+            const formData = {
+                street: document.getElementById('street').value,
+                city: document.getElementById('city').value,
+                state: document.getElementById('state').value,
+                zip: document.getElementById('zip').value,
+                country: document.getElementById('country').value
+            };
+
+            console.log('[PROFILE-SETTINGS] Address data:', formData);
+
+            fetch('/api/customer/address', {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('[PROFILE-SETTINGS] Address update response:', data);
+                
+                if (data.success) {
+                    showAlert('addressAlert', 'Address updated successfully!', 'success');
+                } else {
+                    showAlert('addressAlert', data.message || 'Error updating address', 'error');
+                }
+            })
+            .catch(err => {
+                console.error('[PROFILE-SETTINGS] Error updating address:', err);
+                showAlert('addressAlert', 'Error updating address', 'error');
+            });
+        });
+
+        // Password Form
+        document.getElementById('passwordForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            console.log('[PROFILE-SETTINGS] Submitting password form...');
+
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (newPassword !== confirmPassword) {
+                showAlert('securityAlert', 'Passwords do not match', 'error');
+                return;
+            }
+
+            const formData = {
+                currentPassword: document.getElementById('currentPassword').value,
+                newPassword: newPassword
+            };
+
+            console.log('[PROFILE-SETTINGS] Password change request sent');
+
+            fetch('/api/auth/change-password', {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${authToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(formData)
+            })
+            .then(res => res.json())
+            .then(data => {
+                console.log('[PROFILE-SETTINGS] Password change response:', data);
+                
+                if (data.success) {
+                    showAlert('securityAlert', 'Password changed successfully!', 'success');
+                    resetPasswordForm();
+                } else {
+                    showAlert('securityAlert', data.message || 'Error changing password', 'error');
+                }
+            })
+            .catch(err => {
+                console.error('[PROFILE-SETTINGS] Error changing password:', err);
+                showAlert('securityAlert', 'Error changing password', 'error');
+            });
+        });
+
+        function showAlert(elementId, message, type) {
+            const alertElement = document.getElementById(elementId);
+            alertElement.textContent = message;
+            alertElement.className = `alert show alert-${type}`;
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                alertElement.classList.remove('show');
+            }, 5000);
+        }
+
+        function resetPersonalForm() {
+            loadProfileData();
+        }
+
+        function resetAddressForm() {
+            loadAddressData();
+        }
+
+        function resetPasswordForm() {
+            document.getElementById('passwordForm').reset();
+        }
+
+        function goBack() {
+            window.location.href = '/customer-dashboard.html';
+        }
+    </script>
+    <script src="/cart-manager.js"></script>
+    <script src="/load-components.js"></script>
+</body>
+</html>

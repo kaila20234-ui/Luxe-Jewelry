@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Payment Successful | Luxe Jewelry</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="/styles.css">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --primary: #d4af37;
+      --secondary: #101010;
+      --light: #f8f8f8;
+      --shadow: 0 6px 18px rgba(0,0,0,0.12);
+      --transition: all .25s ease;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: var(--light);
+      color: var(--secondary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+    .container {
+      width: 100%;
+      max-width: 500px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      animation: slideUp 0.6s ease;
+    }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+    .card-header {
+      background: var(--primary);
+      color: var(--secondary);
+      padding: 30px 20px;
+      text-align: center;
+    }
+    .checkmark {
+      font-size: 3rem;
+      margin-bottom: 12px;
+      animation: popIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    }
+    @keyframes popIn { 0% { transform: scale(0); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+    .card-header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .card-header p { font-size: 0.85rem; opacity: 0.85; }
+    .content { padding: 25px; }
+    .section { margin-bottom: 18px; }
+    .section-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--light);
+      font-size: 0.9rem;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #999; font-weight: 500; }
+    .info-value { font-weight: 600; color: var(--secondary); }
+    .order-items {
+      background: var(--light);
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+    }
+    .order-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 6px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .order-item:last-child { border-bottom: none; }
+    .item-info { flex: 1; }
+    .item-name { font-weight: 600; color: var(--secondary); }
+    .item-qty { font-size: 0.8rem; color: #999; }
+    .item-price { color: var(--primary); font-weight: 600; }
+    .summary { background: var(--light); padding: 12px; border-radius: 8px; font-size: 0.9rem; }
+    .summary-line {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .summary-line:last-child { border-bottom: none; }
+    .summary-line.total {
+      font-weight: 600;
+      color: var(--primary);
+      padding-top: 8px;
+      margin-top: 8px;
+      border-top: 1px solid #e0e0e0;
+    }
+    .alert {
+      padding: 12px;
+      border-radius: 8px;
+      margin-bottom: 15px;
+      display: none;
+      font-size: 0.9rem;
+    }
+    .alert.error { background: #fee; border: 1px solid #fcc; color: #c33; display: flex; align-items: center; gap: 8px; }
+    .loading {
+      text-align: center;
+      padding: 30px;
+    }
+    .spinner {
+      width: 40px;
+      height: 40px;
+      margin: 0 auto 12px;
+      border: 3px solid rgba(212, 175, 55, 0.2);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+    .btn-primary {
+      flex: 1;
+      background: var(--primary);
+      color: var(--secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+    .btn-secondary {
+      flex: 1;
+      background: var(--light);
+      color: var(--secondary);
+      border: 1px solid #e0e0e0;
+    }
+    .btn-secondary:hover { background: #e0e0e0; }
+    .badge {
+      display: inline-block;
+      background: var(--primary);
+      color: var(--secondary);
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="card-header">
+      <div class="checkmark">✅</div>
+      <h1>Order Confirmed</h1>
+      <p>Payment received successfully</p>
+    </div>
+
+    <div class="content">
+      <div id="alert" class="alert"></div>
+
+      <div id="loadingState" class="loading">
+        <div class="spinner"></div>
+        <p style="font-size: 0.9rem; color: #999;">Verifying order...</p>
+      </div>
+
+      <div id="successState" style="display: none;">
+        <div class="section">
+          <div class="section-title"><i class="fas fa-receipt"></i> Order Reference</div>
+          <div class="info-row">
+            <span class="info-label">Reference:</span>
+            <span class="info-value" id="reference">—</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Status:</span>
+            <span><span class="badge">Confirmed</span></span>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title"><i class="fas fa-user"></i> Delivery To</div>
+          <div class="info-row">
+            <span class="info-label">Name:</span>
+            <span class="info-value" id="customerName">—</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Email:</span>
+            <span class="info-value" id="customerEmail">—</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Phone:</span>
+            <span class="info-value" id="customerPhone">—</span>
+          </div>
+          <div class="info-row">
+            <span class="info-label">Address:</span>
+            <span class="info-value" id="customerAddress">—</span>
+          </div>
+        </div>
+
+        <div class="section">
+          <div class="section-title"><i class="fas fa-box"></i> Items</div>
+          <div class="order-items" id="orderItems"></div>
+        </div>
+
+        <div class="section">
+          <div class="section-title"><i class="fas fa-list"></i> Total</div>
+          <div class="summary">
+            <div class="summary-line">
+              <span>Subtotal</span>
+              <span id="subtotal">₦0</span>
+            </div>
+            <div class="summary-line total">
+              <span>Paid</span>
+              <span id="totalAmount">₦0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button class="btn btn-primary" onclick="downloadReceipt()"><i class="fas fa-download"></i> Download Receipt</button>
+          <button class="btn btn-primary" onclick="goHome()"><i class="fas fa-home"></i> Home</button>
+          <button class="btn btn-secondary" onclick="goShop()"><i class="fas fa-shopping-bag"></i> Shop</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', async () => {
+      const params = new URLSearchParams(window.location.search);
+      const reference = params.get('reference');
+
+      if (!reference) {
+        showError('No order reference found.');
+        return;
+      }
+
+      await verifyPayment(reference);
+    });
+
+    async function verifyPayment(reference) {
+      try {
+        let attempts = 0;
+        const maxAttempts = 8;
+
+        while (attempts < maxAttempts) {
+          const res = await fetch(`/api/verify-payment?reference=${encodeURIComponent(reference)}`);
+          const data = await res.json();
+
+          if (data.success && data.sale) {
+            displayOrderDetails(data.sale);
+            localStorage.removeItem('cart');
+            sessionStorage.clear();
+            return;
+          }
+
+          attempts++;
+          if (attempts < maxAttempts) {
+            console.log('Verifying order... attempt ' + attempts + '/' + maxAttempts);
+            await new Promise(r => setTimeout(r, 1500));
+          }
+        }
+
+        throw new Error('Order could not be verified. Please contact support with reference: ' + reference);
+      } catch (error) {
+        console.error('Error:', error);
+        showError(error.message || 'Failed to verify order. Contact support.');
+      }
+    }
+
+    function setTextContent(id, text) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.textContent = text;
+      }
+    }
+
+    function setInnerHTML(id, html) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.innerHTML = html;
+      }
+    }
+
+    function displayOrderDetails(sale) {
+      setTextContent('reference', sale.reference || '—');
+      setTextContent('customerName', sale.name || '—');
+      setTextContent('customerEmail', sale.email || '—');
+      setTextContent('customerPhone', sale.phone || '—');
+      setTextContent('customerAddress', sale.address || '—');
+
+      const itemsHtml = (sale.items || []).map(item => `
+        <div class="order-item">
+          <div class="item-info">
+            <div class="item-name">${item.productName || item.name || 'Item'}</div>
+            <div class="item-qty">Qty: ${item.quantity || 1}</div>
+          </div>
+          <div class="item-price">₦${Number(item.price || 0).toLocaleString()}</div>
+        </div>
+      `).join('');
+
+      setInnerHTML('orderItems', itemsHtml);
+
+      const subtotal = (sale.items || []).reduce((sum, item) => sum + ((Number(item.price) || 0) * (Number(item.quantity) || 0)), 0);
+      const tax = Math.round(subtotal * 0.05);
+
+      setTextContent('subtotal', '₦' + subtotal.toLocaleString());
+      setTextContent('tax', '₦' + tax.toLocaleString());
+      setTextContent('totalAmount', '₦' + Math.round(Number(sale.amount) || subtotal + tax).toLocaleString());
+
+      const loadingState = document.getElementById('loadingState');
+      const successState = document.getElementById('successState');
+      if (loadingState) loadingState.style.display = 'none';
+      if (successState) successState.style.display = 'block';
+    }
+
+    function showError(message) {
+      const alert = document.getElementById('alert');
+      alert.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+      alert.className = 'alert error';
+      document.getElementById('loadingState').style.display = 'none';
+    }
+
+    function goHome() {
+      window.location.href = '/index.html';
+    }
+
+    function goShop() {
+      window.location.href = '/index.html#products';
+    }
+
+    function downloadReceipt() {
+      const params = new URLSearchParams(window.location.search);
+      const reference = params.get('reference');
+      
+      if (!reference) {
+        alert('No receipt available');
+        return;
+      }
+
+      // Get order details from displayed content
+      const orderRef = document.getElementById('orderRef')?.textContent || reference;
+      const orderDate = document.getElementById('orderDate')?.textContent || new Date().toLocaleDateString();
+      const customerName = document.getElementById('customerName')?.textContent || 'Customer';
+      const customerEmail = document.getElementById('customerEmail')?.textContent || '';
+      const customerPhone = document.getElementById('customerPhone')?.textContent || '';
+      const customerAddress = document.getElementById('customerAddress')?.textContent || '';
+      const itemsHtml = document.getElementById('orderItems')?.innerHTML || '';
+      const totalAmount = document.getElementById('totalAmount')?.textContent || '₦0';
+
+      // Create receipt HTML
+      const receiptHtml = `
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Receipt - Luxe Jewelry</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    .receipt {
+      max-width: 600px;
+      margin: 0 auto;
+      background: white;
+      padding: 40px;
+      border-radius: 8px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    .header {
+      text-align: center;
+      border-bottom: 2px solid #d4af37;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+    .header h1 {
+      color: #d4af37;
+      font-size: 28px;
+      margin-bottom: 5px;
+    }
+    .header p {
+      color: #666;
+      font-size: 14px;
+    }
+    .receipt-number {
+      text-align: center;
+      background: #f9f9f9;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 20px;
+      font-weight: 600;
+      color: #333;
+    }
+    .section {
+      margin-bottom: 20px;
+    }
+    .section-title {
+      font-weight: 600;
+      color: #d4af37;
+      margin-bottom: 10px;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      font-size: 14px;
+      border-bottom: 1px solid #eee;
+    }
+    .info-row:last-child { border-bottom: none; }
+    .info-label { color: #666; }
+    .info-value { font-weight: 600; color: #333; }
+    .items-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin: 15px 0;
+    }
+    .items-table th {
+      background: #f9f9f9;
+      padding: 8px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #d4af37;
+      color: #333;
+    }
+    .items-table td {
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    .items-table tr:last-child td {
+      border-bottom: 2px solid #d4af37;
+    }
+    .total-section {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 4px;
+      margin-top: 20px;
+    }
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 0;
+      font-size: 16px;
+      font-weight: 600;
+      color: #d4af37;
+    }
+    .footer {
+      text-align: center;
+      margin-top: 30px;
+      padding-top: 20px;
+      border-top: 1px solid #eee;
+      font-size: 12px;
+      color: #999;
+    }
+    .print-button {
+      text-align: center;
+      margin-top: 20px;
+    }
+    .print-button button {
+      background: #d4af37;
+      color: #000;
+      border: none;
+      padding: 10px 30px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+    }
+    .print-button button:hover {
+      background: #b6912e;
+    }
+    @media print {
+      body { background: white; }
+      .print-button { display: none; }
+      .receipt { box-shadow: none; }
+    }
+  </style>
+</head>
+<body>
+  <div class="receipt">
+    <div class="header">
+      <h1>✨ LUXE JEWELRY ✨</h1>
+      <p>Premium Jewelry Collection</p>
+    </div>
+
+    <div class="receipt-number">
+      ORDER REFERENCE: ${orderRef}
+    </div>
+
+    <div class="section">
+      <div class="section-title">Order Information</div>
+      <div class="info-row">
+        <span class="info-label">Date:</span>
+        <span class="info-value">${orderDate}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Status:</span>
+        <span class="info-value" style="color: #27ae60;">Paid</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Customer Information</div>
+      <div class="info-row">
+        <span class="info-label">Name:</span>
+        <span class="info-value">${customerName}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Email:</span>
+        <span class="info-value">${customerEmail}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Phone:</span>
+        <span class="info-value">${customerPhone}</span>
+      </div>
+      <div class="info-row">
+        <span class="info-label">Address:</span>
+        <span class="info-value">${customerAddress}</span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">Order Items</div>
+      <table class="items-table">
+        <thead>
+          <tr>
+            <th>Product</th>
+            <th>Qty</th>
+            <th>Price</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody id="receiptItems">
+          ${itemsHtml}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="total-section">
+      <div class="total-row">
+        <span>TOTAL AMOUNT:</span>
+        <span>${totalAmount}</span>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>Thank you for your purchase!</p>
+      <p>For support, contact: support@luxejewelry.com</p>
+      <p>Receipt generated on ${new Date().toLocaleString('en-NG')}</p>
+    </div>
+
+    <div class="print-button">
+      <button onclick="window.print()"><i class="fas fa-print"></i> Print Receipt</button>
+    </div>
+  </div>
+</body>
+</html>`;
+
+      // Create and download receipt as HTML file
+      const blob = new Blob([receiptHtml], { type: 'text/html;charset=utf-8;' });
+      const link = document.createElement('a');
+      const url = URL.createObjectURL(blob);
+      link.setAttribute('href', url);
+      link.setAttribute('download', `receipt-${reference}.html`);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+
+      alert('Receipt downloaded! You can also print it from the downloaded file.');
+    }
+  </script>
+  <script src="/cart-manager.js"></script>
+</body>
+</html>

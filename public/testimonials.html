@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testimonials - Luxe Jewelry</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="/style.css" rel="stylesheet" />
+    <link href="components.css" rel="stylesheet" />
+    <style>
+      .container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 24px 14px;
+      }
+
+      .page-header {
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        color: white;
+        padding: 60px 20px;
+        text-align: center;
+        border-radius: 12px;
+        margin-bottom: 50px;
+      }
+
+      .page-header h1 {
+        font-size: 2.5rem;
+        margin: 0 0 16px 0;
+        font-weight: 700;
+      }
+
+      .page-header p {
+        font-size: 1.1rem;
+        margin: 0;
+        opacity: 0.95;
+      }
+
+      /* Stats Section */
+      .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px;
+        margin-bottom: 60px;
+      }
+
+      .stat-card {
+        background: white;
+        padding: 24px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-top: 3px solid #d4af37;
+      }
+
+      .stat-number {
+        color: #d4af37;
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .stat-label {
+        color: #666;
+        font-size: 0.95rem;
+      }
+
+      /* Testimonials Grid */
+      .testimonials-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+      }
+
+      .testimonial-card {
+        background: white;
+        border-radius: 12px;
+        padding: 28px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .testimonial-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 8px 24px rgba(212, 175, 55, 0.15);
+      }
+
+      .testimonial-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 16px;
+        border-bottom: 2px solid #f0f0f0;
+        padding-bottom: 16px;
+      }
+
+      .testimonial-avatar {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1.8rem;
+        flex-shrink: 0;
+      }
+
+      .testimonial-info h3 {
+        color: #333;
+        font-size: 1rem;
+        margin: 0 0 4px 0;
+        font-weight: 600;
+      }
+
+      .testimonial-info p {
+        color: #999;
+        font-size: 0.85rem;
+        margin: 0;
+      }
+
+      .testimonial-rating {
+        color: #ffc107;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+      }
+
+      .testimonial-text {
+        color: #666;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        margin: 0;
+        font-style: italic;
+      }
+
+      .testimonial-quote {
+        color: #d4af37;
+        font-size: 2rem;
+        opacity: 0.2;
+        position: relative;
+        bottom: -8px;
+        margin-bottom: -12px;
+      }
+
+      /* Category Filter */
+      .filter-section {
+        text-align: center;
+        margin-bottom: 50px;
+      }
+
+      .filter-section h2 {
+        color: #333;
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+
+      .filter-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+
+      .filter-btn {
+        padding: 10px 20px;
+        border-radius: 24px;
+        border: 2px solid #d4af37;
+        background: white;
+        color: #d4af37;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s;
+      }
+
+      .filter-btn:hover,
+      .filter-btn.active {
+        background: #d4af37;
+        color: white;
+      }
+
+      /* Video Testimonials */
+      .video-section {
+        background: #f9f6f1;
+        padding: 60px 40px;
+        border-radius: 12px;
+        margin-bottom: 60px;
+      }
+
+      .video-section h2 {
+        color: #d4af37;
+        font-size: 1.8rem;
+        text-align: center;
+        margin: 0 0 40px 0;
+      }
+
+      .video-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 30px;
+      }
+
+      .video-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        cursor: pointer;
+        transition: transform 0.3s;
+      }
+
+      .video-card:hover {
+        transform: translateY(-8px);
+      }
+
+      .video-thumbnail {
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        height: 200px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        position: relative;
+      }
+
+      .video-thumbnail i {
+        font-size: 4rem;
+      }
+
+      .play-button {
+        position: absolute;
+        width: 60px;
+        height: 60px;
+        background: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #d4af37;
+        font-size: 1.5rem;
+        transition: transform 0.3s;
+      }
+
+      .video-card:hover .play-button {
+        transform: scale(1.1);
+      }
+
+      .video-info {
+        padding: 20px;
+      }
+
+      .video-info h3 {
+        color: #333;
+        font-size: 1rem;
+        margin: 0 0 8px 0;
+      }
+
+      .video-info p {
+        color: #666;
+        font-size: 0.85rem;
+        margin: 0;
+      }
+
+      /* Rating Breakdown */
+      .rating-section {
+        background: white;
+        border-radius: 12px;
+        padding: 40px;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+        margin-bottom: 60px;
+      }
+
+      .rating-section h2 {
+        color: #d4af37;
+        font-size: 1.8rem;
+        text-align: center;
+        margin: 0 0 40px 0;
+      }
+
+      .rating-grid {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 40px;
+        align-items: center;
+      }
+
+      .overall-rating {
+        text-align: center;
+      }
+
+      .overall-rating-number {
+        font-size: 3.5rem;
+        color: #d4af37;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .overall-rating-stars {
+        color: #ffc107;
+        font-size: 1.5rem;
+        margin-bottom: 16px;
+      }
+
+      .overall-rating-count {
+        color: #666;
+        font-size: 0.95rem;
+      }
+
+      .rating-breakdown {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      .rating-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .rating-row-label {
+        color: #333;
+        font-weight: 600;
+        min-width: 80px;
+        font-size: 0.9rem;
+      }
+
+      .rating-row-bar {
+        flex: 1;
+        height: 8px;
+        background: #f0f0f0;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      .rating-row-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #d4af37, #b6912e);
+      }
+
+      .rating-row-count {
+        color: #666;
+        font-size: 0.9rem;
+        min-width: 60px;
+        text-align: right;
+      }
+
+      /* CTA Section */
+      .cta-section {
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        color: white;
+        padding: 60px 40px;
+        border-radius: 12px;
+        text-align: center;
+      }
+
+      .cta-section h2 {
+        font-size: 1.8rem;
+        margin: 0 0 16px 0;
+      }
+
+      .cta-section p {
+        font-size: 1.1rem;
+        margin: 0 0 32px 0;
+        opacity: 0.95;
+      }
+
+      .cta-button {
+        background: white;
+        color: #d4af37;
+        padding: 14px 32px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .cta-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+      }
+
+      @media (max-width: 768px) {
+        .page-header h1 {
+          font-size: 1.8rem;
+        }
+
+        .testimonials-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .video-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .rating-grid {
+          grid-template-columns: 1fr;
+        }
+
+        .filter-buttons {
+          justify-content: center;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header loaded dynamically by load-components.js -->
+
+    <!-- Main Content -->
+    <main class="container">
+      <div class="page-header">
+        <h1>Customer Testimonials</h1>
+        <p>Real stories from real customers who trust Luxe Jewelry</p>
+      </div>
+
+      <!-- Stats -->
+      <section class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">4.9/5</div>
+          <div class="stat-label">Average Rating</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">5,000+</div>
+          <div class="stat-label">Happy Customers</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2,847</div>
+          <div class="stat-label">5-Star Reviews</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">98%</div>
+          <div class="stat-label">Satisfied</div>
+        </div>
+      </section>
+
+      <!-- Filter Section -->
+      <section class="filter-section">
+        <h2>Filter Reviews</h2>
+        <div class="filter-buttons">
+          <button class="filter-btn active" onclick="filterReviews('all')">
+            <i class="fas fa-star"></i> All Reviews
+          </button>
+          <button class="filter-btn" onclick="filterReviews('5')">
+            <i class="fas fa-star"></i> 5 Stars
+          </button>
+          <button class="filter-btn" onclick="filterReviews('4')">
+            <i class="fas fa-star"></i> 4 Stars
+          </button>
+          <button class="filter-btn" onclick="filterReviews('product')">
+            <i class="fas fa-ring"></i> Product Quality
+          </button>
+          <button class="filter-btn" onclick="filterReviews('shipping')">
+            <i class="fas fa-truck"></i> Shipping
+          </button>
+          <button class="filter-btn" onclick="filterReviews('service')">
+            <i class="fas fa-headset"></i> Customer Service
+          </button>
+        </div>
+      </section>
+
+      <!-- Testimonials -->
+      <section class="testimonials-grid">
+        <!-- Testimonial 1 -->
+        <div class="testimonial-card" data-category="product">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="testimonial-info">
+              <h3>Adeola Mensah</h3>
+              <p>Verified Purchase</p>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div style="margin-bottom: 12px">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">
+              The quality of this necklace is absolutely stunning! The
+              craftsmanship is impeccable, and it arrived beautifully packaged.
+              I've worn it to multiple events and received so many compliments.
+              Highly recommend Luxe Jewelry!
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="testimonial-card" data-category="shipping">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="testimonial-info">
+              <h3>Chioma Williams</h3>
+              <p>Verified Purchase</p>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div style="margin-bottom: 12px">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">
+              Delivery was super fast and the tracking system was really
+              helpful. The bracelet arrived on time and in perfect condition.
+              The attention to detail in packaging shows how much they care
+              about their customers.
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="testimonial-card" data-category="service">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="testimonial-info">
+              <h3>Amara Okafor</h3>
+              <p>Verified Purchase</p>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div style="margin-bottom: 12px">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">
+              The customer service team went above and beyond! I had questions
+              about sizing and they responded within hours with detailed photos
+              and advice. Truly exceptional service. Will definitely order
+              again!
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimonial 4 -->
+        <div class="testimonial-card" data-category="product">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="testimonial-info">
+              <h3>Zainab Hassan</h3>
+              <p>Verified Purchase</p>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div style="margin-bottom: 12px">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">
+              I bought the emerald earrings for my wedding and they were
+              absolutely perfect. The color, the cut, the shine - everything
+              exceeded my expectations. This is a piece I'll treasure forever!
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimonial 5 -->
+        <div class="testimonial-card" data-category="shipping">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="testimonial-info">
+              <h3>Tayo Adeyemi</h3>
+              <p>Verified Purchase</p>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div style="margin-bottom: 12px">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">
+              Ordered the ring on Monday, received it by Friday with insurance.
+              The packaging was luxurious and protective. Definitely my go-to
+              jewelry store now!
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimonial 6 -->
+        <div class="testimonial-card" data-category="product">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="testimonial-info">
+              <h3>Folake Okonkwo</h3>
+              <p>Verified Purchase</p>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div style="margin-bottom: 12px">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">
+              The authenticity certificate and warranty gave me so much
+              confidence in my purchase. I knew I was getting genuine,
+              high-quality jewelry. Best investment ever!
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimonial 7 -->
+        <div class="testimonial-card" data-category="service">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="testimonial-info">
+              <h3>Chidinma Eze</h3>
+              <p>Verified Purchase</p>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div style="margin-bottom: 12px">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">
+              I had a small issue with my first order and their team handled it
+              perfectly. They sent a replacement immediately and even included a
+              small gift. That's real customer service!
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimonial 8 -->
+        <div class="testimonial-card" data-category="product">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="testimonial-info">
+              <h3>Ngozi Mbah</h3>
+              <p>Verified Purchase</p>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div style="margin-bottom: 12px">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">
+              These are the most elegant pieces I own. The attention to detail
+              is incredible. Every time I wear them, I feel confident and
+              beautiful. Worth every naira!
+            </p>
+          </div>
+        </div>
+
+        <!-- Testimonial 9 -->
+        <div class="testimonial-card" data-category="shipping">
+          <div class="testimonial-header">
+            <div class="testimonial-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="testimonial-info">
+              <h3>Blessing Osu</h3>
+              <p>Verified Purchase</p>
+            </div>
+          </div>
+          <div class="testimonial-rating">★★★★★</div>
+          <div style="margin-bottom: 12px">
+            <div class="testimonial-quote">"</div>
+            <p class="testimonial-text">
+              Ordered from Kano and got delivery within 2 days. The tracking
+              kept me updated every step of the way. Amazing experience from
+              start to finish!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Rating Breakdown -->
+      <section class="rating-section">
+        <h2>Rating Breakdown</h2>
+        <div class="rating-grid">
+          <div class="overall-rating">
+            <div class="overall-rating-number">4.9</div>
+            <div class="overall-rating-stars">★★★★★</div>
+            <div class="overall-rating-count">
+              Based on 2,847 verified purchases
+            </div>
+          </div>
+          <div class="rating-breakdown">
+            <div class="rating-row">
+              <span class="rating-row-label">5 Stars</span>
+              <div class="rating-row-bar">
+                <div class="rating-row-fill" style="width: 95%"></div>
+              </div>
+              <span class="rating-row-count">2,698 (94.8%)</span>
+            </div>
+            <div class="rating-row">
+              <span class="rating-row-label">4 Stars</span>
+              <div class="rating-row-bar">
+                <div class="rating-row-fill" style="width: 4%"></div>
+              </div>
+              <span class="rating-row-count">113 (4%)</span>
+            </div>
+            <div class="rating-row">
+              <span class="rating-row-label">3 Stars</span>
+              <div class="rating-row-bar">
+                <div class="rating-row-fill" style="width: 1%"></div>
+              </div>
+              <span class="rating-row-count">30 (1%)</span>
+            </div>
+            <div class="rating-row">
+              <span class="rating-row-label">2 Stars</span>
+              <div class="rating-row-bar">
+                <div class="rating-row-fill" style="width: 0%"></div>
+              </div>
+              <span class="rating-row-count">5 (0.2%)</span>
+            </div>
+            <div class="rating-row">
+              <span class="rating-row-label">1 Star</span>
+              <div class="rating-row-bar">
+                <div class="rating-row-fill" style="width: 0%"></div>
+              </div>
+              <span class="rating-row-count">1 (0%)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Video Testimonials -->
+      <section class="video-section">
+        <h2>Video Testimonials</h2>
+        <div class="video-grid">
+          <div class="video-card">
+            <div class="video-thumbnail">
+              <i class="fas fa-ring"></i>
+              <div class="play-button">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+            <div class="video-info">
+              <h3>Customer Story: Wedding Ring</h3>
+              <p>Watch how our customer found her perfect engagement ring</p>
+            </div>
+          </div>
+
+          <div class="video-card">
+            <div class="video-thumbnail">
+              <i class="fas fa-crown"></i>
+              <div class="play-button">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+            <div class="video-info">
+              <h3>Luxury Unboxing</h3>
+              <p>See the complete unboxing experience with our packaging</p>
+            </div>
+          </div>
+
+          <div class="video-card">
+            <div class="video-thumbnail">
+              <i class="fas fa-heart"></i>
+              <div class="play-button">
+                <i class="fas fa-play"></i>
+              </div>
+            </div>
+            <div class="video-info">
+              <h3>Customer Review & Styling</h3>
+              <p>How one customer styles her Luxe Jewelry collection</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="cta-section">
+        <h2>Join Our Community</h2>
+        <p>Experience luxury jewelry and exceptional service</p>
+        <a href="/shop-all.html" class="cta-button">
+          <i class="fas fa-shopping-bag"></i> Shop Now
+        </a>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="footer-content">
+        <div class="footer-column">
+          <h3>About Luxe Jewelry</h3>
+          <p>Crafting timeless pieces of elegance since 2025.</p>
+        </div>
+        <div class="footer-column">
+          <h3>Quick Links</h3>
+          <a href="/shop-all.html"
+            ><i class="fas fa-chevron-right"></i> Shop All</a
+          >
+          <a href="/new-arrivals.html"
+            ><i class="fas fa-chevron-right"></i> New Arrivals</a
+          >
+          <a href="/about.html"
+            ><i class="fas fa-chevron-right"></i> About Us</a
+          >
+          <a href="/contact.html"
+            ><i class="fas fa-chevron-right"></i> Customer Support</a
+          >
+        </div>
+        <div class="footer-column">
+          <h3>Customer Service</h3>
+          <a href="/contact.html"
+            ><i class="fas fa-chevron-right"></i> Contact Us</a
+          >
+          <a href="/shipping-info.html"
+            ><i class="fas fa-chevron-right"></i> Shipping Info</a
+          >
+          <a href="/returns.html"
+            ><i class="fas fa-chevron-right"></i> Returns & Exchanges</a
+          >
+          <a href="/faqs.html"><i class="fas fa-chevron-right"></i> FAQs</a>
+          <a href="/privacy.html"
+            ><i class="fas fa-chevron-right"></i> Privacy Policy</a
+          >
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Luxe Jewelry. All rights reserved.</p>
+      </div>
+    </footer>
+
+    <!-- Cookie Consent Banner -->
+    <script src="js/cookie-consent.js"></script>
+    <script>
+      function filterReviews(category) {
+        // Update active button
+        document
+          .querySelectorAll(".filter-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        event.target.classList.add("active");
+
+        // Filter testimonials
+        const cards = document.querySelectorAll(".testimonial-card");
+        cards.forEach((card) => {
+          if (category === "all" || card.dataset.category === category) {
+            card.style.display = "block";
+            setTimeout(() => (card.style.opacity = "1"), 10);
+          } else {
+            card.style.opacity = "0";
+            setTimeout(() => (card.style.display = "none"), 300);
+          }
+        });
+      }
+
+      // Add smooth transitions
+      const style = document.createElement("style");
+      style.innerHTML = `
+      .testimonial-card {
+        transition: opacity 0.3s ease;
+      }
+    `;
+      document.head.appendChild(style);
+    </script>
+    <script src="load-components.js"></script>
+  </body>
+</html>

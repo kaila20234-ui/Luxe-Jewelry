@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Customer Support - Luxe Jewelry</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="/style.css" rel="stylesheet" />
+    <link href="/components.css" rel="stylesheet" />
+    <link href="/styles.css" rel="stylesheet" />
+    <style>
+      .contact-container {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 18px 10px;
+      }
+
+      .contact-hero {
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        color: white;
+        padding: 28px 12px;
+        text-align: center;
+        border-radius: 10px;
+        margin-bottom: 18px;
+      }
+
+      .contact-hero h1 {
+        font-size: 1.6rem;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+      }
+
+      .contact-hero p {
+        font-size: 0.9rem;
+        margin: 0;
+        opacity: 0.95;
+      }
+
+      .contact-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+        margin-top: 18px;
+      }
+
+      .contact-info {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .info-card {
+        background: white;
+        padding: 12px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border-left: 4px solid #d4af37;
+      }
+
+      .info-card h3 {
+        color: #d4af37;
+        margin: 0 0 6px 0;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+
+      .info-card i {
+        font-size: 1rem;
+        color: #d4af37;
+      }
+
+      .info-card p {
+        margin: 4px 0;
+        color: #666;
+        line-height: 1.4;
+        font-size: 0.8rem;
+      }
+
+      .info-card a {
+        color: #d4af37;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+        font-size: 0.8rem;
+      }
+
+      .info-card a:hover {
+        color: #b6912e;
+      }
+
+      .contact-form {
+        background: white;
+        padding: 16px;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+      }
+
+      .contact-form h2 {
+        color: #333;
+        margin: 0 0 16px 0;
+        font-size: 1.2rem;
+      }
+
+      .form-group {
+        margin-bottom: 14px;
+      }
+
+      .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        color: #333;
+        font-weight: 600;
+        font-size: 0.9rem;
+      }
+
+      .form-group input,
+      .form-group textarea {
+        width: 100%;
+        padding: 8px;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        font-family: "Poppins", sans-serif;
+        font-size: 0.9rem;
+        transition: border-color 0.3s ease;
+      }
+
+      .form-group input:focus,
+      .form-group textarea:focus {
+        outline: none;
+        border-color: #d4af37;
+        box-shadow: 0 0 0 2px rgba(212, 175, 55, 0.1);
+      }
+
+      .form-group textarea {
+        resize: vertical;
+        min-height: 100px;
+      }
+
+      .submit-btn {
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 10px rgba(212, 175, 55, 0.25);
+      }
+
+      .submit-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 14px rgba(212, 175, 55, 0.35);
+      }
+
+      @media (max-width: 768px) {
+        .contact-content {
+          grid-template-columns: 1fr;
+        }
+
+        .contact-hero h1 {
+          font-size: 1.5rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header loaded dynamically by load-components.js -->
+
+    <!-- Main Content -->
+    <main class="contact-container">
+      <div class="contact-hero">
+        <h1><i class="fas fa-headset"></i> Customer Support</h1>
+        <p>We're here to help. Contact our support team anytime!</p>
+      </div>
+
+      <div class="contact-content">
+        <!-- Support Form (Full Width) -->
+        <div class="contact-form" style="grid-column: 1 / -1; max-width: 600px; margin: 0 auto;">
+          <h2>Submit a Support Ticket</h2>
+          <form id="contactForm">
+            <div class="form-group">
+              <label for="name">Full Name *</label>
+              <input type="text" id="name" name="name" required />
+            </div>
+
+            <div class="form-group">
+              <label for="email">Email Address *</label>
+              <input type="email" id="email" name="email" required />
+            </div>
+
+            <div class="form-group">
+              <label for="orderid">Order ID (if applicable)</label>
+              <input type="text" id="orderid" name="orderid" />
+            </div>
+
+            <div class="form-group">
+              <label for="category">Issue Category *</label>
+              <select id="category" name="category" required style="width: 100%; padding: 8px; border: 2px solid #e0e0e0; border-radius: 6px; font-family: 'Poppins', sans-serif; font-size: 0.9rem;">
+                <option value="">-- Select Category --</option>
+                <option value="order">Order Related</option>
+                <option value="shipping">Shipping Issue</option>
+                <option value="return">Return/Exchange</option>
+                <option value="product">Product Quality</option>
+                <option value="payment">Payment Issue</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label for="subject">Subject *</label>
+              <input type="text" id="subject" name="subject" required />
+            </div>
+
+            <div class="form-group">
+              <label for="message">Describe Your Issue *</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+
+            <button type="submit" class="submit-btn">
+              <i class="fas fa-ticket-alt"></i> Submit Ticket
+            </button>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <!-- Footer loaded dynamically by load-components.js -->
+
+    <script>
+      document
+        .getElementById("contactForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+          
+          const name = document.getElementById("name").value;
+          const email = document.getElementById("email").value;
+          const orderid = document.getElementById("orderid").value;
+          const category = document.getElementById("category").value;
+          const subject = document.getElementById("subject").value;
+          const message = document.getElementById("message").value;
+
+          try {
+            const response = await fetch("/api/tickets", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                title: subject,
+                description: message,
+                email,
+              }),
+            });
+
+            if (response.ok) {
+              alert(
+                "Thank you for your support ticket! Our team will get back to you within 24 hours."
+              );
+              this.reset();
+            } else {
+              alert("Error submitting ticket. Please try again.");
+            }
+          } catch (error) {
+            console.error("Error:", error);
+            alert("Error submitting ticket. Please try again.");
+          }
+        });
+    </script>
+    <script src="/cart-manager.js"></script>
+    <script src="/load-components.js"></script>
+  </body>
+</html>

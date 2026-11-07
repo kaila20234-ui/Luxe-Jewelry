@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Submit Complaint | Luxe Jewelry</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link href="/style.css" rel="stylesheet" />
+  <link href="/components.css" rel="stylesheet" />
+  <link href="styles.css" rel="stylesheet" />
+  <style>
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(to right, #fffaf2, #f4e6c2);
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .complain-container {
+      background: #fff;
+      width: 90%;
+      max-width: 500px;
+      border-radius: 14px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      padding: 30px;
+    }
+
+    h2 {
+      text-align: center;
+      color: #d4af37;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      font-size: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    input:focus, textarea:focus {
+      border-color: #d4af37;
+    }
+
+    textarea {
+      resize: none;
+      height: 120px;
+    }
+
+    button {
+      background: #d4af37;
+      color: white;
+      border: none;
+      padding: 12px;
+      font-weight: bold;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #c59b2a;
+    }
+
+    .success {
+      text-align: center;
+      color: green;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+
+    .error {
+      text-align: center;
+      color: red;
+      font-weight: 600;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="complain-container">
+    <h2>📩 Submit a Complaint</h2>
+    <form id="complainForm">
+      <input type="text" id="name" placeholder="Full Name" required>
+      <input type="tel" id="phone" placeholder="Phone Number" required>
+      <input type="email" id="email" placeholder="Email Address" required>
+      <input type="text" id="product" placeholder="Product (optional)">
+      <textarea id="message" placeholder="Describe your complaint..." required></textarea>
+      <button type="submit">Submit Complaint</button>
+    </form>
+    <div id="responseMessage"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('complainForm');
+    const responseMessage = document.getElementById('responseMessage');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const product = document.getElementById('product').value.trim();
+      const message = document.getElementById('message').value.trim();
+
+      if (!name || !phone || !email || !message) {
+        responseMessage.textContent = "⚠️ Please fill in all required fields.";
+        responseMessage.className = "error";
+        return;
+      }
+
+      try {
+        const res = await fetch('/api/complaints', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, phone, email, product, message })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+          responseMessage.textContent = "✅ Complaint submitted successfully!";
+          responseMessage.className = "success";
+          form.reset();
+        } else {
+          responseMessage.textContent = "❌ Failed to send complaint.";
+          responseMessage.className = "error";
+        }
+      } catch (error) {
+        console.error('Error submitting complaint:', error);
+        responseMessage.textContent = "⚠️ Could not connect to server.";
+        responseMessage.className = "error";
+      }
+    });
+  </script>
+  <script src="/cart-manager.js"></script>
+  <script src="/theme.js"></script>
+  <script src="/load-components.js"></script>
+</body>
+</html>

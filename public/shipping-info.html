@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Shipping Info - Luxe Jewelry</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="/style.css" rel="stylesheet" />
+    <link href="/components.css" rel="stylesheet" />
+    <link href="/styles.css" rel="stylesheet" />
+    <style>
+      body {
+        overflow-x: hidden;
+        background-color: #fafafa;
+      }
+
+      .wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 30px 20px 80px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .page-title {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .page-title h1 {
+        font-size: 2.2rem;
+        color: #333;
+        margin: 0 0 10px 0;
+        font-weight: 700;
+      }
+
+      .page-title p {
+        font-size: 1rem;
+        color: #666;
+        margin: 0;
+      }
+
+      .section {
+        background: white;
+        padding: 30px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        border-top: 4px solid #d4af37;
+      }
+
+      .section h2 {
+        font-size: 1.3rem;
+        color: #333;
+        margin: 0 0 15px 0;
+        font-weight: 600;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .section p {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin: 0 0 15px 0;
+      }
+
+      .section h3 {
+        font-size: 1.05rem;
+        color: #333;
+        margin: 20px 0 10px 0;
+        font-weight: 600;
+      }
+
+      .shipping-card {
+        background: linear-gradient(135deg, #f5f1e8 0%, #fffbf0 100%);
+        border: 2px solid #d4af37;
+        border-radius: 8px;
+        padding: 20px;
+        margin: 15px 0;
+        text-align: left;
+      }
+
+      .shipping-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-bottom: 12px;
+      }
+
+      .shipping-card-header h3 {
+        color: #d4af37;
+        margin: 0;
+        font-size: 1.1rem;
+        font-weight: 600;
+      }
+
+      .shipping-card-price {
+        font-size: 1.6rem;
+        font-weight: 700;
+        color: #333;
+        margin: 10px 0;
+      }
+
+      .shipping-card-time {
+        color: #666;
+        font-size: 0.9rem;
+        margin-bottom: 12px;
+      }
+
+      .shipping-card ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .shipping-card li {
+        color: #666;
+        font-size: 0.9rem;
+        padding: 6px 0;
+        padding-left: 24px;
+        position: relative;
+      }
+
+      .shipping-card li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #d4af37;
+        font-weight: bold;
+        font-size: 1.1rem;
+      }
+
+      .faq-item {
+        background: #f9f9f9;
+        border-left: 4px solid #d4af37;
+        padding: 15px;
+        margin: 12px 0;
+        border-radius: 4px;
+      }
+
+      .faq-item strong {
+        color: #333;
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+      }
+
+      .faq-item p {
+        color: #666;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .highlight {
+        background: linear-gradient(135deg, #fff9e6 0%, #f4e7c5 100%);
+        border-left: 4px solid #ffd700;
+        padding: 20px;
+        border-radius: 6px;
+        margin: 20px 0;
+      }
+
+      .highlight p {
+        margin: 8px 0;
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 768px) {
+        .wrapper {
+          padding: 20px 15px 60px 15px;
+        }
+
+        .page-title h1 {
+          font-size: 1.6rem;
+        }
+
+        .section {
+          padding: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header loaded dynamically by load-components.js -->
+
+    <div class="wrapper">
+      <div class="page-title">
+        <h1>Shipping Information</h1>
+        <p>Fast, reliable delivery to your doorstep</p>
+      </div>
+
+      <!-- Shipping Options -->
+      <div class="section">
+        <h2>Express Shipping - ₦2,500</h2>
+        <p><strong>Delivery Time:</strong> 1-2 Business Days</p>
+        <div class="shipping-card">
+          <ul>
+            <li>Priority handling and processing</li>
+            <li>Fully insured delivery</li>
+            <li>Real-time tracking included</li>
+            <li>Weekend delivery available</li>
+            <li>Perfect for urgent orders</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Standard Shipping - ₦1,200</h2>
+        <p><strong>Delivery Time:</strong> 3-5 Business Days</p>
+        <div class="shipping-card">
+          <ul>
+            <li>Standard secure packaging</li>
+            <li>Full tracking included</li>
+            <li>Weekday delivery</li>
+            <li>Safe and reliable service</li>
+            <li>Good balance of cost and speed</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Economy Shipping - FREE</h2>
+        <p><strong>Delivery Time:</strong> 7-10 Business Days (Orders over ₦50,000)</p>
+        <div class="shipping-card">
+          <ul>
+            <li>Most economical option</li>
+            <li>Eco-friendly packaging</li>
+            <li>Basic tracking included</li>
+            <li>Automatic on orders ₦50,000+</li>
+            <li>Perfect for planned purchases</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- How Shipping Works -->
+      <div class="section">
+        <h2>How Our Shipping Process Works</h2>
+
+        <h3>Step 1: Order Confirmation</h3>
+        <p>Once your order is placed and payment is confirmed, you'll receive an email confirmation with your order number and estimated delivery date within 1 hour.</p>
+
+        <h3>Step 2: Processing</h3>
+        <p>Our team carefully inspects and packages your jewelry in our signature Luxe Jewelry box with protective wrapping. This typically takes 1-2 business days.</p>
+
+        <h3>Step 3: Dispatch</h3>
+        <p>Once your order ships, you'll receive an email with a tracking number and link. You can monitor your package in real-time through our courier partner's tracking system.</p>
+
+        <h3>Step 4: Delivery</h3>
+        <p>Your package arrives at your doorstep. Signature may be required for high-value items. If you're not home, the courier will leave a notice with instructions for redelivery.</p>
+
+        <h3>Step 5: Confirmation</h3>
+        <p>Once delivered, you'll receive a delivery confirmation. Please inspect your package immediately and contact us if there are any issues.</p>
+      </div>
+
+      <!-- Shipping FAQs -->
+      <div class="section">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <strong>Do you ship internationally?</strong>
+          <p>Currently, we ship within Nigeria only. International shipping is coming soon. Contact us if you need clarification about your location.</p>
+        </div>
+
+        <div class="faq-item">
+          <strong>Can I track my order?</strong>
+          <p>Yes! Once your order ships, you'll receive a tracking number via email. You can use this number to monitor your package's location in real-time.</p>
+        </div>
+
+        <div class="faq-item">
+          <strong>What if my package doesn't arrive on time?</strong>
+          <p>Our couriers have a 99.8% on-time delivery rate. If there's a delay, we'll investigate immediately and keep you updated. Contact support for assistance.</p>
+        </div>
+
+        <div class="faq-item">
+          <strong>Can I change my delivery address after ordering?</strong>
+          <p>If your order hasn't shipped yet, contact us within 2 hours of purchase to change the address. Once shipped, contact the courier directly.</p>
+        </div>
+
+        <div class="faq-item">
+          <strong>Is your packaging recyclable?</strong>
+          <p>Yes! All our packaging is fully recyclable. We use eco-friendly materials to protect your jewelry while minimizing environmental impact.</p>
+        </div>
+
+        <div class="faq-item">
+          <strong>What are the shipping charges?</strong>
+          <p>Express: ₦2,500, Standard: ₦1,200, Economy: FREE on orders over ₦50,000. See above for details on each option.</p>
+        </div>
+
+        <div class="faq-item">
+          <strong>Is my order insured during shipping?</strong>
+          <p>Express and Standard shipments are fully insured. Economy shipments receive basic protection. Contact us for insurance on specific high-value items.</p>
+        </div>
+      </div>
+
+      <!-- Special Offers -->
+      <div class="highlight">
+        <h3 style="margin-top: 0; color: #333;">Special Shipping Offers</h3>
+        <p><strong>Free Standard Shipping</strong> on all orders over ₦50,000 within Nigeria!</p>
+        <p><strong>Express Upgrade:</strong> Add just ₦500 to upgrade any order to Express delivery with priority handling.</p>
+        <p><strong>Track Your Order:</strong> Free real-time tracking included with all shipping options.</p>
+      </div>
+
+      <!-- Contact Support -->
+      <div class="section">
+        <h2>Need Help with Shipping?</h2>
+        <p>Our customer service team is available to assist with any shipping questions or concerns:</p>
+        <p>
+          <strong>Email:</strong> <a href="mailto:support@luxejewelry.com" style="color: #d4af37;">support@luxejewelry.com</a><br />
+          <strong>Phone:</strong> <a href="tel:+2349012892640" style="color: #d4af37;">+2349012892640</a><br />
+          <strong>Hours:</strong> Monday - Friday, 9 AM - 6 PM (Lagos Time)<br />
+          <strong>Response Time:</strong> Within 24 hours
+        </p>
+      </div>
+    </div>
+
+    <script src="/cart-manager.js"></script>
+    <script src="/load-components.js"></script>
+  </body>
+</html>

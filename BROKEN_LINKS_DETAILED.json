@@ -1,0 +1,2269 @@
+{
+  "crawledPages": [
+    {
+      "file": "about.html",
+      "url": "/about.html",
+      "size": 21624
+    },
+    {
+      "file": "admin-category.html",
+      "url": "/admin-category.html",
+      "size": 4175
+    },
+    {
+      "file": "admin-customers.html",
+      "url": "/admin-customers.html",
+      "size": 1286
+    },
+    {
+      "file": "admin-old.html",
+      "url": "/admin-old.html",
+      "size": 15756
+    },
+    {
+      "file": "admin-settings.html",
+      "url": "/admin-settings.html",
+      "size": 1829
+    },
+    {
+      "file": "admin-subscribers.html",
+      "url": "/admin-subscribers.html",
+      "size": 2363
+    },
+    {
+      "file": "admin-tickets.html",
+      "url": "/admin-tickets.html",
+      "size": 2233
+    },
+    {
+      "file": "admin-users.html",
+      "url": "/admin-users.html",
+      "size": 4181
+    },
+    {
+      "file": "admin.html",
+      "url": "/admin.html",
+      "size": 86531
+    },
+    {
+      "file": "admin_complain.html",
+      "url": "/admin_complain.html",
+      "size": 48514
+    },
+    {
+      "file": "admin_coupons.html",
+      "url": "/admin_coupons.html",
+      "size": 18747
+    },
+    {
+      "file": "admin_sales.html",
+      "url": "/admin_sales.html",
+      "size": 3598
+    },
+    {
+      "file": "complain.html",
+      "url": "/complain.html",
+      "size": 4103
+    },
+    {
+      "file": "compose-message-guide.html",
+      "url": "/compose-message-guide.html",
+      "size": 21054
+    },
+    {
+      "file": "contact.html",
+      "url": "/contact.html",
+      "size": 9489
+    },
+    {
+      "file": "cookies.html",
+      "url": "/cookies.html",
+      "size": 16951
+    },
+    {
+      "file": "customer-dashboard.html",
+      "url": "/customer-dashboard.html",
+      "size": 44764
+    },
+    {
+      "file": "customer-login.html",
+      "url": "/customer-login.html",
+      "size": 10560
+    },
+    {
+      "file": "customer-profile-settings.html",
+      "url": "/customer-profile-settings.html",
+      "size": 20878
+    },
+    {
+      "file": "customer-signup.html",
+      "url": "/customer-signup.html",
+      "size": 13429
+    },
+    {
+      "file": "faqs.html",
+      "url": "/faqs.html",
+      "size": 19155
+    },
+    {
+      "file": "index.html",
+      "url": "/index.html",
+      "size": 60240
+    },
+    {
+      "file": "init-admin.html",
+      "url": "/init-admin.html",
+      "size": 7655
+    },
+    {
+      "file": "login.html",
+      "url": "/login.html",
+      "size": 3525
+    },
+    {
+      "file": "manager-subscribers.html",
+      "url": "/manager-subscribers.html",
+      "size": 5852
+    },
+    {
+      "file": "manager_login.html",
+      "url": "/manager_login.html",
+      "size": 2095
+    },
+    {
+      "file": "messages.html",
+      "url": "/messages.html",
+      "size": 24009
+    },
+    {
+      "file": "messaging-fixes.html",
+      "url": "/messaging-fixes.html",
+      "size": 14015
+    },
+    {
+      "file": "new-arrivals.html",
+      "url": "/new-arrivals.html",
+      "size": 10280
+    },
+    {
+      "file": "payment-otp.html",
+      "url": "/payment-otp.html",
+      "size": 13606
+    },
+    {
+      "file": "payment-process.html",
+      "url": "/payment-process.html",
+      "size": 5622
+    },
+    {
+      "file": "payment-success.html",
+      "url": "/payment-success.html",
+      "size": 11396
+    },
+    {
+      "file": "payment-summary.html",
+      "url": "/payment-summary.html",
+      "size": 14355
+    },
+    {
+      "file": "privacy.html",
+      "url": "/privacy.html",
+      "size": 15801
+    },
+    {
+      "file": "product.html",
+      "url": "/product.html",
+      "size": 6998
+    },
+    {
+      "file": "quick-links.html",
+      "url": "/quick-links.html",
+      "size": 4321
+    },
+    {
+      "file": "quick-start.html",
+      "url": "/quick-start.html",
+      "size": 16718
+    },
+    {
+      "file": "returns.html",
+      "url": "/returns.html",
+      "size": 12984
+    },
+    {
+      "file": "setup.html",
+      "url": "/setup.html",
+      "size": 13886
+    },
+    {
+      "file": "shipping-info.html",
+      "url": "/shipping-info.html",
+      "size": 10544
+    },
+    {
+      "file": "shop-all.html",
+      "url": "/shop-all.html",
+      "size": 5891
+    },
+    {
+      "file": "terms-conditions.html",
+      "url": "/terms-conditions.html",
+      "size": 17748
+    },
+    {
+      "file": "terms.html",
+      "url": "/terms.html",
+      "size": 21185
+    },
+    {
+      "file": "testimonials.html",
+      "url": "/testimonials.html",
+      "size": 24148
+    },
+    {
+      "file": "top-customers.html",
+      "url": "/top-customers.html",
+      "size": 12833
+    }
+  ],
+  "workingLinks": [
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Luxe Jewelry"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Shop"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "About"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Contact"
+    },
+    {
+      "url": "/index.html#customer-login",
+      "fullUrl": "http://localhost:5000/index.html#customer-login",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Login"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Shop Now"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/terms.html",
+      "fullUrl": "http://localhost:5000/terms.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Terms of Service"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/cookies.html",
+      "fullUrl": "http://localhost:5000/cookies.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/about.html",
+      "text": "Cookie Policy"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Luxe Jewelry"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Shop"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "About"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Contact"
+    },
+    {
+      "url": "/index.html#customer-login",
+      "fullUrl": "http://localhost:5000/index.html#customer-login",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Login"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/new-arrivals.html",
+      "fullUrl": "http://localhost:5000/new-arrivals.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "New Arrivals"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/shipping-info.html",
+      "fullUrl": "http://localhost:5000/shipping-info.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Shipping Info"
+    },
+    {
+      "url": "/returns.html",
+      "fullUrl": "http://localhost:5000/returns.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Returns & Exchanges"
+    },
+    {
+      "url": "/faqs.html",
+      "fullUrl": "http://localhost:5000/faqs.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "FAQs"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "Luxe Jewelry"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "Shop"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "About"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "Contact"
+    },
+    {
+      "url": "/index.html#customer-login",
+      "fullUrl": "http://localhost:5000/index.html#customer-login",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "Login"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/terms.html",
+      "fullUrl": "http://localhost:5000/terms.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "Terms of Service"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/cookies.html",
+      "fullUrl": "http://localhost:5000/cookies.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "Cookie Policy"
+    },
+    {
+      "url": "https://facebook.com/privacy",
+      "fullUrl": "https://facebook.com/privacy",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/cookies.html",
+      "text": "Facebook Privacy Policy"
+    },
+    {
+      "url": "/customer-profile-settings.html",
+      "fullUrl": "http://localhost:5000/customer-profile-settings.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/customer-dashboard.html",
+      "text": "Edit Profile"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/customer-login.html",
+      "text": "Back to Shop"
+    },
+    {
+      "url": "/customer-signup.html",
+      "fullUrl": "http://localhost:5000/customer-signup.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/customer-login.html",
+      "text": "Create Account"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/customer-signup.html",
+      "text": "Back to Shop"
+    },
+    {
+      "url": "/customer-login.html",
+      "fullUrl": "http://localhost:5000/customer-login.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/customer-signup.html",
+      "text": "Sign in instead"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Luxe Jewelry"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Shop"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "About"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Contact"
+    },
+    {
+      "url": "/index.html#customer-login",
+      "fullUrl": "http://localhost:5000/index.html#customer-login",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Login"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/new-arrivals.html",
+      "fullUrl": "http://localhost:5000/new-arrivals.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "New Arrivals"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/shipping-info.html",
+      "fullUrl": "http://localhost:5000/shipping-info.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Shipping Info"
+    },
+    {
+      "url": "/returns.html",
+      "fullUrl": "http://localhost:5000/returns.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Returns & Exchanges"
+    },
+    {
+      "url": "/faqs.html",
+      "fullUrl": "http://localhost:5000/faqs.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "FAQs"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/login.html",
+      "fullUrl": "http://localhost:5000/login.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Staff Login"
+    },
+    {
+      "url": "/customer-login.html",
+      "fullUrl": "http://localhost:5000/customer-login.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Customer Login"
+    },
+    {
+      "url": "/customer-dashboard.html#profile",
+      "fullUrl": "http://localhost:5000/customer-dashboard.html#profile",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Profile"
+    },
+    {
+      "url": "/customer-dashboard.html#orders",
+      "fullUrl": "http://localhost:5000/customer-dashboard.html#orders",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Orders"
+    },
+    {
+      "url": "/customer-dashboard.html#addresses",
+      "fullUrl": "http://localhost:5000/customer-dashboard.html#addresses",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Addresses"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/new-arrivals.html",
+      "fullUrl": "http://localhost:5000/new-arrivals.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "New Arrivals"
+    },
+    {
+      "url": "/top-customers.html",
+      "fullUrl": "http://localhost:5000/top-customers.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Top Customers"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/complain.html",
+      "fullUrl": "http://localhost:5000/complain.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Customer Support"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/shipping-info.html",
+      "fullUrl": "http://localhost:5000/shipping-info.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Shipping Info"
+    },
+    {
+      "url": "/returns.html",
+      "fullUrl": "http://localhost:5000/returns.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Returns & Exchanges"
+    },
+    {
+      "url": "/faqs.html",
+      "fullUrl": "http://localhost:5000/faqs.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "FAQs"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/index.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/uploads/default.png",
+      "fullUrl": "http://localhost:5000/uploads/default.png",
+      "status": 200,
+      "category": "asset",
+      "sourcePage": "/index.html",
+      "text": ""
+    },
+    {
+      "url": "/favicon.svg",
+      "fullUrl": "http://localhost:5000/favicon.svg",
+      "status": 200,
+      "category": "asset",
+      "sourcePage": "/index.html",
+      "text": ""
+    },
+    {
+      "url": "/login.html",
+      "fullUrl": "http://localhost:5000/login.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/manager_login.html",
+      "text": "Staff Login"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/new-arrivals.html",
+      "text": "Back to Home"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Luxe Jewelry"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Shop"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "About"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Contact"
+    },
+    {
+      "url": "/index.html#customer-login",
+      "fullUrl": "http://localhost:5000/index.html#customer-login",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Login"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/new-arrivals.html",
+      "fullUrl": "http://localhost:5000/new-arrivals.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "New Arrivals"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/shipping-info.html",
+      "fullUrl": "http://localhost:5000/shipping-info.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Shipping Info"
+    },
+    {
+      "url": "/returns.html",
+      "fullUrl": "http://localhost:5000/returns.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Returns & Exchanges"
+    },
+    {
+      "url": "/faqs.html",
+      "fullUrl": "http://localhost:5000/faqs.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "FAQs"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/",
+      "fullUrl": "http://localhost:5000/",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/product.html",
+      "text": "Back to shop"
+    },
+    {
+      "url": "/customer-login.html",
+      "fullUrl": "http://localhost:5000/customer-login.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/product.html",
+      "text": "Buy Now"
+    },
+    {
+      "url": "/uploads/default.png",
+      "fullUrl": "http://localhost:5000/uploads/default.png",
+      "status": 200,
+      "category": "asset",
+      "sourcePage": "/product.html",
+      "text": ""
+    },
+    {
+      "url": "http://localhost:5000/admin.html",
+      "fullUrl": "http://localhost:5000/admin.html",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "📊 Admin Dashboard"
+    },
+    {
+      "url": "http://localhost:5000/admin_complain.html",
+      "fullUrl": "http://localhost:5000/admin_complain.html",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "⚠️ Manager Dashboard"
+    },
+    {
+      "url": "http://localhost:5000/messages.html",
+      "fullUrl": "http://localhost:5000/messages.html",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "💌 Internal Messaging"
+    },
+    {
+      "url": "http://localhost:5000/admin-tickets.html",
+      "fullUrl": "http://localhost:5000/admin-tickets.html",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "🎫 Support Tickets"
+    },
+    {
+      "url": "http://localhost:5000/complain.html",
+      "fullUrl": "http://localhost:5000/complain.html",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "📝 Customer Complaints"
+    },
+    {
+      "url": "http://localhost:5000/admin-customers.html",
+      "fullUrl": "http://localhost:5000/admin-customers.html",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "👥 Customers"
+    },
+    {
+      "url": "http://localhost:5000/admin-category.html",
+      "fullUrl": "http://localhost:5000/admin-category.html",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "📦 Categories"
+    },
+    {
+      "url": "http://localhost:5000/admin-users.html",
+      "fullUrl": "http://localhost:5000/admin-users.html",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "👤 Users"
+    },
+    {
+      "url": "http://localhost:5000/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "🏠 Home"
+    },
+    {
+      "url": "http://localhost:5000/admin-sales.html",
+      "fullUrl": "http://localhost:5000/admin-sales.html",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "📈 Sales Report"
+    },
+    {
+      "url": "http://localhost:5000/",
+      "fullUrl": "http://localhost:5000/",
+      "status": 200,
+      "category": "external",
+      "sourcePage": "/quick-links.html",
+      "text": "🚪 Logout"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Luxe Jewelry"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Shop"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "About"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Contact"
+    },
+    {
+      "url": "/index.html#customer-login",
+      "fullUrl": "http://localhost:5000/index.html#customer-login",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Login"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/new-arrivals.html",
+      "fullUrl": "http://localhost:5000/new-arrivals.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "New Arrivals"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/shipping-info.html",
+      "fullUrl": "http://localhost:5000/shipping-info.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Shipping Info"
+    },
+    {
+      "url": "/returns.html",
+      "fullUrl": "http://localhost:5000/returns.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Returns & Exchanges"
+    },
+    {
+      "url": "/faqs.html",
+      "fullUrl": "http://localhost:5000/faqs.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "FAQs"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Luxe Jewelry"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Shop"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "About"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Contact"
+    },
+    {
+      "url": "/index.html#customer-login",
+      "fullUrl": "http://localhost:5000/index.html#customer-login",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Login"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/new-arrivals.html",
+      "fullUrl": "http://localhost:5000/new-arrivals.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "New Arrivals"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/shipping-info.html",
+      "fullUrl": "http://localhost:5000/shipping-info.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Shipping Info"
+    },
+    {
+      "url": "/returns.html",
+      "fullUrl": "http://localhost:5000/returns.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Returns & Exchanges"
+    },
+    {
+      "url": "/faqs.html",
+      "fullUrl": "http://localhost:5000/faqs.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "FAQs"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/shop-all.html",
+      "text": "Back to Home"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "Luxe Jewelry"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "Shop"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "About"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "Contact"
+    },
+    {
+      "url": "/index.html#customer-login",
+      "fullUrl": "http://localhost:5000/index.html#customer-login",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "Login"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/terms.html",
+      "fullUrl": "http://localhost:5000/terms.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "Terms of Service"
+    },
+    {
+      "url": "/terms-conditions.html",
+      "fullUrl": "http://localhost:5000/terms-conditions.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "Terms & Conditions"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Luxe Jewelry"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Shop"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "About"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Contact"
+    },
+    {
+      "url": "/index.html#customer-login",
+      "fullUrl": "http://localhost:5000/index.html#customer-login",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Login"
+    },
+    {
+      "url": "/returns.html",
+      "fullUrl": "http://localhost:5000/returns.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Returns & Exchanges page"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/terms.html",
+      "fullUrl": "http://localhost:5000/terms.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Terms of Service"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "Contact Us"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Luxe Jewelry"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Shop"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "About"
+    },
+    {
+      "url": "/contact.html",
+      "fullUrl": "http://localhost:5000/contact.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Contact"
+    },
+    {
+      "url": "/index.html#customer-login",
+      "fullUrl": "http://localhost:5000/index.html#customer-login",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Login"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Shop Now"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Home"
+    },
+    {
+      "url": "/shop-all.html",
+      "fullUrl": "http://localhost:5000/shop-all.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Shop All"
+    },
+    {
+      "url": "/about.html",
+      "fullUrl": "http://localhost:5000/about.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "About Us"
+    },
+    {
+      "url": "/terms.html",
+      "fullUrl": "http://localhost:5000/terms.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Terms of Service"
+    },
+    {
+      "url": "/privacy.html",
+      "fullUrl": "http://localhost:5000/privacy.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Privacy Policy"
+    },
+    {
+      "url": "/cookies.html",
+      "fullUrl": "http://localhost:5000/cookies.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/testimonials.html",
+      "text": "Cookie Policy"
+    },
+    {
+      "url": "/index.html",
+      "fullUrl": "http://localhost:5000/index.html",
+      "status": 200,
+      "category": "internal",
+      "sourcePage": "/top-customers.html",
+      "text": "Back to Home"
+    },
+    {
+      "endpoint": "/api/products",
+      "status": 200,
+      "method": "HEAD",
+      "category": "api",
+      "note": "OK"
+    },
+    {
+      "endpoint": "/api/cart",
+      "status": 401,
+      "method": "HEAD",
+      "category": "api",
+      "note": "Requires authentication"
+    },
+    {
+      "endpoint": "/api/orders",
+      "status": 401,
+      "method": "HEAD",
+      "category": "api",
+      "note": "Requires authentication"
+    },
+    {
+      "endpoint": "/api/users/profile",
+      "status": 401,
+      "method": "HEAD",
+      "category": "api",
+      "note": "Requires authentication"
+    },
+    {
+      "endpoint": "/api/admin/products",
+      "status": 401,
+      "method": "HEAD",
+      "category": "api",
+      "note": "Requires authentication"
+    },
+    {
+      "endpoint": "/api/admin/orders",
+      "status": 401,
+      "method": "HEAD",
+      "category": "api",
+      "note": "Requires authentication"
+    },
+    {
+      "endpoint": "/api/admin/users",
+      "status": 401,
+      "method": "HEAD",
+      "category": "api",
+      "note": "Requires authentication"
+    }
+  ],
+  "brokenLinks": [
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/about.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "js/cookie-consent.js",
+      "fullUrl": "http://localhost:5000js/cookie-consent.js",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/about.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "admin-users.html",
+      "fullUrl": "http://localhost:5000admin-users.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/admin-old.html",
+      "text": "Manage Users",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "admin-tickets.html",
+      "fullUrl": "http://localhost:5000admin-tickets.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/admin-old.html",
+      "text": "Support Tickets",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "admin-settings.html",
+      "fullUrl": "http://localhost:5000admin-settings.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/admin-old.html",
+      "text": "Site Settings",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "admin-customers.html",
+      "fullUrl": "http://localhost:5000admin-customers.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/admin-old.html",
+      "text": "Customers",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "tel:+2349012892640",
+      "fullUrl": "http://localhost:5000tel:+2349012892640",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "+2349012892640",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "mailto:support@luxejewelry.com",
+      "fullUrl": "http://localhost:5000mailto:support@luxejewelry.com",
+      "status": 405,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "support@luxejewelry.com",
+      "error": "HTTP 405"
+    },
+    {
+      "url": "mailto:sales@luxejewelry.com",
+      "fullUrl": "http://localhost:5000mailto:sales@luxejewelry.com",
+      "status": 405,
+      "category": "internal",
+      "sourcePage": "/contact.html",
+      "text": "sales@luxejewelry.com",
+      "error": "HTTP 405"
+    },
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/contact.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "mailto:privacy@luxejewelry.com",
+      "fullUrl": "http://localhost:5000mailto:privacy@luxejewelry.com",
+      "status": 405,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "privacy@luxejewelry.com",
+      "error": "HTTP 405"
+    },
+    {
+      "url": "tel:+2349012892640",
+      "fullUrl": "http://localhost:5000tel:+2349012892640",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/cookies.html",
+      "text": "+2349012892640",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "https://policies.google.com/privacy",
+      "fullUrl": "https://policies.google.com/privacy",
+      "status": 400,
+      "category": "external",
+      "sourcePage": "/cookies.html",
+      "text": "Google Privacy Policy",
+      "error": "HTTP 400"
+    },
+    {
+      "url": "https://paystack.com/privacy",
+      "fullUrl": "https://paystack.com/privacy",
+      "status": 403,
+      "category": "external",
+      "sourcePage": "/cookies.html",
+      "text": "Paystack Privacy Policy",
+      "error": "HTTP 403"
+    },
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/cookies.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/customer-profile-settings.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "mailto:support@luxejewelry.com",
+      "fullUrl": "http://localhost:5000mailto:support@luxejewelry.com",
+      "status": 405,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "support@luxejewelry.com",
+      "error": "HTTP 405"
+    },
+    {
+      "url": "tel:+2349012892640",
+      "fullUrl": "http://localhost:5000tel:+2349012892640",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/faqs.html",
+      "text": "+2349012892640",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/faqs.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "js/cookie-consent.js",
+      "fullUrl": "http://localhost:5000js/cookie-consent.js",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/index.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "login.html",
+      "fullUrl": "http://localhost:5000login.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/init-admin.html",
+      "text": "← Back to Login",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "tel:+2349012892640",
+      "fullUrl": "http://localhost:5000tel:+2349012892640",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "+2349012892640",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "mailto:privacy@luxejewelry.com",
+      "fullUrl": "http://localhost:5000mailto:privacy@luxejewelry.com",
+      "status": 405,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "privacy@luxejewelry.com",
+      "error": "HTTP 405"
+    },
+    {
+      "url": "tel:+2349012892640",
+      "fullUrl": "http://localhost:5000tel:+2349012892640",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/privacy.html",
+      "text": "+2349012892640",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/privacy.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "init-admin.html",
+      "fullUrl": "http://localhost:5000init-admin.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/quick-start.html",
+      "text": "Create Admin Account",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "login.html",
+      "fullUrl": "http://localhost:5000login.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/quick-start.html",
+      "text": "Go to Login",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "messages.html",
+      "fullUrl": "http://localhost:5000messages.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/quick-start.html",
+      "text": "Open Messages",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "init-admin.html",
+      "fullUrl": "http://localhost:5000init-admin.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/quick-start.html",
+      "text": "Create Admin Account",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "login.html",
+      "fullUrl": "http://localhost:5000login.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/quick-start.html",
+      "text": "Go to Login",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "setup.html",
+      "fullUrl": "http://localhost:5000setup.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/quick-start.html",
+      "text": "View Setup Guide",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "index.html",
+      "fullUrl": "http://localhost:5000index.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/quick-start.html",
+      "text": "Back to Home",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "tel:+2349012892640",
+      "fullUrl": "http://localhost:5000tel:+2349012892640",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "+2349012892640",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "mailto:support@luxejewelry.com",
+      "fullUrl": "http://localhost:5000mailto:support@luxejewelry.com",
+      "status": 405,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "support@luxejewelry.com",
+      "error": "HTTP 405"
+    },
+    {
+      "url": "tel:+2349012892640",
+      "fullUrl": "http://localhost:5000tel:+2349012892640",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/returns.html",
+      "text": "+2349012892640",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/returns.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "init-admin.html",
+      "fullUrl": "http://localhost:5000init-admin.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/setup.html",
+      "text": "Create Admin",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "messages.html",
+      "fullUrl": "http://localhost:5000messages.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/setup.html",
+      "text": "Open Messaging",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "admin.html",
+      "fullUrl": "http://localhost:5000admin.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/setup.html",
+      "text": "Manage Users",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "quick-links.html",
+      "fullUrl": "http://localhost:5000quick-links.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/setup.html",
+      "text": "View Docs",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "admin.html",
+      "fullUrl": "http://localhost:5000admin.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/setup.html",
+      "text": "Go to Dashboard",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "index.html",
+      "fullUrl": "http://localhost:5000index.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/setup.html",
+      "text": "Home",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "login.html",
+      "fullUrl": "http://localhost:5000login.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/setup.html",
+      "text": "Login",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "quick-links.html",
+      "fullUrl": "http://localhost:5000quick-links.html",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/setup.html",
+      "text": "Site Map",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "tel:+2349012892640",
+      "fullUrl": "http://localhost:5000tel:+2349012892640",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/shipping-info.html",
+      "text": "+2349012892640",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/shipping-info.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "mailto:support@luxejewelry.com",
+      "fullUrl": "http://localhost:5000mailto:support@luxejewelry.com",
+      "status": 405,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "support@luxejewelry.com",
+      "error": "HTTP 405"
+    },
+    {
+      "url": "tel:+2349012892640",
+      "fullUrl": "http://localhost:5000tel:+2349012892640",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/terms-conditions.html",
+      "text": "+2349012892640",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/terms-conditions.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "mailto:legal@luxejewelry.com",
+      "fullUrl": "http://localhost:5000mailto:legal@luxejewelry.com",
+      "status": 405,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "legal@luxejewelry.com",
+      "error": "HTTP 405"
+    },
+    {
+      "url": "tel:+2349012892640",
+      "fullUrl": "http://localhost:5000tel:+2349012892640",
+      "status": 0,
+      "category": "internal",
+      "sourcePage": "/terms.html",
+      "text": "+2349012892640",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/terms.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "style.css",
+      "fullUrl": "http://localhost:5000style.css",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/testimonials.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "url": "js/cookie-consent.js",
+      "fullUrl": "http://localhost:5000js/cookie-consent.js",
+      "status": 0,
+      "category": "asset",
+      "sourcePage": "/testimonials.html",
+      "text": "",
+      "error": "Invalid URL"
+    },
+    {
+      "endpoint": "/api/auth/login",
+      "status": 404,
+      "method": "HEAD",
+      "category": "api",
+      "sourcePage": "API Endpoint Test"
+    },
+    {
+      "endpoint": "/api/auth/signup",
+      "status": 404,
+      "method": "HEAD",
+      "category": "api",
+      "sourcePage": "API Endpoint Test"
+    },
+    {
+      "endpoint": "/api/auth/logout",
+      "status": 404,
+      "method": "HEAD",
+      "category": "api",
+      "sourcePage": "API Endpoint Test"
+    },
+    {
+      "endpoint": "/api/payment/initiate",
+      "status": 404,
+      "method": "HEAD",
+      "category": "api",
+      "sourcePage": "API Endpoint Test"
+    },
+    {
+      "endpoint": "/api/payment/verify-otp",
+      "status": 404,
+      "method": "HEAD",
+      "category": "api",
+      "sourcePage": "API Endpoint Test"
+    },
+    {
+      "endpoint": "/api/payment/verify",
+      "status": 404,
+      "method": "HEAD",
+      "category": "api",
+      "sourcePage": "API Endpoint Test"
+    },
+    {
+      "endpoint": "/api/subscribers",
+      "status": 404,
+      "method": "HEAD",
+      "category": "api",
+      "sourcePage": "API Endpoint Test"
+    }
+  ],
+  "redirects": [],
+  "externalLinks": [],
+  "assetErrors": [],
+  "summary": {
+    "totalPages": 45,
+    "totalLinksTested": 248,
+    "workingLinks": 187,
+    "brokenLinks": 61,
+    "redirects": 0,
+    "externalLinks": 0,
+    "brokenPercentage": "24.60"
+  }
+}

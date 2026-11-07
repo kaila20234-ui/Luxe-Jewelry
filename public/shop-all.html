@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Shop All - Luxe Jewelry</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/components.css" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .shop-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 25px 15px 40px;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .page-title h1 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .page-title p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--primary);
+      color: var(--secondary);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+      background: #c9a834;
+    }
+
+    .shop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+      margin-top: 30px;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 1px solid var(--border);
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(212, 175, 55, 0.25);
+    }
+
+    .product-image {
+      width: 100%;
+      height: 160px;
+      background: linear-gradient(135deg, var(--primary), #b6912e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: white;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .stock-badge {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 5px 10px;
+      border: 1px solid rgba(255, 255, 255, 0.65);
+      border-radius: 999px;
+      color: white;
+      font-size: 0.7rem;
+      font-weight: 700;
+      line-height: 1.2;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
+      backdrop-filter: blur(6px);
+      z-index: 1;
+    }
+
+    .stock-badge.in-stock {
+      background: linear-gradient(135deg, #d4af37, #b6912e);
+      color: #252525;
+    }
+
+    .stock-badge.out-of-stock {
+      background: #dc3545;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      min-height: 120px;
+    }
+
+    .product-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: var(--secondary);
+      line-height: 1.3;
+    }
+
+    .product-category {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .product-price {
+      font-size: 1rem;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .shop-qty-control {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 6px;
+    }
+
+    .shop-qty-control button {
+      width: 30px;
+      height: 30px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--card-bg);
+      color: var(--secondary);
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .shop-qty-control button:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    .shop-qty-control input {
+      width: 48px;
+      height: 30px;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      background: var(--card-bg);
+      color: var(--secondary);
+      text-align: center;
+    }
+
+    .add-to-cart-btn {
+      width: 100%;
+      padding: 10px;
+      background: var(--primary) !important;
+      color: var(--secondary) !important;
+      border: none !important;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      margin-top: auto;
+    }
+
+    .add-to-cart-btn:hover {
+      background: #c9a834;
+      transform: scale(1.02);
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      .shop-container {
+        padding: 30px 15px 50px;
+      }
+
+      .page-title h1 {
+        font-size: 1.8rem;
+      }
+
+      .shop-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+      }
+
+      .product-image {
+        height: 150px;
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="shop-container">
+    <a href="/index.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <div class="page-title">
+      <h1>Shop All Collections</h1>
+      <p>Explore our complete collection of exquisite jewelry pieces, carefully curated to bring elegance and sophistication to every occasion.</p>
+    </div>
+
+    <div class="shop-grid" id="productsGrid">
+      <!-- Products will be loaded here -->
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api';
+    let allProducts = [];
+
+    async function loadProducts() {
+      try {
+        console.log('[SHOP-ALL] Fetching products');
+        
+        const response = await fetch(`${API_URL}/products`);
+
+        if (!response.ok) {
+          console.error('[SHOP-ALL] Error fetching products:', response.status);
+          return;
+        }
+
+        const data = await response.json();
+        console.log('[SHOP-ALL] API Response:', data);
+        
+        // Handle both wrapped and direct array responses
+        const products = data.products || data;
+        if (!Array.isArray(products)) {
+          console.error('[SHOP-ALL] Products is not an array:', products);
+          return;
+        }
+        
+        console.log('[SHOP-ALL] Fetched', products.length, 'products');
+        allProducts = products;
+        displayProducts(products);
+      } catch (err) {
+        console.error('[SHOP-ALL] Error:', err);
+      }
+    }
+
+    function displayProducts(products) {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '';
+
+      if (products.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1; text-align: center; padding: 60px 20px;">
+            <i class="fas fa-box-open" style="font-size: 3rem; color: #999; margin-bottom: 20px;"></i>
+            <p style="color: #999;">No products available</p>
+          </div>
+        `;
+        return;
+      }
+
+      products.forEach(product => {
+        const stockValue = Number(product.stock);
+        const stock =
+          product.stock == null || product.stock === "" || !Number.isFinite(stockValue)
+            ? 1
+            : Math.max(0, Math.floor(stockValue));
+        const isAvailable = product.available !== false && stock > 0;
+        const card = document.createElement('div');
+        card.className = `product-card${isAvailable ? '' : ' unavailable'}`;
+        card.innerHTML = `
+          <div class="product-image" style="background: linear-gradient(135deg, #d4af37, #b6912e); display: flex; align-items: center; justify-content: center;">
+            <div class="stock-badge ${isAvailable ? 'in-stock' : 'out-of-stock'}" role="status">
+              <i class="fas ${isAvailable ? 'fa-check-circle' : 'fa-circle-xmark'}"></i>
+              ${isAvailable ? `Available · ${stock}` : 'Out of Stock'}
+            </div>
+            ${product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" />` : '<i class="fas fa-gem" style="font-size: 3rem; color: white;"></i>'}
+          </div>
+          <div class="product-info">
+            <div class="product-name">${product.name}</div>
+            <div style="color: #d4af37; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem;">${product.category || 'Jewelry'}</div>
+            <div class="product-price">₦${Number(product.price).toLocaleString('en-US')}</div>
+            <div class="shop-qty-control" aria-label="Quantity">
+              <button type="button" class="quantity-change" data-product-id="${product._id}" data-change="-1" aria-label="Decrease quantity" ${isAvailable ? '' : 'disabled'}>−</button>
+              <input type="number" class="qty-${product._id}" value="1" min="1" max="${stock}" readonly aria-label="Quantity for ${product.name}" />
+              <button type="button" class="quantity-change" data-product-id="${product._id}" data-change="1" aria-label="Increase quantity" ${isAvailable ? '' : 'disabled'}>+</button>
+            </div>
+            <button class="add-to-cart-btn" data-product-id="${product._id}" ${isAvailable ? '' : 'disabled'} style="width: 100%; margin-top: 10px; padding: 8px 12px; background: #d4af37; color: #333; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background 0.3s;">
+              <i class="fas fa-shopping-bag"></i> Add to Cart
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Use event delegation for add-to-cart buttons (prevents duplicate listeners)
+      const gridElement = document.getElementById('productsGrid');
+      
+      // Check if listener already exists to prevent duplicates
+      if (!gridElement._cartListenerAttached) {
+        gridElement.addEventListener('click', async (e) => {
+          const quantityButton = e.target.closest('.quantity-change');
+          if (quantityButton) {
+            const productId = quantityButton.getAttribute('data-product-id');
+            const quantityInput = gridElement.querySelector(`.qty-${productId}`);
+            if (quantityInput) {
+              const currentQuantity = Number.parseInt(quantityInput.value, 10) || 1;
+              const change = Number.parseInt(quantityButton.getAttribute('data-change'), 10);
+              const product = allProducts.find(item => String(item._id) === String(productId));
+              const stockValue = Number(product?.stock);
+              const stock =
+                product?.stock == null ||
+                product.stock === "" ||
+                !Number.isFinite(stockValue)
+                  ? 1
+                  : Math.max(0, Math.floor(stockValue));
+              quantityInput.value = Math.min(stock, Math.max(1, currentQuantity + change));
+            }
+            return;
+          }
+
+          const btn = e.target.closest('.add-to-cart-btn');
+          if (!btn) return;
+
+          const productId = btn.getAttribute('data-product-id');
+          const product = allProducts.find(p => p._id === productId);
+          
+          if (!product) {
+            showToast('Product not found');
+            return;
+          }
+
+          const quantityInput = gridElement.querySelector(`.qty-${productId}`);
+          const quantity = Math.max(1, Number.parseInt(quantityInput?.value, 10) || 1);
+          btn.disabled = true;
+          btn.innerHTML = 'Adding...';
+
+          try {
+            await CartManager.addToCart(product, quantity);
+            showToast('✓ Added to Cart');
+            btn.innerHTML = '✓ Added to Cart';
+            btn.style.background = '#d4af37';
+            setTimeout(() => {
+              btn.disabled = false;
+              btn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
+              btn.style.background = '';
+              if (quantityInput) quantityInput.value = '1';
+            }, 1500);
+          } catch (error) {
+            console.error('Error adding to cart:', error);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
+            showToast('Failed to add to cart', 'error');
+          }
+        });
+        gridElement._cartListenerAttached = true;
+      }
+    }
+
+    function showToast(message, type = 'success') {
+      const toast = document.createElement('div');
+      toast.textContent = message;
+      toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        max-width: calc(100vw - 40px);
+        background: ${type === 'error' ? '#dc3545' : '#d4af37'};
+        color: ${type === 'error' ? 'white' : '#1b1b1b'};
+        padding: 14px 20px;
+        border-radius: 12px;
+        z-index: 9999;
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.25s ease, transform 0.25s ease;
+      `;
+      document.body.appendChild(toast);
+      requestAnimationFrame(() => {
+        toast.style.opacity = '1';
+        toast.style.transform = 'translateY(0)';
+      });
+      
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transform = 'translateY(-10px)';
+        setTimeout(() => toast.remove(), 250);
+      }, 2600);
+    }
+
+    document.addEventListener('DOMContentLoaded', loadProducts);
+  </script>
+  <script src="/cart-manager.js"></script>
+  <script src="/load-components.js"></script>
+</body>
+</html>

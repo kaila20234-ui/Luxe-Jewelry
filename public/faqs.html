@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FAQs - Luxe Jewelry</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="/style.css" rel="stylesheet" />
+    <link href="/components.css" rel="stylesheet" />
+    <link href="/styles.css" rel="stylesheet" />
+    <style>
+      body {
+        overflow-x: hidden;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 30px 20px 60px;
+      }
+
+      .page-header {
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        color: white;
+        padding: 40px 20px;
+        text-align: center;
+        border-radius: 12px;
+        margin-bottom: 35px;
+      }
+
+      .page-header h1 {
+        font-size: 2.2rem;
+        margin: 0 0 15px 0;
+        font-weight: 700;
+      }
+
+      .page-header p {
+        font-size: 1rem;
+        margin: 0;
+        color: #ffffff;
+      }
+
+      .faq-category {
+        margin-bottom: 35px;
+      }
+
+      .faq-category h2 {
+        color: #d4af37;
+        font-size: 1.2rem;
+        margin: 0 0 20px 0;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding-bottom: 14px;
+        border-bottom: 2px solid #d4af37;
+      }
+
+      .faq-category h2 i {
+        font-size: 1.3rem;
+      }
+
+      .faq-item {
+        background: white;
+        margin-bottom: 14px;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .faq-item:hover {
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      }
+
+      .faq-question {
+        padding: 16px;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: #f9f9f9;
+        border-left: 4px solid #d4af37;
+        transition: background 0.3s ease;
+      }
+
+      .faq-item.active .faq-question {
+        background: linear-gradient(135deg, #f9f6f1, #f4e7c5);
+      }
+
+      .faq-question:hover {
+        background: #f5f5f5;
+      }
+
+      .faq-item.active .faq-question:hover {
+        background: linear-gradient(135deg, #f9f6f1, #f4e7c5);
+      }
+
+      .faq-question-text {
+        color: #333;
+        font-weight: 600;
+        font-size: 1rem;
+        flex: 1;
+      }
+
+      .faq-toggle {
+        color: #d4af37;
+        font-size: 1.2rem;
+        transition: transform 0.3s ease;
+        margin-left: 16px;
+      }
+
+      .faq-item.active .faq-toggle {
+        transform: rotate(180deg);
+      }
+
+      .faq-answer {
+        padding: 0 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: white;
+      }
+
+      .faq-item.active .faq-answer {
+        padding: 20px;
+        max-height: 1000px;
+      }
+
+      .faq-answer p {
+        color: #666;
+        line-height: 1.8;
+        margin: 0 0 12px 0;
+        font-size: 0.95rem;
+      }
+
+      .faq-answer ul {
+        color: #666;
+        line-height: 1.8;
+        margin: 12px 0 0 24px;
+        padding: 0;
+        font-size: 0.95rem;
+      }
+
+      .faq-answer li {
+        margin: 8px 0;
+      }
+
+      .contact-section {
+        background: linear-gradient(135deg, #e8f4f8, #f0e8f6);
+        padding: 36px;
+        border-radius: 12px;
+        text-align: center;
+        margin-top: 45px;
+        border-left: 4px solid #d4af37;
+      }
+
+      .contact-section h3 {
+        color: #333;
+        margin: 0 0 16px 0;
+        font-size: 1.3rem;
+      }
+
+      .contact-section p {
+        color: #666;
+        margin: 8px 0;
+        font-size: 0.95rem;
+      }
+
+      .contact-section a {
+        color: #d4af37;
+        text-decoration: none;
+        font-weight: 600;
+        transition: color 0.3s ease;
+      }
+
+      .contact-section a:hover {
+        color: #b6912e;
+      }
+
+      @media (max-width: 768px) {
+        .page-header h1 {
+          font-size: 1.8rem;
+        }
+
+        .faq-question {
+          flex-direction: column;
+          align-items: flex-start;
+        }
+
+        .faq-question-text {
+          margin-bottom: 8px;
+        }
+
+        .faq-toggle {
+          position: absolute;
+          right: 20px;
+          top: 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header loaded dynamically by load-components.js -->
+
+    <!-- Main Content -->
+    <main class="container">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Search FAQs..." />
+      </div>
+
+      <!-- Orders & Shopping -->
+      <div class="faq-category">
+        <h2><i class="fas fa-shopping-bag"></i> Orders & Shopping</h2>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How do I place an order?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Placing an order is easy! Browse our collection, select your item,
+              add it to your cart, and proceed to checkout. You can pay using
+              your preferred payment method. You'll receive an order
+              confirmation email immediately.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What payment methods do you accept?</span
+            >
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>We accept multiple payment methods including:</p>
+            <ul>
+              <li>Paystack (Credit Card, Debit Card)</li>
+              <li>Bank Transfers</li>
+              <li>Mobile Money</li>
+              <li>PayPal</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >Can I cancel or modify my order?</span
+            >
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Orders can be cancelled within 24 hours of placement. After that,
+              your order enters our fulfillment process. For modifications,
+              please contact our customer service team immediately at
+              support@luxejewelry.com. We'll do our best to help!
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >Do you offer bulk or wholesale orders?</span
+            >
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Yes! We offer special pricing for bulk and wholesale orders.
+              Please contact our sales team at sales@luxejewelry.com with your
+              requirements, and we'll provide you with a custom quote.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Shipping & Delivery -->
+      <div class="faq-category">
+        <h2><i class="fas fa-truck"></i> Shipping & Delivery</h2>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How long does shipping take?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Shipping times depend on your location and chosen delivery method:
+            </p>
+            <ul>
+              <li>Express Delivery (Kano): 1-2 business days</li>
+              <li>Standard Delivery (Nationwide): 3-5 business days</li>
+              <li>Economy Delivery: 7-10 business days</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How much does shipping cost?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Shipping costs vary by location and delivery method. We offer free
+              standard shipping on orders over ₦50,000! Check our Shipping
+              Information page for detailed pricing.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Can I track my order?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Yes! Once your order ships, you'll receive a tracking number via
+              email. You can track your package in real-time through our courier
+              partner's website.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >What if my item arrives damaged?</span
+            >
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              If your item arrives damaged or defective, contact us within 48
+              hours with photos. We'll send a replacement immediately at no cost
+              to you. We stand behind the quality of all our products!
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Returns & Exchanges -->
+      <div class="faq-category">
+        <h2><i class="fas fa-redo"></i> Returns & Exchanges</h2>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What is your return policy?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              We offer a 30-day return policy! If you're not satisfied with your
+              purchase, return it in original condition within 30 days for a
+              full refund or exchange. Custom-made items are non-returnable.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How do I return an item?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Contact our customer service team with your order number. We'll
+              send you a return authorization number and shipping label. Pack
+              your item carefully and send it back to us. We'll process your
+              refund within 7-10 business days.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Do you offer exchanges?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Absolutely! You can exchange your item for a different size,
+              style, or color within 30 days. If the new item costs less, we'll
+              refund the difference. If it costs more, you'll pay the
+              difference.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How long does a refund take?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Once we receive and verify your return, we process your refund
+              within 7-10 business days. The refund will be credited to your
+              original payment method. Please allow up to 5 business days for
+              the amount to appear in your account.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Products & Care -->
+      <div class="faq-category">
+        <h2><i class="fas fa-sparkles"></i> Products & Care</h2>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Are your jewels authentic?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Yes! All our jewelry is 100% authentic. We work directly with
+              certified manufacturers and provide authenticity certificates with
+              every purchase. Each item is carefully inspected for quality
+              before shipping.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How do I care for my jewelry?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>To keep your jewelry beautiful:</p>
+            <ul>
+              <li>Remove jewelry during exercise, swimming, or bathing</li>
+              <li>Store in a cool, dry place</li>
+              <li>Clean gently with a soft cloth</li>
+              <li>Avoid contact with chemicals and perfumes</li>
+              <li>Get professional cleaning annually</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">Do you offer custom jewelry?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              We offer custom designs! Contact our design team at
+              design@luxejewelry.com with your ideas. We'll work with you to
+              create a unique piece that matches your vision.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">What is your warranty?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              All items come with a 1-year warranty against manufacturing
+              defects. Damage from misuse, accidents, or normal wear and tear is
+              not covered. For warranty claims, contact our service team.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Account & Login -->
+      <div class="faq-category">
+        <h2><i class="fas fa-user-circle"></i> Account & Login</h2>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How do I create an account?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Click the "Login" link at the top of the page, then select "Sign
+              Up". Fill in your details and password. You'll receive a
+              confirmation email to verify your account.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text"
+              >I forgot my password. What do I do?</span
+            >
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              On the login page, click "Forgot Password?" and enter your email
+              address. We'll send you instructions to reset your password. Click
+              the link in the email and create a new password.
+            </p>
+          </div>
+        </div>
+
+        <div class="faq-item">
+          <div class="faq-question" onclick="toggleFAQ(this)">
+            <span class="faq-question-text">How do I view my orders?</span>
+            <i class="faq-toggle fas fa-chevron-down"></i>
+          </div>
+          <div class="faq-answer">
+            <p>
+              Log into your account and click on "My Orders". You'll see all
+              your past and current orders with tracking information and status
+              updates.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Contact Section -->
+      <div class="contact-section">
+        <h3><i class="fas fa-headset"></i> Still have questions?</h3>
+        <p>
+          Can't find the answer you're looking for? Our customer service team is
+          here to help!
+        </p>
+        <p>
+          <a href="/contact.html">Contact Us</a> |
+          <a href="mailto:support@luxejewelry.com">support@luxejewelry.com</a> |
+          <a href="tel:+2349012892640">+2349012892640</a>
+        </p>
+      </div>
+    </main>
+
+    <script>
+      function toggleFAQ(element) {
+        element.parentElement.classList.toggle("active");
+      }
+
+      function handleFAQKeydown(event) {
+        if (event.key === "Enter" || event.code === "Space") {
+          event.preventDefault();
+          toggleFAQ(event.currentTarget);
+        }
+      }
+
+      // Initialize accessibility attributes on all FAQ questions
+      document.addEventListener("DOMContentLoaded", function () {
+        const faqQuestions = document.querySelectorAll(".faq-question");
+        faqQuestions.forEach((element) => {
+          element.setAttribute("role", "button");
+          element.setAttribute("tabindex", "0");
+          element.addEventListener("keydown", handleFAQKeydown);
+        });
+      });
+
+      document
+        .getElementById("searchInput")
+        .addEventListener("keyup", function (e) {
+          const searchTerm = e.target.value.toLowerCase();
+          const faqItems = document.querySelectorAll(".faq-item");
+
+          faqItems.forEach((item) => {
+            const questionText = item
+              .querySelector(".faq-question-text")
+              .textContent.toLowerCase();
+            const answerText = item
+              .querySelector(".faq-answer")
+              .textContent.toLowerCase();
+
+            if (
+              questionText.includes(searchTerm) ||
+              answerText.includes(searchTerm)
+            ) {
+              item.style.display = "block";
+            } else {
+              item.style.display = "none";
+            }
+          });
+        });
+    </script>
+    <script src="/cart-manager.js"></script>
+    <script src="/load-components.js"></script>
+  </body>
+</html>

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Links - Luxe Jewelry Admin</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .container {
+      background: white;
+      border-radius: 15px;
+      padding: 40px;
+      max-width: 500px;
+      width: 100%;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #1a1a2e;
+      margin-bottom: 10px;
+      font-size: 28px;
+    }
+
+    .subtitle {
+      color: #999;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .links-section {
+      margin-bottom: 30px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #999;
+      text-transform: uppercase;
+      margin-bottom: 12px;
+      letter-spacing: 1px;
+    }
+
+    .link-btn {
+      display: block;
+      width: 100%;
+      padding: 15px;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+      border: 2px solid #eee;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #333;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-size: 14px;
+      text-align: left;
+    }
+
+    .link-btn:hover {
+      background: linear-gradient(135deg, #d4af37 0%, #b8941e 100%);
+      color: white;
+      border-color: #b8941e;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(212, 175, 55, 0.3);
+    }
+
+    .link-btn i {
+      margin-right: 10px;
+      font-size: 16px;
+    }
+
+    .info-box {
+      background: #f0f8ff;
+      border-left: 4px solid #4ecdc4;
+      padding: 15px;
+      border-radius: 6px;
+      margin-top: 20px;
+      font-size: 13px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .info-box strong {
+      color: #333;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>💎 Luxe Jewelry Admin</h1>
+    <p class="subtitle">Quick Navigation & Tools</p>
+
+    <div class="links-section">
+      <div class="section-title">Dashboard</div>
+      <a href="/admin.html" class="link-btn">📊 Admin Dashboard</a>
+      <a href="/admin.html#complaints" class="link-btn">⚠️ Manager Dashboard</a>
+    </div>
+
+    <div class="links-section">
+      <div class="section-title">Communication</div>
+      <a href="/messages.html" class="link-btn">💌 Internal Messaging</a>
+      <a href="/admin-tickets.html" class="link-btn">🎫 Support Tickets</a>
+      <a href="/complain.html" class="link-btn">📝 Customer Complaints</a>
+    </div>
+
+    <div class="links-section">
+      <div class="section-title">Management</div>
+      <a href="/admin-customers.html" class="link-btn">👥 Customers</a>
+      <a href="/admin-category.html" class="link-btn">📦 Categories</a>
+      <a href="/admin-users.html" class="link-btn">👤 Users</a>
+    </div>
+
+    <div class="links-section">
+      <div class="section-title">Other</div>
+      <a href="/index.html" class="link-btn">🏠 Home</a>
+      <a href="/admin-sales.html" class="link-btn">📈 Sales Report</a>
+      <a href="/" onclick="logout(); return false;" class="link-btn" style="background: #ffebee; border-color: #ffcdd2;">🚪 Logout</a>
+    </div>
+
+    <div class="info-box">
+      <strong>✨ New Feature: Internal Messaging</strong><br>
+      Admins and managers can now communicate internally using the messaging system. Click "Internal Messaging" to send messages, view your inbox, and manage conversations.
+    </div>
+  </div>
+
+  <script>
+    function logout() {
+      if (confirm('Are you sure you want to logout?')) {
+        localStorage.clear();
+        window.location.href = 'login.html';
+      }
+    }
+  </script>
+</body>
+</html>

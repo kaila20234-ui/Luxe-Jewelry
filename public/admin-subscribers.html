@@ -1,0 +1,47 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin - Subscribers</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/admin-shell.css" />
+<style>body{font-family:Poppins;padding:20px}table{width:100%;border-collapse:collapse}th,td{padding:8px;border:1px solid #eee}section{margin-bottom:28px}</style>
+</head>
+<body>
+<h1>Subscribers</h1>
+<section>
+<h3>Newsletter Subscribers</h3>
+<table><thead><tr><th>Email</th><th>Subscribed</th><th>Active</th><th>Action</th></tr></thead><tbody id="newsletter-list"></tbody></table>
+</section>
+<section>
+<h3>Registered Users (Opted-in)</h3>
+<table><thead><tr><th>Email</th><th>Name</th><th>Joined</th></tr></thead><tbody id="user-list"></tbody></table>
+</section>
+<script>
+const token = localStorage.getItem('authToken'); if(!token){alert('Sign in'); location.href='/login.html'}
+async function load(){
+  const res = await fetch('/api/admin/subscribers',{headers:{'Authorization':'Bearer '+token}});
+  const data = await res.json();
+  if(!data.success){ alert('Failed to load subscribers'); return }
+  const news = data.newsletter.items || [];
+  const users = data.users.items || [];
+  document.getElementById('newsletter-list').innerHTML = news.map(n=>`<tr data-id="${n._id}"><td>${n.email}</td><td>${new Date(n.subscribedAt).toLocaleString()}</td><td>${n.isActive? 'Yes':'No'}</td><td><button class="toggle">Toggle</button> <button class="del">Delete</button></td></tr>`).join('');
+  document.getElementById('user-list').innerHTML = users.map(u=>`<tr><td>${u.email}</td><td>${u.name||''}</td><td>${new Date(u.createdAt).toLocaleDateString()}</td></tr>`).join('');
+  document.querySelectorAll('.toggle').forEach(b=>b.addEventListener('click',async e=>{
+    const id = e.target.closest('tr').dataset.id;
+    if(!confirm('Toggle active state for subscriber?')) return;
+    await fetch('/api/admin/subscribers/newsletter/'+id+'/toggle',{method:'PATCH',headers:{'Authorization':'Bearer '+token}});
+    load();
+  }));
+  document.querySelectorAll('.del').forEach(b=>b.addEventListener('click',async e=>{
+    const id = e.target.closest('tr').dataset.id;
+    if(!confirm('Delete subscriber?')) return;
+    await fetch('/api/admin/subscribers/newsletter/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+token}});
+    load();
+  }));
+}
+load();
+</script>
+<script src="/admin-shell.js"></script>
+</body>
+</html>

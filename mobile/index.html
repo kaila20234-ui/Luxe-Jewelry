@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Luxe Jewelry">
+    <meta name="theme-color" content="#d4af37">
+    <title>Luxe Jewelry Mobile</title>
+    <link rel="icon" type="image/png" href="../public/assets/favicon.png">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/mobile-styles.css">
+    <style>
+        /* ⚡ ELECTRIC & SPARKLE ANIMATIONS ⚡ */
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; transform: scale(0); }
+            50% { opacity: 1; transform: scale(1); }
+        }
+
+        @keyframes electric-bolt {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
+        }
+
+        @keyframes pulse-glow {
+            0%, 100% { text-shadow: 0 0 10px rgba(212, 175, 55, 0.5), 0 0 20px rgba(212, 175, 55, 0.3); }
+            50% { text-shadow: 0 0 20px rgba(212, 175, 55, 0.8), 0 0 40px rgba(212, 175, 55, 0.6), 0 0 60px rgba(212, 175, 55, 0.4); }
+        }
+
+        @keyframes float-up {
+            0% { opacity: 0; transform: translateY(20px) scale(0.5); }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { opacity: 0; transform: translateY(-80px) scale(0); }
+        }
+
+        .animated-logo-container {
+            position: relative;
+            display: inline-block;
+            margin: 0 auto;
+        }
+
+        .animated-logo {
+            font-size: 28px;
+            margin-bottom: 8px;
+            animation: pulse-glow 2s ease-in-out infinite;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .sparkle {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .sparkle-star {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            background: #d4af37;
+            clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+            animation: sparkle 1.5s ease-in-out infinite;
+        }
+
+        .electric-bolt {
+            position: absolute;
+            font-size: 20px;
+            animation: electric-bolt 1.5s ease-in-out infinite;
+            filter: drop-shadow(0 0 8px #d4af37);
+        }
+
+        .floating-sparkle {
+            position: absolute;
+            font-size: 14px;
+            animation: float-up 2s ease-in infinite;
+            pointer-events: none;
+        }
+
+        .diamond-emoji {
+            display: inline-block;
+            animation: pulse-glow 1.5s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div id="mobile-app">
+        <!-- HEADER -->
+        <header class="mobile-header">
+            <div class="logo">LUXE <span>💎</span></div>
+            <div class="mobile-header-actions">
+                <button class="search-toggle" id="searchToggle" title="Search">
+                    <i class="fas fa-search"></i>
+                </button>
+                <button class="cart-toggle" id="cartToggle" style="display: none;" title="Cart">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cartCount">0</span>
+                </button>
+                <button class="profile-toggle" id="profileToggle" title="Profile">
+                    <i class="fas fa-user"></i>
+                </button>
+                <button class="theme-toggle" id="themeToggle" title="Dark Mode">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- SEARCH BAR (Hidden by default) -->
+        <div class="search-box" id="searchBar" style="display: none; margin-top: 0;">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search products...">
+        </div>
+
+        <!-- MAIN CONTENT AREA -->
+        <main class="mobile-content" id="mobileContent">
+            <!-- LOGIN PAGE (shown before authentication) -->
+            <div class="page-section active" id="loginPage">
+                <div style="padding: 40px 20px; display: flex; flex-direction: column; justify-content: center; min-height: 100vh;">
+                    <div style="text-align: center; margin-bottom: 40px; position: relative;">
+                        <!-- Animated Logo Header -->
+                        <div class="animated-logo-container">
+                            <h1 class="animated-logo">
+                                LUXE <span class="diamond-emoji">💎</span>
+                            </h1>
+                            
+                            <!-- Electric Bolts -->
+                            <span class="electric-bolt" style="top: -15px; left: 5px; animation-delay: 0s;">⚡</span>
+                            <span class="electric-bolt" style="top: -15px; right: 5px; animation-delay: 0.3s;">⚡</span>
+                            
+                            <!-- Floating Sparkles -->
+                            <span class="floating-sparkle" style="top: 20px; left: 10px; animation-delay: 0s;">✨</span>
+                            <span class="floating-sparkle" style="top: 15px; right: 10px; animation-delay: 0.5s;">✨</span>
+                            <span class="floating-sparkle" style="top: 35px; left: 20%; animation-delay: 1s;">⭐</span>
+                            <span class="floating-sparkle" style="top: 40px; right: 20%; animation-delay: 1.2s;">⭐</span>
+                        </div>
+                        
+                        <p style="color: #999; font-size: 14px;">Premium Jewelry Collection</p>
+                    </div>
+
+                    <div id="loginForm">
+                        <div class="form-group">
+                            <label for="loginEmail">Email</label>
+                            <input type="email" id="loginEmail" placeholder="your@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loginPassword">Password</label>
+                            <input type="password" id="loginPassword" placeholder="••••••••">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="loginRole">Login As</label>
+                            <select id="loginRole">
+                                <option value="customer">Customer</option>
+                                <option value="manager">Manager</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+
+                        <button class="btn btn-primary" onclick="handleLogin()" style="width: 100%; margin-bottom: 12px;">
+                            Login
+                        </button>
+
+                        <button class="btn btn-secondary" onclick="switchToRegister()" style="width: 100%;">
+                            Create Account
+                        </button>
+                    </div>
+
+                    <div id="registerForm" style="display: none;">
+                        <div class="form-group">
+                            <label for="regEmail">Email</label>
+                            <input type="email" id="regEmail" placeholder="your@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regPassword">Password</label>
+                            <input type="password" id="regPassword" placeholder="••••••••">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="regName">Full Name</label>
+                            <input type="text" id="regName" placeholder="John Doe">
+                        </div>
+
+                        <button class="btn btn-primary" onclick="handleRegister()" style="width: 100%; margin-bottom: 12px;">
+                            Create Account
+                        </button>
+
+                        <button class="btn btn-secondary" onclick="switchToLogin()" style="width: 100%;">
+                            Back to Login
+                        </button>
+                    </div>
+
+                    <div id="loginError" class="alert alert-error" style="display: none; margin-top: 16px;">
+                        <i class="fas fa-exclamation-circle"></i>
+                        <span id="errorMessage"></span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CUSTOMER APP PAGES -->
+            <div class="page-section" id="customerHome">
+                <div class="section-header">
+                    <h2 class="section-title">Shop</h2>
+                    <p class="section-subtitle">Discover Our Collection</p>
+                </div>
+                <div id="productsGrid" class="grid-2"></div>
+            </div>
+
+            <div class="page-section" id="customerCart">
+                <div class="section-header">
+                    <h2 class="section-title">Shopping Cart</h2>
+                </div>
+                <div id="cartItems" style="padding: 16px;"></div>
+                <div id="cartSummary" style="padding: 16px; background: #f9f6f1;">
+                    <div style="margin-bottom: 12px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span>Subtotal:</span>
+                            <span id="cartSubtotal">₦0.00</span>
+                        </div>
+                        <div style="border-top: 1px solid #e0cba0; padding-top: 8px; display: flex; justify-content: space-between; font-weight: 700; font-size: 16px;">
+                            <span>Total:</span>
+                            <span id="cartTotal" style="color: #d4af37;">₦0.00</span>
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" onclick="proceedToCheckout()" style="width: 100%;">
+                        <i class="fas fa-lock"></i> Checkout
+                    </button>
+                </div>
+            </div>
+
+            <div class="page-section" id="customerOrders">
+                <div class="section-header">
+                    <h2 class="section-title">My Orders</h2>
+                </div>
+                <div id="ordersList" style="padding: 16px;"></div>
+            </div>
+
+            <div class="page-section" id="customerWishlist">
+                <div class="section-header">
+                    <h2 class="section-title">Wishlist</h2>
+                </div>
+                <div id="wishlistItems" class="grid-2"></div>
+            </div>
+
+            <div class="page-section" id="customerProfile">
+                <div class="section-header">
+                    <h2 class="section-title">My Account</h2>
+                </div>
+                <div style="padding: 16px;">
+                    <div class="card">
+                        <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Profile Information</h3>
+                        <div class="list-item" style="border: none; padding: 0; flex-direction: column; align-items: flex-start;">
+                            <p><strong>Email:</strong> <span id="profileEmail"></span></p>
+                            <p style="margin-top: 8px;"><strong>Name:</strong> <span id="profileName"></span></p>
+                            <p style="margin-top: 8px;"><strong>Phone:</strong> <span id="profilePhone"></span></p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Saved Addresses</h3>
+                        <div id="addressesList"></div>
+                        <button class="btn btn-secondary" style="width: 100%;">
+                            <i class="fas fa-plus"></i> Add Address
+                        </button>
+                    </div>
+
+                    <button class="btn btn-danger" onclick="handleLogout()" style="width: 100%; margin-top: 16px;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- MANAGER APP PAGES -->
+            <div class="page-section" id="managerDashboard">
+                <div class="section-header">
+                    <h2 class="section-title">Dashboard</h2>
+                    <p class="section-subtitle">Welcome, Manager</p>
+                </div>
+                <div style="padding: 16px;">
+                    <div class="grid-1">
+                        <div class="card">
+                            <div style="text-align: center;">
+                                <i class="fas fa-exclamation-triangle" style="font-size: 32px; color: #d4af37; margin-bottom: 8px;"></i>
+                                <p style="font-size: 24px; font-weight: 700; color: #333;">-</p>
+                                <p style="color: #999; font-size: 12px;">New Complaints</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div style="text-align: center;">
+                                <i class="fas fa-ticket-alt" style="font-size: 32px; color: #d4af37; margin-bottom: 8px;"></i>
+                                <p style="font-size: 24px; font-weight: 700; color: #333;">-</p>
+                                <p style="color: #999; font-size: 12px;">Support Tickets</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-section" id="managerComplaints">
+                <div class="section-header">
+                    <h2 class="section-title">Complaints</h2>
+                </div>
+                <div id="complaintsList" style="padding: 16px;"></div>
+            </div>
+
+            <div class="page-section" id="managerTickets">
+                <div class="section-header">
+                    <h2 class="section-title">Support Tickets</h2>
+                </div>
+                <div id="ticketsList" style="padding: 16px;"></div>
+            </div>
+
+            <div class="page-section" id="managerSubscribers">
+                <div class="section-header">
+                    <h2 class="section-title">Subscribers</h2>
+                </div>
+                <div id="subscribersList" style="padding: 16px;"></div>
+            </div>
+
+            <div class="page-section" id="managerProfile">
+                <div class="section-header">
+                    <h2 class="section-title">My Account</h2>
+                </div>
+                <div style="padding: 16px;">
+                    <div class="card">
+                        <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Manager Info</h3>
+                        <div class="list-item" style="border: none; padding: 0; flex-direction: column; align-items: flex-start;">
+                            <p><strong>Email:</strong> <span id="managerEmail"></span></p>
+                            <p style="margin-top: 8px;"><strong>Role:</strong> Manager</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger" onclick="handleLogout()" style="width: 100%; margin-top: 16px;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+
+            <!-- ADMIN APP PAGES -->
+            <div class="page-section" id="adminDashboard">
+                <div class="section-header">
+                    <h2 class="section-title">Dashboard</h2>
+                    <p class="section-subtitle">Admin Control Panel</p>
+                </div>
+                <div style="padding: 16px;">
+                    <div class="grid-2">
+                        <div class="card">
+                            <div style="text-align: center;">
+                                <i class="fas fa-box" style="font-size: 32px; color: #d4af37; margin-bottom: 8px;"></i>
+                                <p style="font-size: 24px; font-weight: 700; color: #333;">-</p>
+                                <p style="color: #999; font-size: 12px;">Total Products</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div style="text-align: center;">
+                                <i class="fas fa-users" style="font-size: 32px; color: #d4af37; margin-bottom: 8px;"></i>
+                                <p style="font-size: 24px; font-weight: 700; color: #333;">-</p>
+                                <p style="color: #999; font-size: 12px;">Total Customers</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div style="text-align: center;">
+                                <i class="fas fa-shopping-cart" style="font-size: 32px; color: #d4af37; margin-bottom: 8px;"></i>
+                                <p style="font-size: 24px; font-weight: 700; color: #333;">-</p>
+                                <p style="color: #999; font-size: 12px;">Total Orders</p>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div style="text-align: center;">
+                                <i class="fas fa-coins" style="font-size: 32px; color: #d4af37; margin-bottom: 8px;"></i>
+                                <p style="font-size: 24px; font-weight: 700; color: #333;">₦0</p>
+                                <p style="color: #999; font-size: 12px;">Total Revenue</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-section" id="adminProducts">
+                <div class="section-header">
+                    <h2 class="section-title">Products</h2>
+                    <p class="section-subtitle">Manage inventory</p>
+                </div>
+                <div style="padding: 16px;">
+                    <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;">
+                        <i class="fas fa-plus"></i> Add Product
+                    </button>
+                    <div id="adminProductsList"></div>
+                </div>
+            </div>
+
+            <div class="page-section" id="adminUsers">
+                <div class="section-header">
+                    <h2 class="section-title">Staff Users</h2>
+                    <p class="section-subtitle">Manage admins & managers</p>
+                </div>
+                <div style="padding: 16px;">
+                    <button class="btn btn-primary" style="width: 100%; margin-bottom: 16px;">
+                        <i class="fas fa-user-plus"></i> Add Staff
+                    </button>
+                    <div id="adminUsersList"></div>
+                </div>
+            </div>
+
+            <div class="page-section" id="adminReports">
+                <div class="section-header">
+                    <h2 class="section-title">Reports</h2>
+                    <p class="section-subtitle">Sales & Analytics</p>
+                </div>
+                <div style="padding: 16px;">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Sales Overview</span>
+                        </div>
+                        <div style="text-align: center; padding: 20px;">
+                            <p style="color: #999; margin-bottom: 12px;">Select date range to view analytics</p>
+                            <div class="form-group">
+                                <input type="date" style="width: 100%;">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="page-section" id="adminSettings">
+                <div class="section-header">
+                    <h2 class="section-title">Settings</h2>
+                </div>
+                <div style="padding: 16px;">
+                    <div class="card">
+                        <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">Admin Account</h3>
+                        <div class="list-item" style="border: none; padding: 0; flex-direction: column; align-items: flex-start;">
+                            <p><strong>Email:</strong> <span id="adminEmail"></span></p>
+                            <p style="margin-top: 8px;"><strong>Role:</strong> Administrator</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3 style="font-size: 14px; font-weight: 600; margin-bottom: 12px;">System Settings</h3>
+                        <div class="form-group">
+                            <label for="appVersion">App Version</label>
+                            <p id="appVersion" style="font-size: 14px; color: #999;">v1.0.0</p>
+                        </div>
+                    </div>
+                    <button class="btn btn-danger" onclick="handleLogout()" style="width: 100%; margin-top: 16px;">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+        </main>
+
+        <!-- BOTTOM TAB NAVIGATION -->
+        <nav class="mobile-tabs" id="mobileTabs">
+            <!-- Tabs will be generated dynamically based on user role -->
+        </nav>
+    </div>
+
+    <script src="js/mobile-app.js"></script>
+    <script src="js/api-client.js"></script>
+</body>
+</html>

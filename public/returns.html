@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Returns & Exchanges - Luxe Jewelry</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="/style.css" rel="stylesheet" />
+    <link href="/components.css" rel="stylesheet" />
+    <link href="/styles.css" rel="stylesheet" />
+    <style>
+      body {
+        overflow-x: hidden;
+        background-color: #fafafa;
+      }
+
+      .wrapper {
+        max-width: 900px;
+        margin: 0 auto;
+        padding: 30px 20px 80px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+
+      .page-title {
+        text-align: center;
+        margin-bottom: 40px;
+      }
+
+      .page-title h1 {
+        font-size: 2.2rem;
+        color: #333;
+        margin: 0 0 10px 0;
+        font-weight: 700;
+      }
+
+      .page-title p {
+        font-size: 1rem;
+        color: #666;
+        margin: 0;
+      }
+
+      .section {
+        background: white;
+        padding: 30px;
+        margin-bottom: 20px;
+        border-radius: 8px;
+        border-top: 4px solid #d4af37;
+      }
+
+      .section h2 {
+        font-size: 1.3rem;
+        color: #333;
+        margin: 0 0 15px 0;
+        font-weight: 600;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #f0f0f0;
+      }
+
+      .section p {
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.7;
+        margin: 0 0 15px 0;
+      }
+
+      .section h3 {
+        font-size: 1.05rem;
+        color: #333;
+        margin: 20px 0 10px 0;
+        font-weight: 600;
+      }
+
+      .policy-box {
+        background: linear-gradient(135deg, #f5f1e8 0%, #fffbf0 100%);
+        border: 2px solid #d4af37;
+        border-radius: 8px;
+        padding: 18px;
+        margin: 15px 0;
+      }
+
+      .policy-box strong {
+        color: #333;
+        display: block;
+        margin-bottom: 8px;
+        font-size: 0.95rem;
+      }
+
+      .policy-box p {
+        color: #666;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .timeline {
+        margin: 20px 0;
+      }
+
+      .timeline-step {
+        display: flex;
+        gap: 15px;
+        margin: 20px 0;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #f0f0f0;
+      }
+
+      .timeline-step:last-child {
+        border-bottom: none;
+      }
+
+      .step-number {
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        color: white;
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        flex-shrink: 0;
+        font-size: 0.9rem;
+      }
+
+      .step-content h4 {
+        color: #333;
+        margin: 0 0 6px 0;
+        font-size: 1rem;
+        font-weight: 600;
+      }
+
+      .step-content p {
+        color: #666;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      .checklist {
+        background: #f9f9f9;
+        border-left: 4px solid #d4af37;
+        padding: 15px 15px 15px 25px;
+        border-radius: 4px;
+        margin: 15px 0;
+      }
+
+      .checklist ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+
+      .checklist li {
+        color: #666;
+        font-size: 0.9rem;
+        padding: 6px 0;
+        padding-left: 20px;
+        position: relative;
+      }
+
+      .checklist li:before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #d4af37;
+        font-weight: bold;
+        font-size: 1rem;
+      }
+
+      .highlight {
+        background: linear-gradient(135deg, #fff9e6 0%, #f4e7c5 100%);
+        border-left: 4px solid #ffd700;
+        padding: 20px;
+        border-radius: 6px;
+        margin: 20px 0;
+      }
+
+      .highlight p {
+        margin: 8px 0;
+        color: #666;
+        font-size: 0.95rem;
+        line-height: 1.6;
+      }
+
+      @media (max-width: 768px) {
+        .wrapper {
+          padding: 20px 15px 60px 15px;
+        }
+
+        .page-title h1 {
+          font-size: 1.6rem;
+        }
+
+        .section {
+          padding: 20px;
+        }
+
+        .timeline-step {
+          gap: 12px;
+        }
+
+        .step-number {
+          width: 30px;
+          height: 30px;
+          font-size: 0.8rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header loaded dynamically by load-components.js -->
+
+    <div class="wrapper">
+      <div class="page-title">
+        <h1>Returns & Exchanges</h1>
+        <p>100% satisfaction guaranteed - Easy returns within 30 days</p>
+      </div>
+
+      <!-- Return Policy -->
+      <div class="section">
+        <h2>Our Return Policy</h2>
+        <p>We stand behind every piece of jewelry. If you're not completely satisfied, we make returns simple and hassle-free.</p>
+
+        <div class="policy-box">
+          <strong>30-Day Return Window</strong>
+          <p>You have 30 days from the date of delivery to return your item for a full refund or exchange. Items must be in original condition with all packaging and certificates included.</p>
+        </div>
+
+        <div class="policy-box">
+          <strong>Full Refund Guarantee</strong>
+          <p>Return any unused item within 30 days in original condition and receive a full refund of the purchase price. Refunds are processed within 7-10 business days to your original payment method.</p>
+        </div>
+
+        <div class="policy-box">
+          <strong>Non-Returnable Items</strong>
+          <p>Custom-made jewelry, engraved items, and clearance/sale items are non-returnable. Items damaged due to misuse cannot be returned. Please inspect items before completing purchase.</p>
+        </div>
+
+        <div class="highlight">
+          <p><strong>Free Return Shipping:</strong> For items that are defective or don't match the product description. Return shipping is customer-paid for change-of-mind returns.</p>
+        </div>
+      </div>
+
+      <!-- How to Return -->
+      <div class="section">
+        <h2>How to Return an Item</h2>
+        <p>Our return process is quick and straightforward. Follow these 5 simple steps:</p>
+
+        <div class="timeline">
+          <div class="timeline-step">
+            <div class="step-number">1</div>
+            <div class="step-content">
+              <h4>Contact Our Support Team</h4>
+              <p>Email support@luxejewelry.com or call +2349012892640 with your order number and reason for return. Include photos if applicable. We'll respond within 24 hours.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-number">2</div>
+            <div class="step-content">
+              <h4>Receive Return Authorization</h4>
+              <p>We'll send you a return authorization number (RMA) and prepaid shipping label (if applicable) via email within 24 hours. Keep the RMA number for your records.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-number">3</div>
+            <div class="step-content">
+              <h4>Ship Your Item Back</h4>
+              <p>Carefully pack your jewelry in the original Luxe Jewelry box with all documentation, certificates, and packaging. Use the provided shipping label and include your RMA number on the package.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-number">4</div>
+            <div class="step-content">
+              <h4>We Inspect & Process</h4>
+              <p>Once we receive your return, we inspect the item to verify it meets our return conditions. This typically takes 3-5 business days. We'll email you updates.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-number">5</div>
+            <div class="step-content">
+              <h4>Receive Your Refund or Exchange</h4>
+              <p>If approved, we'll process your refund or send your replacement item immediately. Refunds appear in your account within 7-10 business days.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Exchanges -->
+      <div class="section">
+        <h2>Want to Exchange Instead?</h2>
+        <p>Exchanges are simple and often faster than returns. Exchange your item for a different style, color, or size at no extra cost within 30 days.</p>
+
+        <h3>Exchange Requirements</h3>
+        <div class="checklist">
+          <ul>
+            <li>Original Luxe Jewelry box and packaging</li>
+            <li>All certificates and documentation included</li>
+            <li>Item must be in original condition</li>
+            <li>Exchange requested within 30 days of delivery</li>
+            <li>Size and color changes are free</li>
+            <li>If exchanging for higher-value item, pay the difference</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- What to Include -->
+      <div class="section">
+        <h2>What to Include in Your Return</h2>
+        <p>To ensure your return is processed quickly, include the following:</p>
+
+        <div class="checklist">
+          <ul>
+            <li>The original jewelry item</li>
+            <li>Original Luxe Jewelry box and all packaging materials</li>
+            <li>All certificates of authenticity</li>
+            <li>Return authorization number (RMA) on the outside of package</li>
+            <li>Original receipt or order confirmation (if available)</li>
+            <li>A note with your order number and reason for return</li>
+          </ul>
+        </div>
+
+        <div class="highlight">
+          <p><strong>Important:</strong> Items returned without proper packaging or documentation may be rejected. Always include your RMA number on the outside of the package in clear, visible writing.</p>
+        </div>
+      </div>
+
+      <!-- Return Address -->
+      <div class="section">
+        <h2>Where to Send Returns</h2>
+        <p>After receiving your return authorization number, send your item to:</p>
+
+        <p style="background: #f9f9f9; padding: 15px; border-left: 4px solid #d4af37; border-radius: 4px; margin: 20px 0;">
+          <strong>Luxe Jewelry Returns Department</strong><br />
+          123 Fashion Street<br />
+          Kano, Nigeria<br /><br />
+          <strong>Important:</strong> Write your Return Authorization Number (RMA) clearly on the package exterior
+        </p>
+      </div>
+
+      <!-- Contact Support -->
+      <div class="section">
+        <h2>Questions About Returns?</h2>
+        <p>Our customer service team is happy to help with any return or exchange questions:</p>
+        <p>
+          <strong>Email:</strong> <a href="mailto:support@luxejewelry.com" style="color: #d4af37;">support@luxejewelry.com</a><br />
+          <strong>Phone:</strong> <a href="tel:+2349012892640" style="color: #d4af37;">+2349012892640</a><br />
+          <strong>Hours:</strong> Monday - Friday, 9 AM - 6 PM (Lagos Time)<br />
+          <strong>Response Time:</strong> Within 24 hours
+        </p>
+      </div>
+    </div>
+
+    <script src="/cart-manager.js"></script>
+    <script src="/load-components.js"></script>
+  </body>
+</html>

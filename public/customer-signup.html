@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account - Luxe Jewelry</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/styles.css" />
+  
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --primary: #d4af37;
+      --secondary: #101010;
+      --light: #f8f8f8;
+      --muted: #e6e6e6;
+      --card-bg: #fff;
+      --shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+      --transition: all 0.25s ease;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f8f8f8, #f0f0f0);
+      color: var(--secondary);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .auth-container {
+      width: 100%;
+      max-width: 500px;
+      background: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      padding: 40px;
+      animation: slideUp 0.6s ease;
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .auth-header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .auth-header h1 {
+      font-size: 2rem;
+      color: var(--primary);
+      font-weight: 300;
+      letter-spacing: 2px;
+      margin-bottom: 10px;
+    }
+
+    .auth-header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--secondary);
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--muted);
+      border-radius: 8px;
+      font-size: 1rem;
+      transition: var(--transition);
+      background: #fafafa;
+    }
+
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+      background: #fff;
+    }
+
+    .form-group input::placeholder {
+      color: #b0b0b0;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .form-row .form-group {
+      margin-bottom: 0;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #d4af37, #b6912e);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-top: 15px;
+    }
+
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    .submit-btn.loading {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      margin: 25px 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .divider::before,
+    .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--muted);
+    }
+
+    .divider span {
+      margin: 0 12px;
+    }
+
+    .toggle-form {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .toggle-form p {
+      font-size: 0.95rem;
+      color: var(--secondary);
+      margin-bottom: 8px;
+    }
+
+    .toggle-form a {
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .toggle-form a:hover {
+      text-decoration: underline;
+    }
+
+    .alert {
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      display: none;
+    }
+
+    .alert.show {
+      display: block;
+    }
+
+    .alert.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .alert.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .back-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--primary);
+      text-decoration: none;
+      margin-bottom: 20px;
+      font-size: 0.95rem;
+      transition: var(--transition);
+    }
+
+    .back-link:hover {
+      gap: 12px;
+    }
+
+    .password-requirements {
+      background: #f9f9f9;
+      border: 1px solid var(--muted);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .password-requirements ul {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .password-requirements li {
+      padding: 4px 0;
+      padding-left: 20px;
+      position: relative;
+    }
+
+    .password-requirements li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: var(--primary);
+      font-weight: bold;
+    }
+
+    .password-wrapper {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .password-wrapper input {
+      width: 100%;
+      padding-right: 40px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 12px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--secondary);
+      font-size: 1.2rem;
+      padding: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: var(--transition);
+    }
+
+    .toggle-password:hover {
+      color: var(--primary);
+    }
+
+    @media (max-width: 600px) {
+      .auth-container {
+        padding: 30px 20px;
+      }
+
+      .auth-header h1 {
+        font-size: 1.6rem;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="auth-container">
+    <a href="/index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Shop</a>
+
+    <div class="auth-header">
+      <h1><span style="color: var(--primary);">LUXE</span></h1>
+      <p>Create Your Account</p>
+    </div>
+
+    <div id="signupAlert" class="alert"></div>
+
+    <form id="signupFormElement">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="firstName">First Name</label>
+          <input type="text" id="firstName" name="firstName" placeholder="Enter your first name" autocomplete="off" required>
+        </div>
+        <div class="form-group">
+          <label for="lastName">Last Name</label>
+          <input type="text" id="lastName" name="lastName" placeholder="Enter your last name" autocomplete="off" required>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" name="email" placeholder="Enter your email address" autocomplete="off" required>
+      </div>
+
+      <div class="form-group">
+        <label for="phone">Phone Number</label>
+        <input type="tel" id="phone" name="phone" placeholder="Enter your phone number" autocomplete="off" required>
+      </div>
+
+      <div class="form-group">
+        <label for="referrerCode">Referral Code (optional)</label>
+        <input type="text" id="referrerCode" name="referrerCode" placeholder="Enter a referral code if you have one" autocomplete="off">
+        <small id="referralNote" class="info-text" style="display:none; margin-top: 8px; padding: 12px; border-radius: 8px; background: #f5f5dc; color: #333; border: 1px solid #e1d8a7;"></small>
+        <small style="display:block; margin-top: 8px; color:#555;">Referral codes are optional and only apply during signup. This does not affect login or password reset.</small>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="password" name="password" placeholder="Enter a strong password" autocomplete="off" required>
+          <button type="button" class="toggle-password" id="togglePassword" title="Show/Hide Password">
+            <i class="fas fa-eye" id="passwordIcon"></i>
+          </button>
+        </div>
+        <div class="password-requirements">
+          <ul>
+            <li>At least 6 characters</li>
+            <li>Use letters, numbers, and symbols</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword">Confirm Password</label>
+        <div class="password-wrapper">
+          <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Re-enter your password" autocomplete="off" required>
+          <button type="button" class="toggle-password" id="toggleConfirmPassword" title="Show/Hide Password">
+            <i class="fas fa-eye" id="confirmPasswordIcon"></i>
+          </button>
+        </div>
+      </div>
+
+      <button type="submit" class="submit-btn" id="signupSubmitBtn">Create Account</button>
+    </form>
+
+    <div class="divider"><span>Already have an account?</span></div>
+
+    <div class="toggle-form">
+      <p><a href="/customer-login.html">Sign in instead</a></p>
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api';
+
+    function showAlert(elementId, message, type) {
+      const alertEl = document.getElementById(elementId);
+      alertEl.textContent = message;
+      alertEl.className = `alert show ${type}`;
+    }
+
+    // Signup Handler
+    document.getElementById('signupFormElement').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = document.getElementById('signupSubmitBtn');
+      btn.classList.add('loading');
+      btn.textContent = 'Creating account...';
+
+      try {
+        const firstName = document.getElementById('firstName').value.trim();
+        const lastName = document.getElementById('lastName').value.trim();
+        const email = document.getElementById('email').value.trim().toLowerCase();
+        const phone = document.getElementById('phone').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        // Client-side validation
+        if (!firstName || !lastName || !email || !phone || !password || !confirmPassword) {
+          showAlert('signupAlert', 'Please fill in all fields', 'error');
+          btn.classList.remove('loading');
+          btn.textContent = 'Create Account';
+          return;
+        }
+
+        if (password.length < 8) {
+          showAlert('signupAlert', 'Password must be at least 8 characters', 'error');
+          btn.classList.remove('loading');
+          btn.textContent = 'Create Account';
+          return;
+        }
+
+        if (password !== confirmPassword) {
+          showAlert('signupAlert', 'Passwords do not match', 'error');
+          btn.classList.remove('loading');
+          btn.textContent = 'Create Account';
+          return;
+        }
+
+        const fullName = `${firstName} ${lastName}`;
+        const params = new URLSearchParams(window.location.search);
+        const urlReferrerCode = params.get('ref') ? params.get('ref').trim().toUpperCase() : '';
+        const formReferrerCode = document.getElementById('referrerCode').value.trim().toUpperCase();
+        const referrerCode = urlReferrerCode || formReferrerCode;
+
+        if (urlReferrerCode) {
+          const referralNote = document.getElementById('referralNote');
+          referralNote.textContent = `Referral code detected: ${urlReferrerCode}. It will be applied when you sign up.`;
+          referralNote.style.display = 'block';
+        }
+
+        const payload = {
+          name: fullName,
+          email: email,
+          phone: phone,
+          password: password,
+          confirmPassword: confirmPassword
+        };
+
+        if (referrerCode) {
+          payload.referrerCode = referrerCode;
+        }
+
+        const response = await fetch(`${API_URL}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          showAlert('signupAlert', data.message || 'Account created successfully. Please check your email to verify and then log in.', 'success');
+          setTimeout(() => {
+            window.location.href = '/customer-login.html';
+          }, 1800);
+        } else {
+          showAlert('signupAlert', data.message || 'Account creation failed', 'error');
+        }
+      } catch (error) {
+        console.error('Signup error:', error);
+        showAlert('signupAlert', 'Network error. Please try again.', 'error');
+      } finally {
+        btn.classList.remove('loading');
+        btn.textContent = 'Create Account';
+      }
+    });
+
+    // Toggle password visibility for password field
+    const togglePassword = document.getElementById('togglePassword');
+    const passwordInput = document.getElementById('password');
+    const passwordIcon = document.getElementById('passwordIcon');
+
+    togglePassword.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isPassword = passwordInput.type === 'password';
+      passwordInput.type = isPassword ? 'text' : 'password';
+      passwordIcon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+
+    // Toggle password visibility for confirm password field
+    const toggleConfirmPassword = document.getElementById('toggleConfirmPassword');
+    const confirmPasswordInput = document.getElementById('confirmPassword');
+    const confirmPasswordIcon = document.getElementById('confirmPasswordIcon');
+
+    toggleConfirmPassword.addEventListener('click', (e) => {
+      e.preventDefault();
+      const isPassword = confirmPasswordInput.type === 'password';
+      confirmPasswordInput.type = isPassword ? 'text' : 'password';
+      confirmPasswordIcon.className = isPassword ? 'fas fa-eye-slash' : 'fas fa-eye';
+    });
+
+    // Check if user is already logged in
+    window.addEventListener('load', () => {
+      const token = localStorage.getItem('authToken');
+      if (token) {
+        window.location.href = '/customer-dashboard.html';
+      }
+
+      const params = new URLSearchParams(window.location.search);
+      const referrerCode = params.get('ref') ? params.get('ref').trim().toUpperCase() : '';
+      if (referrerCode) {
+        const referralInput = document.getElementById('referrerCode');
+        const referralNote = document.getElementById('referralNote');
+        if (referralInput) referralInput.value = referrerCode;
+        if (referralNote) {
+          referralNote.textContent = `Referral code detected: ${referrerCode}. Your code will be applied when you sign up.`;
+          referralNote.style.display = 'block';
+        }
+      }
+
+      // Clear form fields to prevent browser autofill from persisting values
+      console.log('[SIGNUP-PAGE] Clearing form fields...');
+      document.getElementById('firstName').value = '';
+      document.getElementById('lastName').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('phone').value = '';
+      document.getElementById('password').value = '';
+      document.getElementById('confirmPassword').value = '';
+    });
+  </script>
+  <script src="/cart-manager.js"></script>
+  <script src="/theme.js"></script>
+</body>
+</html>

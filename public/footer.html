@@ -1,0 +1,169 @@
+<footer>
+  <div class="footer-top">
+    <div class="footer-column">
+      <h3>About Luxe Jewelry</h3>
+      <p>
+        Crafting timeless pieces of elegance since 2025. Every jewelry item is
+        carefully selected and designed to bring out your unique beauty.
+      </p>
+      <div class="social-links">
+        <a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+        <a href="#" title="Instagram"><i class="fab fa-instagram"></i></a>
+        <a href="#" title="Twitter"><i class="fab fa-twitter"></i></a>
+        <a href="#" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+      </div>
+    </div>
+
+    <div class="footer-column">
+      <h3>Quick Links</h3>
+      <a href="/shop-all.html"
+        ><i class="fas fa-chevron-right" style="margin-right: 8px"></i> Shop
+        All</a
+      >
+      <a href="/new-arrivals.html"
+        ><i class="fas fa-chevron-right" style="margin-right: 8px"></i> New
+        Arrivals</a
+      >
+      <a href="/about.html"
+        ><i class="fas fa-chevron-right" style="margin-right: 8px"></i> About
+        Us</a
+      >
+      <a href="/support.html"
+        ><i class="fas fa-chevron-right" style="margin-right: 8px"></i> Customer
+        Support</a
+      >
+    </div>
+
+    <div class="footer-column">
+      <h3>Customer Service</h3>
+      <a href="/contact.html"
+        ><i class="fas fa-chevron-right" style="margin-right: 8px"></i> Contact
+        Us</a
+      >
+      <a href="/shipping-info.html"
+        ><i class="fas fa-chevron-right" style="margin-right: 8px"></i> Shipping
+        Info</a
+      >
+      <a href="/returns.html"
+        ><i class="fas fa-chevron-right" style="margin-right: 8px"></i> Returns
+        & Exchanges</a
+      >
+      <a href="/faqs.html"
+        ><i class="fas fa-chevron-right" style="margin-right: 8px"></i> FAQs</a
+      >
+      <a href="/privacy.html"
+        ><i class="fas fa-chevron-right" style="margin-right: 8px"></i> Privacy
+        Policy</a
+      >
+    </div>
+
+    <div class="footer-column">
+      <h3><i class="fas fa-bell" style="margin-right: 8px"></i> Newsletter</h3>
+      <p>Subscribe to get special offers and updates on new collections!</p>
+      <!-- NOSONAR: contrast -->
+      <form
+        id="newsletterForm"
+        onsubmit="handleNewsletterSubscribe(event)"
+        style="display: flex; flex-direction: column; gap: 12px"
+      >
+        <div id="emailInputsContainer" style="display: flex; flex-direction: column; gap: 8px">
+          <div class="input-icon-wrapper" style="position: relative">
+            <i class="fas fa-envelope field-icon"></i>
+            <input
+              type="email"
+              class="newsletterEmail"
+              placeholder="Your email"
+              required
+              style="
+                width: 100%;
+                padding: 12px 12px 12px 40px;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+                border-radius: 6px;
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                font-family: 'Poppins', sans-serif;
+                font-size: 0.95rem;
+                transition: all 0.3s ease;
+              "
+              onfocus="this.style.borderColor='#d4af37'; this.style.backgroundColor='rgba(255,255,255,0.2)'"
+              onblur="this.style.borderColor='rgba(255,255,255,0.3)'; this.style.backgroundColor='rgba(255,255,255,0.1)'"
+            />
+          </div>
+        </div>
+
+        <button
+          type="button"
+          id="addEmailBtn"
+          style="
+            background: rgba(212, 175, 55, 0.3);
+            color: #d4af37;
+            border: 2px solid #d4af37;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            font-size: 0.9rem;
+          "
+          onclick="addEmailInput()"
+          onmouseover="this.style.backgroundColor='rgba(212, 175, 55, 0.5)'"
+          onmouseout="this.style.backgroundColor='rgba(212, 175, 55, 0.3)'"
+        >
+          <i class="fas fa-plus"></i> Add Another Email
+        </button>
+
+        <button
+          type="submit"
+          style="
+            background: linear-gradient(135deg, #d4af37, #ffed4e);
+            color: #333;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+          "
+          onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(212, 175, 55, 0.4)'"
+          onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212, 175, 55, 0.3)'"
+          onfocus="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(212, 175, 55, 0.4)'"
+          onblur="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212, 175, 55, 0.3)';"
+        >
+          <i class="fas fa-paper-plane"></i> Subscribe
+        </button>
+      </form>
+      <div
+        id="newsletterMessage"
+        style="
+          margin-top: 12px;
+          font-size: 0.85rem;
+          display: none;
+          padding: 10px;
+          border-radius: 6px;
+          text-align: center;
+        "
+      ></div>
+      <p style="margin-top: 16px; font-size: 0.85rem; opacity: 0.9">
+        <i class="fas fa-lock" style="margin-right: 6px"></i> We respect your
+        privacy. Unsubscribe anytime.
+      </p>
+    </div>
+  </div>
+
+  <!-- NOSONAR: contrast -->
+  <div class="footer-bottom">
+    <p>
+      &copy; 2025 Luxe Jewelry. All rights reserved. | Proudly crafted with
+      <i class="fas fa-gem" style="color: #d4af37; margin-right: 4px"></i>
+      <i class="fas fa-heart" style="color: #dc3545"></i>
+    </p>
+  </div>
+</footer>

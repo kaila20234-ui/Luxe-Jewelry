@@ -1,0 +1,28 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Admin - Settings</title>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/admin-shell.css" />
+<style>body{font-family:Poppins;padding:20px}label{display:block;margin-top:8px}input,textarea{width:100%;padding:8px}</style>
+</head>
+<body>
+<h1>Site Settings</h1>
+<form id="form">
+ <label>Site Title<input id="siteTitle"></label>
+ <label>Support Email<input id="supportEmail"></label>
+ <label>Paystack Public Key<input id="payPublic"></label>
+ <label>Paystack Secret (masked)<input id="paySecret" placeholder="*****"></label>
+ <div style="margin-top:8px"><button type="submit">Save</button></div>
+</form>
+<script>
+const token=localStorage.getItem('authToken'); if(!token){alert('Sign in');location.href='/login.html'}
+async function load(){ const res=await fetch('/api/settings',{headers:{'Authorization':'Bearer '+token}}); const s=await res.json(); const kv={}; s.forEach(i=>kv[i.key]=i.value); document.getElementById('siteTitle').value=kv['siteTitle']||''; document.getElementById('supportEmail').value=kv['supportEmail']||''; document.getElementById('payPublic').value=kv['payPublic']||''; document.getElementById('paySecret').value=kv['paySecret']||''; }
+
+document.getElementById('form').addEventListener('submit',async e=>{ e.preventDefault(); const payloads=[ ['siteTitle',document.getElementById('siteTitle').value], ['supportEmail',document.getElementById('supportEmail').value], ['payPublic',document.getElementById('payPublic').value], ['paySecret',document.getElementById('paySecret').value] ]; for(const [k,v] of payloads){ await fetch('/api/settings',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify({key:k,value:v})}); } alert('Saved'); });
+load();
+</script>
+<script src="/admin-shell.js"></script>
+</body>
+</html>

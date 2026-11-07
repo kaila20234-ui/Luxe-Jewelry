@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About Us - Luxe Jewelry</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      rel="stylesheet"
+    />
+    <link href="/style.css" rel="stylesheet" />
+    <link href="/components.css" rel="stylesheet" />
+    <link href="/styles.css" rel="stylesheet" />
+    <style>
+      /* Modern Luxury Layout */
+      .about-container {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 0 14px;
+      }
+
+      /* Hero Section */
+      .hero-about {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: white;
+        padding: 45px 15px;
+        text-align: center;
+        margin-bottom: 35px;
+        border-radius: 0;
+      }
+
+      .hero-about h1 {
+        font-size: 2.2rem;
+        font-weight: 700;
+        margin: 0 0 12px 0;
+        letter-spacing: -1px;
+      }
+
+      .hero-about .tagline {
+        font-size: 0.95rem;
+        color: #d4af37;
+        margin: 0;
+        font-weight: 300;
+        letter-spacing: 0.5px;
+      }
+
+      /* Section Headers */
+      .section-header {
+        text-align: center;
+        margin-bottom: 30px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #d4af37;
+      }
+
+      .section-header h2 {
+        font-size: 1.6rem;
+        color: #1a1a1a;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+      }
+
+      .section-header p {
+        font-size: 0.9rem;
+        color: #666;
+        margin: 0;
+      }
+
+      /* Journey Section */
+      .journey-section {
+        margin-bottom: 45px;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .journey-intro {
+        background: #f9f6f1;
+        padding: 25px;
+        border-radius: 8px;
+        border-left: 4px solid #d4af37;
+      }
+
+      .journey-intro p {
+        color: #333;
+        line-height: 1.6;
+        font-size: 0.9rem;
+        margin: 0;
+        font-weight: 500;
+      }
+
+      .journey-intro p:not(:last-child) {
+        margin-bottom: 12px;
+      }
+
+      /* Mission Vision Values */
+      .mvv-section {
+        margin-bottom: 45px;
+      }
+
+      .mvv-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .mvv-card {
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        border-top: 3px solid #d4af37;
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .mvv-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(212, 175, 55, 0.15);
+      }
+
+      .mvv-card h3 {
+        color: #d4af37;
+        font-size: 1.05rem;
+        margin: 0 0 12px 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+      }
+
+      .mvv-card p {
+        color: #666;
+        font-size: 0.85rem;
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      /* Team Section */
+      .team-section {
+        margin-bottom: 45px;
+      }
+
+      .team-section h2 {
+        text-align: center;
+        font-size: 1.6rem;
+        margin: 0 0 30px 0;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #d4af37;
+        color: #1a1a1a;
+      }
+
+      .team-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .team-card {
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .team-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 12px 24px rgba(212, 175, 55, 0.12);
+      }
+
+      .team-avatar {
+        background: linear-gradient(135deg, #d4af37 0%, #b6912e 100%);
+        height: 160px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 2.8rem;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .team-avatar i {
+        opacity: 0.8;
+      }
+
+      .team-info {
+        padding: 15px;
+        text-align: center;
+      }
+
+      .team-info h3 {
+        color: #1a1a1a;
+        font-size: 0.95rem;
+        margin: 0 0 3px 0;
+        font-weight: 700;
+      }
+
+      .team-role {
+        color: #d4af37;
+        font-size: 0.75rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+
+      .team-bio {
+        color: #666;
+        font-size: 0.75rem;
+        line-height: 1.4;
+        margin: 0;
+      }
+
+      /* Achievements Section */
+      .achievements-section {
+        background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+        color: white;
+        padding: 35px 25px;
+        border-radius: 8px;
+        margin-bottom: 45px;
+      }
+
+      .achievements-section h2 {
+        text-align: center;
+        font-size: 1.4rem;
+        margin: 0 0 30px 0;
+        color: white;
+      }
+
+      .achievements-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        text-align: center;
+      }
+
+      .achievement-card {
+        background: rgba(212, 175, 55, 0.1);
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid rgba(212, 175, 55, 0.3);
+        backdrop-filter: blur(10px);
+      }
+
+      .achievement-number {
+        font-size: 1.8rem;
+        font-weight: 700;
+        color: #d4af37;
+        margin-bottom: 6px;
+      }
+
+      .achievement-label {
+        font-size: 0.8rem;
+        color: #ccc;
+        margin: 0;
+        line-height: 1.3;
+      }
+
+      /* Why Choose Us */
+      .why-section {
+        margin-bottom: 45px;
+      }
+
+      .why-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 18px;
+      }
+
+      .why-card {
+        background: white;
+        padding: 18px;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        text-align: center;
+        transition: transform 0.3s, box-shadow 0.3s;
+      }
+
+      .why-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 8px 16px rgba(212, 175, 55, 0.15);
+      }
+
+      .why-icon {
+        font-size: 2rem;
+        color: #d4af37;
+        margin-bottom: 10px;
+      }
+
+      .why-card h3 {
+        color: #1a1a1a;
+        font-size: 0.95rem;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+      }
+
+      .why-card p {
+        color: #666;
+        font-size: 0.8rem;
+        line-height: 1.6;
+        margin: 0;
+      }
+
+      /* Core Values */
+      .values-section {
+        margin-bottom: 60px;
+      }
+
+      .values-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 20px;
+      }
+
+      .value-card {
+        background: linear-gradient(135deg, #f9f6f1 0%, #f4e7c5 100%);
+        padding: 20px;
+        border-radius: 8px;
+        text-align: center;
+        border: 1px solid rgba(212, 175, 55, 0.2);
+      }
+
+      .value-icon {
+        font-size: 2rem;
+        color: #d4af37;
+        margin-bottom: 12px;
+      }
+
+      .value-card h3 {
+        color: #1a1a1a;
+        font-size: 1rem;
+        margin: 0 0 8px 0;
+        font-weight: 700;
+        text-transform: capitalize;
+      }
+
+      .value-card p {
+        color: #666;
+        font-size: 0.8rem;
+        line-height: 1.5;
+        margin: 0;
+      }
+
+      /* CTA Section */
+      .cta-about {
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        color: white;
+        padding: 50px 36px;
+        border-radius: 8px;
+        text-align: center;
+        margin-bottom: 60px;
+      }
+
+      .cta-about h2 {
+        font-size: 1.8rem;
+        margin: 0 0 12px 0;
+        font-weight: 700;
+      }
+
+      .cta-about p {
+        font-size: 1rem;
+        margin: 0 0 28px 0;
+        opacity: 0.95;
+      }
+
+      .cta-btn {
+        background: white;
+        color: #d4af37;
+        padding: 12px 32px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 700;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+        transition: all 0.3s;
+        border: 2px solid white;
+      }
+
+      .cta-btn:hover {
+        background: transparent;
+        color: white;
+        transform: translateY(-2px);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .hero-about h1 {
+          font-size: 2rem;
+        }
+
+        .hero-about .tagline {
+          font-size: 1rem;
+        }
+
+        .section-header h2,
+        .team-section h2 {
+          font-size: 1.5rem;
+        }
+
+        .mvv-grid,
+        .why-grid,
+        .values-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 16px;
+        }
+
+        .team-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+
+        .achievements-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 20px;
+        }
+
+        .achievement-card {
+          padding: 16px;
+        }
+
+        .achievement-number {
+          font-size: 1.8rem;
+        }
+
+        .journey-intro {
+          padding: 24px;
+        }
+
+        .mvv-card,
+        .why-card,
+        .value-card {
+          padding: 16px;
+        }
+
+        .team-avatar {
+          height: 160px;
+          font-size: 2.8rem;
+        }
+
+        .team-info {
+          padding: 16px;
+        }
+
+        .team-info h3 {
+          font-size: 0.95rem;
+        }
+
+        .team-bio {
+          font-size: 0.75rem;
+        }
+
+        .cta-about {
+          padding: 36px 24px;
+        }
+
+        .cta-about h2 {
+          font-size: 1.4rem;
+        }
+
+        .cta-about p {
+          font-size: 0.95rem;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .about-container {
+          padding: 0 10px;
+        }
+
+        .hero-about {
+          padding: 40px 14px;
+          margin-bottom: 30px;
+        }
+
+        .hero-about h1 {
+          font-size: 1.6rem;
+          margin-bottom: 10px;
+        }
+
+        .hero-about .tagline {
+          font-size: 0.9rem;
+        }
+
+        .section-header {
+          margin-bottom: 28px;
+          padding-bottom: 14px;
+        }
+
+        .section-header h2,
+        .team-section h2 {
+          font-size: 1.2rem;
+        }
+
+        .section-header p {
+          font-size: 0.85rem;
+        }
+
+        .mvv-grid,
+        .why-grid,
+        .values-grid,
+        .team-grid {
+          grid-template-columns: 1fr;
+          gap: 12px;
+        }
+
+        .achievements-grid {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 12px;
+        }
+
+        .achievement-card {
+          padding: 12px;
+        }
+
+        .achievement-number {
+          font-size: 1.6rem;
+          margin-bottom: 4px;
+        }
+
+        .achievement-label {
+          font-size: 0.75rem;
+        }
+
+        .team-avatar {
+          height: 140px;
+          font-size: 2.4rem;
+        }
+
+        .team-info {
+          padding: 12px;
+        }
+
+        .team-info h3 {
+          font-size: 0.9rem;
+          margin-bottom: 2px;
+        }
+
+        .team-role {
+          font-size: 0.75rem;
+          margin-bottom: 6px;
+        }
+
+        .team-bio {
+          font-size: 0.7rem;
+        }
+
+        .journey-intro {
+          padding: 16px;
+        }
+
+        .journey-intro p {
+          font-size: 0.9rem;
+        }
+
+        .mvv-card h3,
+        .why-card h3,
+        .value-card h3 {
+          font-size: 0.95rem;
+        }
+
+        .mvv-card p,
+        .why-card p,
+        .value-card p {
+          font-size: 0.75rem;
+        }
+
+        .why-icon {
+          font-size: 1.8rem;
+          margin-bottom: 8px;
+        }
+
+        .value-icon {
+          font-size: 1.6rem;
+          margin-bottom: 8px;
+        }
+
+        .cta-about {
+          padding: 28px 16px;
+          margin-bottom: 30px;
+        }
+
+        .cta-about h2 {
+          font-size: 1.2rem;
+          margin-bottom: 8px;
+        }
+
+        .cta-about p {
+          font-size: 0.9rem;
+          margin-bottom: 16px;
+        }
+
+        .cta-btn {
+          padding: 10px 24px;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Header loaded dynamically by load-components.js -->
+
+    <!-- Hero Section -->
+    <div class="hero-about">
+      <div class="about-container">
+        <h1>About Luxe Jewelry</h1>
+        <p class="tagline">
+          Crafting timeless elegance and authentic beauty since 2025
+        </p>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="about-container">
+      <!-- Journey Section -->
+      <section class="journey-section">
+        <div class="section-header">
+          <h2>Our Journey</h2>
+          <p>How Luxe Jewelry Became Nigeria's Trusted Jewelry Destination</p>
+        </div>
+        <div class="journey-intro">
+          <p>
+            Luxe Jewelry was founded with a singular vision: to bring
+            world-class, authentic jewelry within reach of everyone who
+            appreciates true craftsmanship and timeless elegance. Our founder,
+            with over 15 years of experience in the jewelry industry,
+            established Luxe Jewelry to bridge the gap between premium quality
+            and affordable luxury.
+          </p>
+          <p>
+            What started as a small workshop in Kano has grown into one of
+            Nigeria's most trusted jewelry retailers, serving thousands of
+            satisfied customers across the country. We believe that every piece
+            of jewelry tells a story, and we're honored to be part of yours.
+          </p>
+          <p style="font-style: italic; color: #d4af37">
+            Today, Luxe Jewelry stands as a beacon of quality, authenticity, and
+            customer excellence in the Nigerian jewelry market.
+          </p>
+        </div>
+      </section>
+
+      <!-- Mission, Vision, Values -->
+      <section class="mvv-section">
+        <div class="section-header">
+          <h2>Our Purpose</h2>
+          <p>Mission, Vision & Core Values</p>
+        </div>
+        <div class="mvv-grid">
+          <div class="mvv-card">
+            <h3><i class="fas fa-bullseye"></i> Mission</h3>
+            <p>
+              To provide authentic, beautifully crafted jewelry that celebrates
+              individuality, enhances confidence, and creates lasting memories
+              for our customers worldwide.
+            </p>
+          </div>
+          <div class="mvv-card">
+            <h3><i class="fas fa-eye"></i> Vision</h3>
+            <p>
+              To become the leading trusted jewelry destination in Africa, known
+              for exceptional craftsmanship, ethical practices, and unparalleled
+              customer service.
+            </p>
+          </div>
+          <div class="mvv-card">
+            <h3><i class="fas fa-heart"></i> Values</h3>
+            <p>
+              Integrity, quality, customer-centricity, sustainability, and
+              excellence guide every decision we make and every piece we craft.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team Section -->
+      <section class="team-section">
+        <h2>Meet Our Team</h2>
+        <div class="team-grid">
+          <div class="team-card">
+            <div class="team-avatar">
+              <i class="fas fa-user"></i>
+            </div>
+            <div class="team-info">
+              <h3>Hafizu Salisu Kaula</h3>
+              <div class="team-role">Founder & CEO</div>
+              <p class="team-bio">
+                Industry veteran with 15+ years of experience in jewelry design,
+                sourcing, and retail management.
+              </p>
+            </div>
+          </div>
+
+          <div class="team-card">
+            <div class="team-avatar">
+              <i class="fas fa-briefcase"></i>
+            </div>
+            <div class="team-info">
+              <h3>Sudais Salisu</h3>
+              <div class="team-role">Head of Operations</div>
+              <p class="team-bio">
+                Expert in supply chain management and operational excellence.
+                Ensures every order is handled with precision.
+              </p>
+            </div>
+          </div>
+
+          <div class="team-card">
+            <div class="team-avatar">
+              <i class="fas fa-palette"></i>
+            </div>
+            <div class="team-info">
+              <h3>H S KAILA</h3>
+              <div class="team-role">Head of Design</div>
+              <p class="team-bio">
+                Creative visionary with passion for contemporary and traditional
+                jewelry design. Brings innovation to every collection.
+              </p>
+            </div>
+          </div>
+
+          <div class="team-card">
+            <div class="team-avatar">
+              <i class="fas fa-headset"></i>
+            </div>
+            <div class="team-info">
+              <h3>Zainab Sani Sheni</h3>
+              <div class="team-role">Customer Success Lead</div>
+              <p class="team-bio">
+                Dedicated to ensuring every customer experience exceeds
+                expectations. Your satisfaction is her mission.
+              </p>
+            </div>
+          </div>
+
+          <div class="team-card">
+            <div class="team-avatar">
+              <i class="fas fa-hammer"></i>
+            </div>
+            <div class="team-info">
+              <h3>Hafiz S K</h3>
+              <div class="team-role">Lead Craftsman</div>
+              <p class="team-bio">
+                Master jeweler with 20+ years of hands-on experience. Ensures
+                impeccable quality in every piece crafted.
+              </p>
+            </div>
+          </div>
+
+          <div class="team-card">
+            <div class="team-avatar">
+              <i class="fas fa-check-circle"></i>
+            </div>
+            <div class="team-info">
+              <h3>Hafiz s kaila</h3>
+              <div class="team-role">Quality Assurance Manager</div>
+              <p class="team-bio">
+                Rigorous quality control expert who ensures every piece meets
+                our exacting standards before delivery.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Achievements Section -->
+      <section class="achievements-section">
+        <h2>Our Impact</h2>
+        <div class="achievements-grid">
+          <div class="achievement-card">
+            <div class="achievement-number">5,000+</div>
+            <p class="achievement-label">Satisfied Customers</p>
+          </div>
+          <div class="achievement-card">
+            <div class="achievement-number">3,500+</div>
+            <p class="achievement-label">Pieces Crafted</p>
+          </div>
+          <div class="achievement-card">
+            <div class="achievement-number">4.9/5</div>
+            <p class="achievement-label">Average Rating</p>
+          </div>
+          <div class="achievement-card">
+            <div class="achievement-number">12</div>
+            <p class="achievement-label">Industry Awards</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Why Choose Us -->
+      <section class="why-section">
+        <div class="section-header">
+          <h2>Why Choose Luxe Jewelry?</h2>
+          <p>What Sets Us Apart</p>
+        </div>
+        <div class="why-grid">
+          <div class="why-card">
+            <div class="why-icon">
+              <i class="fas fa-certificate"></i>
+            </div>
+            <h3>Authentic Pieces</h3>
+            <p>
+              Every item is genuinely crafted with authentic materials. We
+              guarantee 100% authenticity on all jewelry.
+            </p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-icon">
+              <i class="fas fa-crown"></i>
+            </div>
+            <h3>Expert Craftsmanship</h3>
+            <p>
+              Our master craftsmen bring decades of experience to every piece,
+              ensuring unparalleled quality and attention to detail.
+            </p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3>Quality Guaranteed</h3>
+            <p>
+              1-year warranty on all pieces covers craftsmanship defects. We
+              stand behind our products 100%.
+            </p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-icon">
+              <i class="fas fa-box"></i>
+            </div>
+            <h3>Fast & Secure Delivery</h3>
+            <p>
+              Multiple shipping options with real-time tracking. Your precious
+              items arrive safely and on time.
+            </p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-icon">
+              <i class="fas fa-headset"></i>
+            </div>
+            <h3>Exceptional Support</h3>
+            <p>
+              Dedicated customer service team available to help with any
+              questions or concerns before, during, and after purchase.
+            </p>
+          </div>
+
+          <div class="why-card">
+            <div class="why-icon">
+              <i class="fas fa-undo"></i>
+            </div>
+            <h3>Easy Returns</h3>
+            <p>
+              30-day return policy with no questions asked. If you're not
+              satisfied, we'll make it right.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Core Values -->
+      <section class="values-section">
+        <div class="section-header">
+          <h2>Our Core Values</h2>
+          <p>The Principles That Guide Us</p>
+        </div>
+        <div class="values-grid">
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="fas fa-handshake"></i>
+            </div>
+            <h3>Integrity</h3>
+            <p>
+              Honest dealings, transparent practices, and ethical sourcing in
+              everything we do.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="fas fa-star"></i>
+            </div>
+            <h3>Excellence</h3>
+            <p>
+              Relentless pursuit of perfection in craftsmanship, service, and
+              customer experience.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="fas fa-leaf"></i>
+            </div>
+            <h3>Sustainability</h3>
+            <p>
+              Responsible sourcing and environmentally conscious practices in
+              all operations.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="fas fa-users"></i>
+            </div>
+            <h3>Community</h3>
+            <p>
+              Supporting local artisans, craftspeople, and giving back to our
+              communities.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="fas fa-lightbulb"></i>
+            </div>
+            <h3>Innovation</h3>
+            <p>
+              Continuously evolving designs while honoring traditional
+              jewelry-making techniques.
+            </p>
+          </div>
+
+          <div class="value-card">
+            <div class="value-icon">
+              <i class="fas fa-heart"></i>
+            </div>
+            <h3>Customer Love</h3>
+            <p>
+              Every decision centered around delighting our customers and
+              exceeding expectations.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CTA Section -->
+      <section class="cta-about">
+        <h2>Ready to Find Your Perfect Piece?</h2>
+        <p>
+          Explore our exclusive collection and discover jewelry that resonates
+          with your style
+        </p>
+        <a href="/product.html" class="cta-btn">
+          <i class="fas fa-shopping-bag"></i>
+          Shop Now
+        </a>
+      </section>
+    </div>
+
+    <!-- Footer loaded dynamically by load-components.js -->
+
+    <script src="/cart-manager.js"></script>
+    <script src="/load-components.js"></script>
+  </body>
+</html>

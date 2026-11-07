@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Admin Dashboard | Luxe Jewelry</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="stylesheet" href="/admin-shell.css" />
+  <!-- Order Alert Styles -->
+  <link rel="stylesheet" href="/css/order-alert.css" />
+
+  <style>
+    
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(to bottom right, #f9f6f1, #f4e7c5);
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ===== Header ===== */
+    header {
+      background: #fffef9;
+      border-bottom: 2px solid #f1e6b2;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    header h1 {
+      font-family: "Times New Roman", serif;
+      font-size: 26px;
+      font-weight: bold;
+      color: #d4af37;
+      letter-spacing: 1px;
+    }
+
+    header .nav-buttons button {
+      margin-left: 10px;
+      padding: 8px 16px;
+      font-size: 15px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 500;
+      transition: 0.3s;
+    }
+
+    .home-btn, .sales-btn {
+      background: #d4af37;
+      color: white;
+    }
+
+    .home-btn:hover, .sales-btn:hover {
+      background: #fcc102;
+    }
+
+    /* ===== Layout ===== */
+    .content-wrapper {
+      display: flex;
+      flex: 1;
+      overflow: hidden;
+    }
+
+    /* ===== Sidebar ===== */
+    .sidebar {
+      width: 260px;
+      background: #fffef9;
+      border-right: 2px solid #f1e6b2;
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.05);
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+
+    .sidebar h3 {
+      color: #d4af37;
+      font-weight: 600;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+
+    .category-list {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 5px;
+      max-height: calc(100vh - 260px);
+    }
+
+    .category-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px;
+      border-bottom: 1px solid #eee;
+      font-size: 15px;
+      color: #555;
+    }
+
+    .category-item button {
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 4px 8px;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .category-item button:hover {
+      background: darkred;
+    }
+
+    .category-form {
+      margin-top: 10px;
+      display: flex;
+      gap: 5px;
+    }
+
+    .category-form input {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+
+    .category-form button {
+      background: #d4af37;
+      border: none;
+      color: white;
+      padding: 8px 12px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .category-form button:hover {
+      background: #c59b2a;
+    }
+
+
+
+    /* ===== Main Content ===== */
+    .main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+      position: relative;
+    }
+
+    .admin-container {
+      max-width: 700px;
+      margin: 20px auto 0;
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      padding: 30px;
+      border-top: 5px solid #d4af37;
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 25px;
+      font-weight: 600;
+    }
+
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    input, select {
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      transition: 0.3s;
+    }
+
+    input:focus, select:focus {
+      border-color: #d4af37;
+      box-shadow: 0 0 4px rgba(212, 175, 55, 0.4);
+      outline: none;
+    }
+
+    button {
+      padding: 12px;
+      background: #d4af37;
+      color: #fff;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #c59b2a;
+      transform: translateY(-1px);
+    }
+
+    .preview img {
+      max-width: 150px;
+      border-radius: 10px;
+      margin-top: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .product-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px;
+      border-bottom: 1px solid #eee;
+      gap: 10px;
+    }
+
+    .product-item:hover {
+      background: #fff7e0;
+    }
+
+    .product-item img {
+      width: 55px;
+      height: 55px;
+      object-fit: cover;
+      border-radius: 6px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .delete-btn {
+      background: crimson;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .delete-btn:hover {
+      background: darkred;
+    }
+
+    .toggle-btn {
+      background: #007bff;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .toggle-btn.off {
+      background: gray;
+    }
+
+    .toggle-btn:hover {
+      background: #0056b3;
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #d4af37;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-weight: 500;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      opacity: 0;
+      transform: translateY(-20px);
+      transition: 0.4s ease;
+      z-index: 1000;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1><i class="fas fa-gem"></i> Luxe Jewelry</h1>
+    <div class="nav-buttons">
+      <button class="home-btn" onclick="location.href='/index.html'"><i class="fas fa-home"></i> Home</button>
+      <button class="sales-btn" onclick="location.href='/admin.html#sales'"><i class="fas fa-chart-bar"></i> Sales</button>
+      <button class="sales-btn" onclick="location.href='/admin-users.html'"><i class="fas fa-users-cog"></i> Users</button>
+      <button class="sales-btn" onclick="location.href='/admin-tickets.html'"><i class="fas fa-headset"></i> Tickets</button>
+      <button class="sales-btn" onclick="location.href='/admin-settings.html'"><i class="fas fa-cog"></i> Settings</button>
+      <button class="sales-btn" onclick="location.href='/admin-customers.html'"><i class="fas fa-user-friends"></i> Customers</button>
+    </div>
+  </header>
+
+  <div class="content-wrapper">
+    <div class="main">
+      <div class="admin-container">
+        <h2><i class="fas fa-shopping-bag"></i> Admin Dashboard</h2>
+        
+        <form id="uploadForm">
+          <input type="text" id="name" placeholder="Product Name" required>
+          <input type="number" id="price" placeholder="Price (₦)" required>
+          <select id="category" required>
+            <option value="">Select Category</option>
+          </select>
+          <label><input type="checkbox" id="available" checked> Product Available</label>
+          <input type="file" id="image" accept="image/*" required>
+          <button type="submit">Upload Product</button>
+        </form>
+        <div class="preview" id="preview"></div>
+        <div class="products-list" id="productsList">
+          <h3><i class="fas fa-box"></i> Uploaded Products</h3>
+          <div id="productsContainer"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="/admin-shell.js"></script>
+  <script>
+    // Require admin role to access this page
+    const _authToken = localStorage.getItem('authToken');
+    const _authRole = localStorage.getItem('authRole');
+    if (!_authToken || _authRole !== 'admin') {
+      alert('Access Denied — please sign in as Admin.');
+      window.location.href = 'login.html';
+    }
+
+    const categorySelect = document.getElementById('category');
+    const categoryList = document.getElementById('categoryList');
+    const categoryForm = document.getElementById('categoryForm');
+    const form = document.getElementById('uploadForm');
+    const productsContainer = document.getElementById('productsContainer');
+    const preview = document.getElementById('preview');
+    const toast = document.getElementById('toast');
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add("show");
+      setTimeout(() => toast.classList.remove("show"), 3000);
+    }
+
+    const ADMIN_AUTH = _authToken;
+    async function loadCategories() {
+      const res = await fetch('http://localhost:5000/api/categories');
+      const categories = await res.json();
+
+      categorySelect.innerHTML = '<option value="">Select Category</option>' +
+        categories.map(c => `<option value="${c.name}">${c.name}</option>`).join('');
+
+      categoryList.innerHTML = categories.map(c => `
+        <div class="category-item">
+          <span>${c.name}</span>
+          <button data-id="${c._id}"><i class="fas fa-trash"></i></button>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.category-item button').forEach(btn =>
+        btn.addEventListener('click', () => deleteCategory(btn.dataset.id))
+      );
+    }
+
+    categoryForm.addEventListener('submit', async e => {
+      e.preventDefault();
+      const name = document.getElementById('categoryName').value.trim();
+      if (!name) return alert('Please enter a category name.');
+
+      const res = await fetch('http://localhost:5000/api/categories', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ADMIN_AUTH}` },
+        body: JSON.stringify({ name })
+      });
+
+      const data = await res.json();
+      if (data.success) {
+        categoryForm.reset();
+        loadCategories();
+        showToast('<i class="fas fa-check-circle"></i> Category added successfully!');
+      }
+    });
+
+    async function deleteCategory(id) {
+      if (!confirm('Delete this category?')) return;
+      const res = await fetch(`http://localhost:5000/api/categories/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${ADMIN_AUTH}` } });
+      const data = await res.json();
+      if (data.success) loadCategories();
+    }
+
+    document.getElementById('image').addEventListener('change', e => {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = () => preview.innerHTML = `<img src="${reader.result}" alt="Preview" />`;
+        reader.readAsDataURL(file);
+      }
+    });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+
+      const name = document.getElementById('name').value.trim();
+      const price = document.getElementById('price').value;
+      const category = categorySelect.value;
+      const available = document.getElementById('available').checked;
+      const image = document.getElementById('image').files[0];
+
+      if (!name || !price || !category || !image) {
+        alert('Please fill all fields');
+        return;
+      }
+
+      const formData = new FormData();
+      formData.append('name', name);
+      formData.append('price', price);
+      formData.append('category', category);
+      formData.append('available', available);
+      formData.append('image', image);
+
+      const res = await fetch('http://localhost:5000/api/products', { method: 'POST', headers: { 'Authorization': `Bearer ${ADMIN_AUTH}` }, body: formData });
+      const data = await res.json();
+      if (data.success) {
+        form.reset();
+        preview.innerHTML = '';
+        loadProducts();
+        showToast('<i class="fas fa-check-circle"></i> Product added successfully!');
+      }
+    });
+
+    async function loadProducts() {
+      const res = await fetch('http://localhost:5000/api/products');
+      const products = await res.json();
+
+      productsContainer.innerHTML = products.map(p => `
+        <div class="product-item">
+          <img src="${p.image.startsWith('http') ? p.image : '/api' + p.image}" alt="${p.name}" />
+          <span>
+            ${p.name} - ₦${p.price.toLocaleString()} 
+            (${
+              p.available 
+                ? '<span style="color:green; font-weight:600;"><i class="fas fa-check-circle"></i> Available</span>' 
+                : '<span style="color:red; font-weight:700;"><i class="fas fa-times-circle"></i> Out of Stock</span>'
+            })
+          </span>
+
+          <div>
+            <button class="toggle-btn ${p.available ? '' : 'off'}" data-id="${p._id}" data-status="${p.available}">
+              ${p.available ? 'Set Out of Stock' : 'Set Available'}
+            </button>
+            <button class="delete-btn" data-id="${p._id}"><i class="fas fa-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+
+      document.querySelectorAll('.delete-btn').forEach(btn =>
+        btn.addEventListener('click', () => deleteProduct(btn.dataset.id))
+      );
+
+      document.querySelectorAll('.toggle-btn').forEach(btn =>
+        btn.addEventListener('click', () => toggleAvailability(btn.dataset.id, btn.dataset.status === 'true'))
+      );
+    }
+
+    async function deleteProduct(id) {
+      const res = await fetch(`http://localhost:5000/api/products/${id}`, { method: 'DELETE', headers: { 'Authorization': `Bearer ${ADMIN_AUTH}` } });
+      const data = await res.json();
+      if (data.success) loadProducts();
+    }
+
+    async function toggleAvailability(id, status) {
+      const res = await fetch(`http://localhost:5000/api/products/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${ADMIN_AUTH}` },
+        body: JSON.stringify({ available: !status })
+      });
+      const data = await res.json();
+      if (data.success) loadProducts();
+    }
+
+    loadCategories();
+    loadProducts();
+  </script>
+
+  <!-- Order Alert System Script -->
+  <script src="/js/order-alert-system.js"></script>
+  
+  <script>
+    // Order Alert Controls
+    const alertToggle = document.getElementById('alertToggle');
+    const alertVolume = document.getElementById('alertVolume');
+    const volumeValue = document.getElementById('volumeValue');
+    const alertStatus = document.getElementById('alertStatus');
+
+    // Initialize alert settings from localStorage
+    function initializeAlertControls() {
+      const isEnabled = localStorage.getItem('orderAlertEnabled') !== 'false';
+      const volume = parseFloat(localStorage.getItem('orderAlertVolume')) || 100;
+      
+      alertToggle.checked = isEnabled;
+      alertVolume.value = volume;
+      volumeValue.textContent = Math.round(volume) + '%';
+    }
+
+    // Toggle alerts
+    alertToggle.addEventListener('change', (e) => {
+      const enabled = e.target.checked;
+      orderAlertSystem.toggleAlerts(enabled);
+      alertStatus.textContent = enabled ? '✅ Ready' : '⏸️ Disabled';
+      console.log(`Order alerts ${enabled ? 'enabled' : 'disabled'}`);
+    });
+
+    // Volume control
+    alertVolume.addEventListener('change', (e) => {
+      const volume = parseInt(e.target.value) / 100;
+      orderAlertSystem.setVolume(volume);
+      volumeValue.textContent = e.target.value + '%';
+    });
+
+    // Test alert function
+    function testOrderAlert() {
+      if (!alertToggle.checked) {
+        alert('⚠️ Order alerts are disabled. Enable them first.');
+        return;
+      }
+      console.log('🧪 Testing order alert...');
+      orderAlertSystem.testAlert();
+    }
+
+    // Make test function global
+    window.testOrderAlert = testOrderAlert;
+
+    // Initialize alert controls
+    initializeAlertControls();
+
+    console.log('✅ Order Alert System integrated into Admin Dashboard');
+  </script>
+</body>
+</html>

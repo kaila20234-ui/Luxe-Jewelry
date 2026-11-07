@@ -1,0 +1,60 @@
+# === Environment variables ===
+# CRITICAL: Never commit .env files containing secrets
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.env.swp
+.env.*.swp
+
+# === Secrets and credentials ===
+secrets/
+.secrets/
+credentials.json
+private_keys/
+
+# === Node.js dependencies ===
+node_modules/
+
+# === Uploads (images and files users add) ===
+uploads/
+
+# === Logs and temporary files ===
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# === System files ===
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*~
+
+# === Backup or build files (optional) ===
+*.bak
+*.tmp
+dist/
+build/
+
+# === IDE / Editor ===
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# === Language-specific cache (safe to ignore) ===
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+.eggs/
+target/
+vendor/
+log/
+tmp/

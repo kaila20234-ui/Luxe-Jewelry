@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Start Guide - Luxe Jewelry</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #fff8e1 0%, #f4e7c5 100%);
+      padding: 20px;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .card {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      margin-bottom: 25px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      color: #d4af37;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 36px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #666;
+      margin-bottom: 40px;
+      font-size: 16px;
+    }
+
+    h2 {
+      color: #333;
+      margin-bottom: 20px;
+      font-size: 24px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h3 {
+      color: #d4af37;
+      margin: 20px 0 15px 0;
+      font-size: 18px;
+    }
+
+    .step {
+      background: #f9f9f9;
+      padding: 20px;
+      border-left: 4px solid #d4af37;
+      margin-bottom: 15px;
+      border-radius: 6px;
+    }
+
+    .step-number {
+      display: inline-block;
+      background: #d4af37;
+      color: white;
+      width: 35px;
+      height: 35px;
+      border-radius: 50%;
+      text-align: center;
+      line-height: 35px;
+      font-weight: 700;
+      margin-right: 12px;
+      margin-bottom: 10px;
+    }
+
+    .step-title {
+      font-weight: 600;
+      color: #333;
+      margin-bottom: 8px;
+    }
+
+    .step-content {
+      color: #666;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .code-block {
+      background: #f5f5f5;
+      border: 1px solid #ddd;
+      padding: 12px;
+      border-radius: 6px;
+      font-family: 'Courier New', monospace;
+      font-size: 12px;
+      margin: 10px 0;
+      color: #333;
+      overflow-x: auto;
+    }
+
+    .link-box {
+      background: #e3f2fd;
+      border-left: 4px solid #2196f3;
+      padding: 15px;
+      border-radius: 6px;
+      margin: 15px 0;
+    }
+
+    .link-box a {
+      color: #1976d2;
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .link-box a:hover {
+      text-decoration: underline;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-block;
+      padding: 12px 24px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #d4af37 0%, #b8941e 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: #333;
+      border: 1px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .timeline {
+      position: relative;
+      padding-left: 40px;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: #d4af37;
+    }
+
+    .timeline-item {
+      margin-bottom: 25px;
+      position: relative;
+    }
+
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -47px;
+      top: 5px;
+      width: 14px;
+      height: 14px;
+      background: white;
+      border: 3px solid #d4af37;
+      border-radius: 50%;
+    }
+
+    .highlight {
+      background: #fffacd;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-weight: 600;
+      color: #d4af37;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-item {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #d4af37;
+    }
+
+    .feature-item h4 {
+      color: #333;
+      margin-bottom: 5px;
+      font-size: 14px;
+    }
+
+    .feature-item p {
+      color: #666;
+      font-size: 13px;
+    }
+
+    .faq {
+      background: #f9f9f9;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 12px;
+    }
+
+    .faq-q {
+      color: #d4af37;
+      font-weight: 600;
+      margin-bottom: 8px;
+      cursor: pointer;
+    }
+
+    .faq-a {
+      color: #666;
+      font-size: 13px;
+      line-height: 1.6;
+      display: none;
+    }
+
+    .faq.open .faq-a {
+      display: block;
+    }
+
+    .success-box {
+      background: #d4edda;
+      border: 1px solid #c3e6cb;
+      border-left: 4px solid #28a745;
+      padding: 15px;
+      border-radius: 6px;
+      color: #155724;
+      margin: 15px 0;
+    }
+
+    .warning-box {
+      background: #fff3cd;
+      border: 1px solid #ffeaa7;
+      border-left: 4px solid #ffc107;
+      padding: 15px;
+      border-radius: 6px;
+      color: #856404;
+      margin: 15px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🚀 Quick Start Guide</h1>
+    <p class="subtitle">Get your Luxe Jewelry system up and running in 5 minutes</p>
+
+    <!-- Getting Started -->
+    <div class="card">
+      <h2><i class="fas fa-play-circle"></i> Getting Started</h2>
+      
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="step-title">1. Create Admin Account</div>
+          <p>Visit <span class="highlight">init-admin.html</span> to create your first admin user</p>
+          <div class="link-box">
+            <a href="/init-admin.html" target="_blank">
+              <i class="fas fa-arrow-right"></i> Create Admin Account
+            </a>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="step-title">2. Login to Dashboard</div>
+          <p>Use your admin credentials at <span class="highlight">login.html</span> (select Admin role)</p>
+          <div class="link-box">
+            <a href="/login.html" target="_blank">
+              <i class="fas fa-arrow-right"></i> Go to Login
+            </a>
+          </div>
+        </div>
+
+        <div class="timeline-item">
+          <div class="step-title">3. Create Manager Accounts</div>
+          <p>In the admin dashboard, go to Users section and add manager accounts</p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="step-title">4. Start Messaging</div>
+          <p>Use the Messages feature to communicate with managers</p>
+          <div class="link-box">
+            <a href="/messages.html" target="_blank">
+              <i class="fas fa-arrow-right"></i> Open Messages
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Features -->
+    <div class="card">
+      <h2><i class="fas fa-star"></i> Key Features</h2>
+      
+      <div class="grid-2">
+        <div class="feature-item">
+          <h4><i class="fas fa-envelope"></i> Internal Messaging</h4>
+          <p>Secure communication between admin and manager accounts with priority levels and read status tracking.</p>
+        </div>
+
+        <div class="feature-item">
+          <h4><i class="fas fa-lock"></i> Role-Based Access</h4>
+          <p>Separate admin and manager roles with appropriate permissions and dashboard views.</p>
+        </div>
+
+        <div class="feature-item">
+          <h4><i class="fas fa-users"></i> User Management</h4>
+          <p>Create and manage staff accounts with secure password hashing and authentication.</p>
+        </div>
+
+        <div class="feature-item">
+          <h4><i class="fas fa-cog"></i> Settings</h4>
+          <p>Manager settings page to change password and view account information.</p>
+        </div>
+
+        <div class="feature-item">
+          <h4><i class="fas fa-check-circle"></i> Complaint Management</h4>
+          <p>Manager dashboard to view customer complaints and send replies.</p>
+        </div>
+
+        <div class="feature-item">
+          <h4><i class="fas fa-chart-bar"></i> Sales Records</h4>
+          <p>View and track all sales transactions with customer details.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Navigation & URLs -->
+    <div class="card">
+      <h2><i class="fas fa-map"></i> Quick Navigation</h2>
+      
+      <h3>Staff Pages</h3>
+      <div class="code-block">
+        Login: /login.html
+        Admin Dashboard: /admin.html
+        Manager Dashboard: /admin.html#complaints
+        Messages: /messages.html
+        Setup Guide: /setup.html
+        Init Admin: /init-admin.html
+      </div>
+
+      <h3>Customer Pages</h3>
+      <div class="code-block">
+        Home: /index.html
+        Customer Login: /customer-login.html
+        Customer Dashboard: /customer-dashboard.html
+        Complaints: /complain.html
+      </div>
+    </div>
+
+    <!-- Messaging Guide -->
+    <div class="card">
+      <h2><i class="fas fa-comment-dots"></i> Using the Messaging System</h2>
+      
+      <div class="step">
+        <div class="step-number">1</div>
+        <div class="step-title">Access Messages</div>
+        <div class="step-content">
+          Click "Messages" in the dashboard menu or go directly to <span class="highlight">messages.html</span>
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">2</div>
+        <div class="step-title">Compose a Message</div>
+        <div class="step-content">
+          Click "+ Compose New Message" button
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">3</div>
+        <div class="step-title">Fill Message Details</div>
+        <div class="step-content">
+          - Select recipient (opposite role)<br>
+          - Enter subject line<br>
+          - Write message body<br>
+          - Choose priority (Low/Normal/High)
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">4</div>
+        <div class="step-title">Send Message</div>
+        <div class="step-content">
+          Click "Send Message" button. Message will appear in your Sent tab
+        </div>
+      </div>
+
+      <div class="step">
+        <div class="step-number">5</div>
+        <div class="step-title">View Inbox</div>
+        <div class="step-content">
+          Recipient will see message in their Inbox tab with unread indicator
+        </div>
+      </div>
+    </div>
+
+    <!-- Important Notes -->
+    <div class="card">
+      <h2><i class="fas fa-lightbulb"></i> Important Notes</h2>
+      
+      <div class="success-box">
+        <strong>✅ Authentication</strong><br>
+        All staff pages require login with admin or manager role. You'll be automatically redirected to login if not authenticated.
+      </div>
+
+      <div class="warning-box">
+        <strong>⚠️ Messaging Restrictions</strong><br>
+        Admins can only message managers, and managers can only message admins. Same-role communication is not allowed.
+      </div>
+
+      <div class="success-box">
+        <strong>✅ First Admin Account</strong><br>
+        Use <span class="highlight">init-admin.html</span> to create the first admin account. This endpoint only works if no admin exists yet.
+      </div>
+
+      <div class="warning-box">
+        <strong>⚠️ Password Security</strong><br>
+        Always use strong passwords (minimum 6 characters). Passwords are securely hashed using bcrypt before storing in the database.
+      </div>
+
+      <div class="success-box">
+        <strong>✅ Session Persistence</strong><br>
+        Your authentication is automatically stored in browser localStorage. You'll remain logged in until you explicitly logout.
+      </div>
+    </div>
+
+    <!-- Troubleshooting -->
+    <div class="card">
+      <h2><i class="fas fa-tools"></i> Troubleshooting</h2>
+      
+      <div class="faq">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <i class="fas fa-chevron-right"></i> How do I create the first admin?
+        </div>
+        <div class="faq-a">
+          Visit <span class="highlight">http://localhost:5000/init-admin.html</span> and fill in your admin details. This page only works if no admin account exists yet.
+        </div>
+      </div>
+
+      <div class="faq">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <i class="fas fa-chevron-right"></i> Can managers message other managers?
+        </div>
+        <div class="faq-a">
+          No, the system is designed for cross-role communication only. Managers can message admins, and admins can message managers. Same-role messaging is blocked for organizational clarity.
+        </div>
+      </div>
+
+      <div class="faq">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <i class="fas fa-chevron-right"></i> What if I forgot my admin password?
+        </div>
+        <div class="faq-a">
+          You'll need to either:<br>
+          1. Reset via database directly if you have access<br>
+          2. Have another admin create a new account for you<br>
+          3. Contact your database administrator
+        </div>
+      </div>
+
+      <div class="faq">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <i class="fas fa-chevron-right"></i> How do I see all messages in a conversation?
+        </div>
+        <div class="faq-a">
+          Click on any message in the Inbox or Sent tab. The message detail view will show the full conversation thread with all related messages.
+        </div>
+      </div>
+
+      <div class="faq">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <i class="fas fa-chevron-right"></i> Can I delete messages?
+        </div>
+        <div class="faq-a">
+          Yes! In the message detail view, you'll see a "Delete" button. You can also "Archive" messages to hide them without permanently deleting.
+        </div>
+      </div>
+
+      <div class="faq">
+        <div class="faq-q" onclick="this.parentElement.classList.toggle('open')">
+          <i class="fas fa-chevron-right"></i> How are messages auto-sorted?
+        </div>
+        <div class="faq-a">
+          Messages are sorted by newest first. Unread messages are highlighted with a pink background. You can mark them as read by clicking the message, and they'll automatically update.
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="card" style="text-align: center;">
+      <h2><i class="fas fa-rocket"></i> Ready to Get Started?</h2>
+      <p style="margin-bottom: 20px; color: #666;">Choose your next action:</p>
+      
+      <div class="button-group" style="justify-content: center;">
+        <a href="/init-admin.html" class="btn btn-primary">
+          <i class="fas fa-plus"></i> Create Admin Account
+        </a>
+        <a href="/login.html" class="btn btn-primary">
+          <i class="fas fa-sign-in-alt"></i> Go to Login
+        </a>
+        <a href="/setup.html" class="btn btn-secondary">
+          <i class="fas fa-cog"></i> View Setup Guide
+        </a>
+        <a href="/index.html" class="btn btn-secondary">
+          <i class="fas fa-home"></i> Back to Home
+        </a>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align: center; color: #999; margin-top: 40px; padding: 20px; font-size: 13px;">
+      <p>© 2025 Luxe Jewelry Management System. All rights reserved.</p>
+      <p>For detailed documentation, visit <span class="highlight">CONFIGURATION_GUIDE.md</span></p>
+    </div>
+  </div>
+
+  <script>
+    // Make FAQ items clickable
+    document.querySelectorAll('.faq-q').forEach(item => {
+      item.addEventListener('click', function() {
+        this.parentElement.classList.toggle('open');
+      });
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Coupon Management - Luxe Jewelry Admin</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+<link rel="stylesheet" href="/admin-shell.css" />
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #d4af37;
+      --secondary: #333;
+      --light: #f9f6f1;
+      --danger: #ff6347;
+      --success: #4CAF50;
+      --warning: #ffc107;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, var(--light), #f4e7c5);
+      color: var(--secondary);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      color: var(--primary);
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border-radius: 8px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary), #b6912e);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-secondary {
+      background: #f0f0f0;
+      color: var(--secondary);
+      border: 1px solid #ddd;
+    }
+
+    .btn-secondary:hover {
+      background: #e0e0e0;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: #e65c3b;
+    }
+
+    .btn-success {
+      background: var(--success);
+      color: white;
+    }
+
+    /* Form Section */
+    .form-section {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 40px;
+    }
+
+    .form-section h2 {
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin-bottom: 24px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 12px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group label {
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--secondary);
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1rem;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    /* Table Section */
+    .table-section {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .table-section h2 {
+      color: var(--primary);
+      font-size: 1.4rem;
+      margin-bottom: 24px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: linear-gradient(135deg, var(--primary), #b6912e);
+      color: white;
+      padding: 14px;
+      text-align: left;
+      font-weight: 600;
+    }
+
+    td {
+      padding: 14px;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    tr:hover {
+      background: #f9f6f1;
+    }
+
+    .status-badge {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: inline-block;
+    }
+
+    .badge-active {
+      background: rgba(76, 175, 80, 0.2);
+      color: var(--success);
+    }
+
+    .badge-inactive {
+      background: rgba(255, 99, 71, 0.2);
+      color: var(--danger);
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .actions button {
+      padding: 8px 12px;
+      border-radius: 4px;
+      border: none;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-edit {
+      background: var(--primary);
+      color: white;
+    }
+
+    .btn-edit:hover {
+      background: #b6912e;
+    }
+
+    .btn-delete {
+      background: var(--danger);
+      color: white;
+    }
+
+    .btn-delete:hover {
+      background: #e65c3b;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 32px;
+      border-radius: 12px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 12px;
+    }
+
+    .modal-header h2 {
+      color: var(--primary);
+      margin: 0;
+    }
+
+    .close-btn {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+    }
+
+    .close-btn:hover {
+      color: var(--secondary);
+    }
+
+    /* Message */
+    .message {
+      padding: 14px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      display: none;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.success {
+      background: rgba(76, 175, 80, 0.1);
+      color: var(--success);
+      border: 1px solid var(--success);
+    }
+
+    .message.error {
+      background: rgba(255, 99, 71, 0.1);
+      color: var(--danger);
+      border: 1px solid var(--danger);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        padding: 20px;
+      }
+
+      .header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 0.9rem;
+      }
+
+      th, td {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-ticket-alt"></i> Coupon Management</h1>
+      <button class="btn btn-primary" onclick="openCreateModal()">
+        <i class="fas fa-plus"></i> Create Coupon
+      </button>
+    </div>
+
+    <!-- Message -->
+    <div id="message" class="message"></div>
+
+    <!-- Create/Edit Form -->
+    <div class="form-section" id="formSection" style="display: none;">
+      <h2 id="formTitle">Create New Coupon</h2>
+      <form id="couponForm" onsubmit="handleFormSubmit(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label>Coupon Code *</label>
+            <input type="text" id="code" required maxlength="20" placeholder="e.g., SUMMER2025">
+          </div>
+          <div class="form-group">
+            <label>Description</label>
+            <input type="text" id="description" placeholder="e.g., Summer Collection Discount">
+          </div>
+          <div class="form-group">
+            <label>Discount Type *</label>
+            <select id="discountType" required onchange="updateDiscountUI()">
+              <option value="">Select type</option>
+              <option value="percentage">Percentage (%)</option>
+              <option value="fixed">Fixed Amount (₦)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label id="discountValueLabel">Discount Value *</label>
+            <input type="number" id="discountValue" required min="0" step="0.01" placeholder="0">
+          </div>
+          <div class="form-group" id="maxDiscountGroup" style="display: none;">
+            <label>Max Discount (for %)</label>
+            <input type="number" id="maxDiscount" min="0" step="0.01" placeholder="Optional cap">
+          </div>
+          <div class="form-group">
+            <label>Minimum Purchase (₦)</label>
+            <input type="number" id="minPurchase" min="0" step="0.01" value="0">
+          </div>
+          <div class="form-group">
+            <label>Usage Limit</label>
+            <input type="number" id="usageLimit" min="0" placeholder="Leave empty for unlimited">
+          </div>
+          <div class="form-group">
+            <label>Per User Limit</label>
+            <input type="number" id="perUserLimit" min="1" value="1">
+          </div>
+          <div class="form-group">
+            <label>Start Date</label>
+            <input type="datetime-local" id="startDate">
+          </div>
+          <div class="form-group">
+            <label>End Date</label>
+            <input type="datetime-local" id="endDate">
+          </div>
+          <div class="form-group">
+            <label>Status</label>
+            <select id="isActive">
+              <option value="true">Active</option>
+              <option value="false">Inactive</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-save"></i> Save Coupon
+          </button>
+          <button type="button" class="btn btn-secondary" onclick="cancelEdit()">
+            <i class="fas fa-times"></i> Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Coupons Table -->
+    <div class="table-section">
+      <h2>Active Coupons</h2>
+      <div id="loadingMessage" style="text-align: center; padding: 20px; color: #999;">
+        Loading coupons...
+      </div>
+      <table id="couponsTable" style="display: none;">
+        <thead>
+          <tr>
+            <th>Code</th>
+            <th>Discount</th>
+            <th>Min Purchase</th>
+            <th>Used / Limit</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="couponsBody">
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <script>
+    let currentCouponId = null;
+    const apiBase = '/api/coupons';
+
+    /**
+     * Load coupons on page load
+     */
+    function loadCoupons() {
+      fetch(`${apiBase}/admin/all`)
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById('loadingMessage').style.display = 'none';
+          if (data.coupons && data.coupons.length > 0) {
+            document.getElementById('couponsTable').style.display = 'table';
+            renderCoupons(data.coupons);
+          } else {
+            document.getElementById('couponsTable').style.display = 'none';
+            showMessage('No coupons found. Create one to get started!', 'info');
+          }
+        })
+        .catch(err => {
+          showMessage('Error loading coupons: ' + err.message, 'error');
+          document.getElementById('loadingMessage').style.display = 'none';
+        });
+    }
+
+    /**
+     * Render coupons in table
+     */
+    function renderCoupons(coupons) {
+      const tbody = document.getElementById('couponsBody');
+      tbody.innerHTML = '';
+
+      coupons.forEach(coupon => {
+        const row = document.createElement('tr');
+        const discountDisplay = coupon.discountType === 'percentage' 
+          ? `${coupon.discountValue}%` 
+          : `₦${coupon.discountValue.toFixed(2)}`;
+
+        const limitDisplay = coupon.usageLimit 
+          ? `${coupon.usageCount} / ${coupon.usageLimit}`
+          : `${coupon.usageCount} / ∞`;
+
+        row.innerHTML = `
+          <td><strong>${coupon.code}</strong></td>
+          <td>${discountDisplay}</td>
+          <td>₦${coupon.minPurchase.toFixed(2)}</td>
+          <td>${limitDisplay}</td>
+          <td>
+            <span class="status-badge ${coupon.isActive ? 'badge-active' : 'badge-inactive'}">
+              ${coupon.isActive ? 'Active' : 'Inactive'}
+            </span>
+          </td>
+          <td>
+            <div class="actions">
+              <button class="btn-edit" onclick="editCoupon('${coupon._id}')">
+                <i class="fas fa-edit"></i> Edit
+              </button>
+              <button class="btn-delete" onclick="deleteCoupon('${coupon._id}')">
+                <i class="fas fa-trash"></i> Delete
+              </button>
+            </div>
+          </td>
+        `;
+        tbody.appendChild(row);
+      });
+    }
+
+    /**
+     * Open create coupon form
+     */
+    function openCreateModal() {
+      currentCouponId = null;
+      document.getElementById('formTitle').textContent = 'Create New Coupon';
+      document.getElementById('couponForm').reset();
+      document.getElementById('code').disabled = false;
+      document.getElementById('formSection').style.display = 'block';
+      window.scrollTo(0, 0);
+    }
+
+    /**
+     * Edit coupon
+     */
+    function editCoupon(id) {
+      fetch(`${apiBase}/admin/${id}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data.success) {
+            const coupon = data.coupon;
+            currentCouponId = id;
+            document.getElementById('formTitle').textContent = `Edit Coupon - ${coupon.code}`;
+            document.getElementById('code').value = coupon.code;
+            document.getElementById('code').disabled = true;
+            document.getElementById('description').value = coupon.description || '';
+            document.getElementById('discountType').value = coupon.discountType;
+            document.getElementById('discountValue').value = coupon.discountValue;
+            document.getElementById('maxDiscount').value = coupon.maxDiscount || '';
+            document.getElementById('minPurchase').value = coupon.minPurchase || 0;
+            document.getElementById('usageLimit').value = coupon.usageLimit || '';
+            document.getElementById('perUserLimit').value = coupon.perUserLimit || 1;
+            document.getElementById('isActive').value = coupon.isActive ? 'true' : 'false';
+            
+            updateDiscountUI();
+            document.getElementById('formSection').style.display = 'block';
+            window.scrollTo(0, 0);
+          }
+        });
+    }
+
+    /**
+     * Cancel edit
+     */
+    function cancelEdit() {
+      document.getElementById('formSection').style.display = 'none';
+      currentCouponId = null;
+    }
+
+    /**
+     * Update discount UI based on type
+     */
+    function updateDiscountUI() {
+      const type = document.getElementById('discountType').value;
+      const label = document.getElementById('discountValueLabel');
+      const maxGroup = document.getElementById('maxDiscountGroup');
+
+      if (type === 'percentage') {
+        label.textContent = 'Discount Value (%) *';
+        maxGroup.style.display = 'block';
+      } else {
+        label.textContent = 'Discount Value (₦) *';
+        maxGroup.style.display = 'none';
+      }
+    }
+
+    /**
+     * Handle form submission
+     */
+    function handleFormSubmit(e) {
+      e.preventDefault();
+
+      const data = {
+        code: document.getElementById('code').value.toUpperCase(),
+        description: document.getElementById('description').value,
+        discountType: document.getElementById('discountType').value,
+        discountValue: parseFloat(document.getElementById('discountValue').value),
+        maxDiscount: document.getElementById('maxDiscount').value ? parseFloat(document.getElementById('maxDiscount').value) : null,
+        minPurchase: parseFloat(document.getElementById('minPurchase').value) || 0,
+        usageLimit: document.getElementById('usageLimit').value ? parseInt(document.getElementById('usageLimit').value) : null,
+        perUserLimit: parseInt(document.getElementById('perUserLimit').value) || 1,
+        isActive: document.getElementById('isActive').value === 'true'
+      };
+
+      const url = currentCouponId 
+        ? `${apiBase}/admin/${currentCouponId}`
+        : `${apiBase}/create`;
+      
+      const method = currentCouponId ? 'PUT' : 'POST';
+
+      fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+      })
+      .then(res => res.json())
+      .then(result => {
+        if (result.success) {
+          showMessage(result.message, 'success');
+          document.getElementById('formSection').style.display = 'none';
+          currentCouponId = null;
+          loadCoupons();
+        } else {
+          showMessage(result.message, 'error');
+        }
+      })
+      .catch(err => showMessage('Error: ' + err.message, 'error'));
+    }
+
+    /**
+     * Delete coupon
+     */
+    function deleteCoupon(id) {
+      if (confirm('Are you sure you want to delete this coupon?')) {
+        fetch(`${apiBase}/admin/${id}`, { method: 'DELETE' })
+          .then(res => res.json())
+          .then(data => {
+            if (data.success) {
+              showMessage(data.message, 'success');
+              loadCoupons();
+            } else {
+              showMessage(data.message, 'error');
+            }
+          })
+          .catch(err => showMessage('Error: ' + err.message, 'error'));
+      }
+    }
+
+    /**
+     * Show message
+     */
+    function showMessage(msg, type) {
+      const msgEl = document.getElementById('message');
+      msgEl.textContent = msg;
+      msgEl.className = `message show ${type === 'success' ? 'success' : 'error'}`;
+
+      setTimeout(() => {
+        msgEl.classList.remove('show');
+      }, 5000);
+    }
+
+    // Load coupons on page load
+    document.addEventListener('DOMContentLoaded', loadCoupons);
+  </script>
+<script src="/admin-shell.js"></script>
+</body>
+</html>

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>System Configuration - Luxe Jewelry</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .header h1 {
+      font-size: 36px;
+      margin-bottom: 10px;
+      color: #d4af37;
+    }
+
+    .header p {
+      font-size: 16px;
+      opacity: 0.8;
+    }
+
+    .config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 25px;
+      margin-bottom: 40px;
+    }
+
+    .config-card {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 2px solid transparent;
+    }
+
+    .config-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+      border-color: #d4af37;
+    }
+
+    .config-card.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .config-card.disabled:hover {
+      transform: none;
+    }
+
+    .card-icon {
+      font-size: 48px;
+      margin-bottom: 15px;
+      color: #d4af37;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 10px;
+      color: #333;
+    }
+
+    .card-description {
+      font-size: 14px;
+      color: #666;
+      margin-bottom: 15px;
+      line-height: 1.6;
+    }
+
+    .card-status {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin-bottom: 15px;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-complete {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #d4af37 0%, #b8941e 100%);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.3s ease;
+      display: inline-block;
+      text-decoration: none;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    .checklist {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      margin-bottom: 40px;
+    }
+
+    .checklist-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 25px;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      padding: 15px;
+      margin-bottom: 10px;
+      background: #f9f9f9;
+      border-radius: 8px;
+      gap: 15px;
+    }
+
+    .checklist-item.completed {
+      background: #f0f9ff;
+      border-left: 4px solid #4CAF50;
+    }
+
+    .checkbox {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #ddd;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 14px;
+      color: white;
+      font-weight: bold;
+    }
+
+    .checklist-item.completed .checkbox {
+      background: #4CAF50;
+      border-color: #4CAF50;
+    }
+
+    .checklist-content h4 {
+      color: #333;
+      margin-bottom: 5px;
+      font-size: 15px;
+    }
+
+    .checklist-content p {
+      color: #666;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .support-section {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    }
+
+    .support-title {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #333;
+    }
+
+    .support-box {
+      background: #f0f8ff;
+      border-left: 4px solid #2196f3;
+      padding: 15px;
+      border-radius: 6px;
+      margin-bottom: 15px;
+      font-size: 14px;
+      color: #1565c0;
+      line-height: 1.6;
+    }
+
+    .support-box strong {
+      display: block;
+      margin-bottom: 5px;
+      color: #0d47a1;
+    }
+
+    .footer {
+      text-align: center;
+      color: white;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .footer p {
+      font-size: 13px;
+      opacity: 0.8;
+    }
+
+    .quick-links {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+    }
+
+    .quick-links a {
+      color: #d4af37;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 13px;
+    }
+
+    .quick-links a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>💎 Luxe Jewelry - System Configuration</h1>
+      <p>Get your platform up and running</p>
+    </div>
+
+    <div class="config-grid">
+      <!-- Create Admin -->
+      <div class="config-card" id="adminCard">
+        <div class="card-icon"><i class="fas fa-user-shield"></i></div>
+        <div class="card-title">Create Admin Account</div>
+        <div class="card-description">
+          Set up your first administrator account to manage the system.
+        </div>
+        <div class="card-status status-pending" id="adminStatus">Pending</div>
+        <a href="/init-admin.html" class="btn-primary">
+          <i class="fas fa-plus"></i> Create Admin
+        </a>
+      </div>
+
+      <!-- Messaging System -->
+      <div class="config-card">
+        <div class="card-icon"><i class="fas fa-envelope"></i></div>
+        <div class="card-title">Messaging System</div>
+        <div class="card-description">
+          Enable internal communication between admins and managers.
+        </div>
+        <div class="card-status status-complete">Enabled</div>
+        <a href="/messages.html" class="btn-primary">
+          <i class="fas fa-envelope"></i> Open Messaging
+        </a>
+      </div>
+
+      <!-- User Management -->
+      <div class="config-card">
+        <div class="card-icon"><i class="fas fa-users-cog"></i></div>
+        <div class="card-title">User Management</div>
+        <div class="card-description">
+          Add and manage admin and manager accounts.
+        </div>
+        <div class="card-status status-complete">Ready</div>
+        <a href="admin.html" class="btn-primary">
+          <i class="fas fa-users"></i> Manage Users
+        </a>
+      </div>
+
+      <!-- Support & Help -->
+      <div class="config-card">
+        <div class="card-icon"><i class="fas fa-life-ring"></i></div>
+        <div class="card-title">Support & Help</div>
+        <div class="card-description">
+          Get help with setup and troubleshooting.
+        </div>
+        <div class="card-status status-complete">Available</div>
+        <button class="btn-primary" onclick="scrollToSupport()">
+          <i class="fas fa-question-circle"></i> View Help
+        </button>
+      </div>
+
+      <!-- Documentation -->
+      <div class="config-card">
+        <div class="card-icon"><i class="fas fa-book"></i></div>
+        <div class="card-title">Documentation</div>
+        <div class="card-description">
+          Read guides for features and system configuration.
+        </div>
+        <div class="card-status status-complete">Available</div>
+        <a href="/quick-links.html" class="btn-primary">
+          <i class="fas fa-external-link-alt"></i> View Docs
+        </a>
+      </div>
+
+      <!-- Dashboard -->
+      <div class="config-card">
+        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="card-title">Main Dashboard</div>
+        <div class="card-description">
+          Access the main admin dashboard to manage your store.
+        </div>
+        <div class="card-status status-complete">Ready</div>
+        <a href="admin.html" class="btn-primary">
+          <i class="fas fa-arrow-right"></i> Go to Dashboard
+        </a>
+      </div>
+    </div>
+
+    <div class="checklist">
+      <div class="checklist-title">
+        <i class="fas fa-clipboard-list"></i> Setup Checklist
+      </div>
+
+      <div class="checklist-item" id="checklistItem1">
+        <div class="checkbox">✓</div>
+        <div class="checklist-content">
+          <h4>Create Admin Account</h4>
+          <p>Set up your initial admin user to access the system.</p>
+        </div>
+      </div>
+
+      <div class="checklist-item" id="checklistItem2">
+        <div class="checkbox">2</div>
+        <div class="checklist-content">
+          <h4>Create Manager Accounts</h4>
+          <p>Add manager users who will handle day-to-day operations and customer complaints.</p>
+        </div>
+      </div>
+
+      <div class="checklist-item" id="checklistItem3">
+        <div class="checkbox">3</div>
+        <div class="checklist-content">
+          <h4>Configure Products & Categories</h4>
+          <p>Add your jewelry products and organize them into categories.</p>
+        </div>
+      </div>
+
+      <div class="checklist-item" id="checklistItem4">
+        <div class="checkbox">4</div>
+        <div class="checklist-content">
+          <h4>Set Up Payment Gateway</h4>
+          <p>Configure Paystack or other payment processors for customer transactions.</p>
+        </div>
+      </div>
+
+      <div class="checklist-item" id="checklistItem5">
+        <div class="checkbox">5</div>
+        <div class="checklist-content">
+          <h4>Enable Customer Complaints</h4>
+          <p>Allow customers to submit complaints and enable managers to reply.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="support-section" id="supportSection">
+      <div class="support-title">
+        <i class="fas fa-life-ring"></i> Support & Troubleshooting
+      </div>
+
+      <div class="support-box">
+        <strong>❓ First Time Setup?</strong>
+        Start by creating an admin account using the "Create Admin Account" button above. This will allow you to log in and manage other users.
+      </div>
+
+      <div class="support-box">
+        <strong>🔐 Authentication</strong>
+        The system uses role-based access control. Admins have full system control, while managers handle customer interactions like complaints and support tickets.
+      </div>
+
+      <div class="support-box">
+        <strong>💬 Messaging System</strong>
+        Admins and managers can communicate securely using the built-in messaging system. Navigate to Messages in the dashboard to send and receive messages.
+      </div>
+
+      <div class="support-box">
+        <strong>⚙️ Settings & Configuration</strong>
+        After creating an admin account, access the admin dashboard to configure system settings, manage users, and customize your store.
+      </div>
+
+      <div class="support-box">
+        <strong>📊 Database & Backups</strong>
+        The system uses MongoDB to store all data. Ensure your database is properly configured and regularly backed up in production.
+      </div>
+
+      <div class="support-box">
+        <strong>🚨 Troubleshooting</strong>
+        If you encounter issues:
+        <ul style="margin-top: 8px; margin-left: 20px;">
+          <li>Check that MongoDB is running and accessible</li>
+          <li>Verify environment variables are properly configured</li>
+          <li>Check browser console for error messages</li>
+          <li>Clear localStorage and try logging in again</li>
+          <li>Ensure you're using the correct credentials (email/username)</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>© 2025 Luxe Jewelry Management System. All rights reserved.</p>
+      <div class="quick-links">
+        <a href="/index.html"><i class="fas fa-home"></i> Home</a>
+        <a href="/login.html"><i class="fas fa-sign-in-alt"></i> Login</a>
+        <a href="/quick-links.html"><i class="fas fa-sitemap"></i> Site Map</a>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function scrollToSupport() {
+      document.getElementById('supportSection').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // Check if admin exists
+    async function checkAdminStatus() {
+      try {
+        const response = await fetch('/api/admin/users?role=admin', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('authToken')}`
+          }
+        });
+        
+        if (response.ok) {
+          const data = await response.json();
+          if (data && data.length > 0) {
+            document.getElementById('adminStatus').textContent = '✓ Complete';
+            document.getElementById('adminStatus').className = 'card-status status-complete';
+            document.getElementById('checklistItem1').classList.add('completed');
+          }
+        }
+      } catch (error) {
+        // Admin check failed - likely not logged in, which is expected
+      }
+    }
+
+    // Initial check on load
+    window.addEventListener('load', checkAdminStatus);
+  </script>
+</body>
+</html>

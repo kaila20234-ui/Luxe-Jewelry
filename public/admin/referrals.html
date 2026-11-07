@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Referral Management | Luxe Jewelry Admin</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/admin-shell.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    .header {
+      background: #fffef9;
+      border-bottom: 2px solid #f1e6b2;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      padding: 15px 25px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    .header h1 {
+      font-family: "Times New Roman", serif;
+      font-size: 26px;
+      font-weight: bold;
+      color: #d4af37;
+      letter-spacing: 1px;
+    }
+
+    .header-right {
+      display: flex;
+      gap: 10px;
+    }
+
+    .header-btn {
+      padding: 8px 16px;
+      font-size: 14px;
+      border: none;
+      border-radius: 8px;
+      background: #d4af37;
+      color: #2c2c2c;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+    }
+
+    .header-btn:hover {
+      background: #c9a227;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+
+    .content {
+      padding: 25px;
+      max-width: 1200px;
+    }
+
+    .page-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 25px;
+      color: #2c2c2c;
+    }
+
+    .page-title h2 {
+      font-size: 28px;
+      font-weight: 600;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    }
+
+    .card h3 {
+      font-size: 18px;
+      margin-bottom: 15px;
+      color: #2c2c2c;
+      border-bottom: 2px solid #f0e9d6;
+      padding-bottom: 10px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: #2c2c2c;
+      font-size: 14px;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #e6e0d0;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 14px;
+      transition: border-color 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: #d4af37;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+
+    .btn {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .btn-primary {
+      background: #d4af37;
+      color: #2c2c2c;
+    }
+
+    .btn-primary:hover {
+      background: #c9a227;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-secondary {
+      background: #999;
+      color: #fff;
+    }
+
+    .btn-secondary:hover {
+      background: #777;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 10px;
+      margin-top: 15px;
+      flex-wrap: wrap;
+    }
+
+    .button-group .btn {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th {
+      background: #f9f6f1;
+      padding: 12px;
+      text-align: left;
+      font-weight: 600;
+      border-bottom: 2px solid #e6e0d0;
+      color: #2c2c2c;
+    }
+
+    td {
+      padding: 12px;
+      border-bottom: 1px solid #f0e9d6;
+    }
+
+    tr:hover {
+      background: #faf9f7;
+    }
+
+    .stat-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+      margin-bottom: 15px;
+    }
+
+    .stat-item {
+      background: #f9f6f1;
+      padding: 15px;
+      border-radius: 8px;
+      border-left: 4px solid #d4af37;
+    }
+
+    .stat-item strong {
+      display: block;
+      font-size: 24px;
+      color: #d4af37;
+      margin-bottom: 5px;
+    }
+
+    .stat-item small {
+      color: #666;
+      font-size: 12px;
+    }
+
+    .error {
+      background: #fee;
+      color: #c00;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 10px 0;
+      border-left: 4px solid #c00;
+    }
+
+    .success {
+      background: #efe;
+      color: #060;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 10px 0;
+      border-left: 4px solid #060;
+    }
+
+    .info {
+      background: #eef;
+      color: #006;
+      padding: 12px;
+      border-radius: 6px;
+      margin: 10px 0;
+      border-left: 4px solid #006;
+    }
+
+    .loading {
+      color: #999;
+      font-style: italic;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .two-col {
+        grid-template-columns: 1fr;
+      }
+      .button-group .btn {
+        min-width: 100px;
+      }
+      .content {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1><i class="fas fa-gem"></i> Luxe Jewelry</h1>
+    <div class="header-right">
+      <button class="header-btn" id="logoutBtn" onclick="handleLogout()">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <div class="content">
+      <div class="page-title">
+        <h2><i class="fas fa-gift"></i> Referral Management</h2>
+      </div>
+
+      <!-- Authentication Section -->
+      <div class="card">
+        <h3><i class="fas fa-key"></i> Authentication</h3>
+        <div class="form-group">
+          <label>Admin Token (JWT)</label>
+          <input id="adminTokenInput" type="password" placeholder="Paste admin token here or leave blank to use saved token" />
+        </div>
+        <div class="button-group">
+          <button class="btn btn-primary" id="saveTokenBtn">
+            <i class="fas fa-save"></i> Save Token
+          </button>
+          <button class="btn btn-secondary" id="clearTokenBtn">
+            <i class="fas fa-trash"></i> Clear Token
+          </button>
+          <button class="btn btn-primary" id="refreshBtn">
+            <i class="fas fa-sync"></i> Refresh Stats
+          </button>
+        </div>
+        <p class="info" style="margin-top: 15px;">
+          <i class="fas fa-info-circle"></i> Get an admin/manager JWT by logging in via the staff portal.
+        </p>
+      </div>
+
+      <!-- Overview Section -->
+      <div class="card">
+        <h3><i class="fas fa-chart-bar"></i> Overview</h3>
+        <div id="statsContent" class="loading">Loading...</div>
+      </div>
+
+      <!-- Top Referrers Section -->
+      <div class="card">
+        <h3><i class="fas fa-star"></i> Top Referrers</h3>
+        <div id="topReferrers" class="loading">Loading...</div>
+      </div>
+
+      <!-- Settings Section -->
+      <div class="card">
+        <h3><i class="fas fa-cog"></i> Referral Settings</h3>
+        <form id="settingsForm">
+          <div class="two-col">
+            <div class="form-group">
+              <label><i class="fas fa-flag"></i> Signup Milestone Threshold</label>
+              <input name="referralSignupMilestoneThreshold" type="number" min="1" placeholder="e.g., 5" />
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-coins"></i> Signup Milestone Reward</label>
+              <input name="referralSignupMilestoneRewardAmount" type="number" min="0" placeholder="e.g., 1000" />
+            </div>
+          </div>
+          <div class="two-col">
+            <div class="form-group">
+              <label><i class="fas fa-shopping-cart"></i> Purchase Reward Amount</label>
+              <input name="referralPurchaseRewardAmount" type="number" min="0" placeholder="e.g., 100" />
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-limit"></i> Purchase Reward Limit</label>
+              <input name="referralPurchaseRewardLimit" type="number" min="0" placeholder="e.g., 5000" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-user"></i> Own Purchase Reward Amount</label>
+            <input name="ownPurchaseRewardAmount" type="number" min="0" placeholder="e.g., 500" />
+          </div>
+          <button class="btn btn-primary" type="submit">
+            <i class="fas fa-save"></i> Save Settings
+          </button>
+        </form>
+        <div id="settingsResult"></div>
+      </div>
+
+      <!-- Manual Award Section -->
+      <div class="card">
+        <h3><i class="fas fa-hand-holding-heart"></i> Manual Award</h3>
+        <form id="awardForm">
+          <div class="two-col">
+            <div class="form-group">
+              <label><i class="fas fa-user"></i> Recipient User ID</label>
+              <input name="userId" placeholder="Enter user ID" />
+            </div>
+            <div class="form-group">
+              <label><i class="fas fa-coins"></i> Amount (currency units)</label>
+              <input name="amount" type="number" placeholder="e.g., 500" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label><i class="fas fa-comment"></i> Reason</label>
+            <input name="reason" placeholder="Why are you awarding this?" />
+          </div>
+          <button class="btn btn-primary" type="submit">
+            <i class="fas fa-check"></i> Apply Award
+          </button>
+        </form>
+        <div id="awardResult"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/admin/referrals.js"></script>
+  <script src="/admin-shell.js"></script>
+</body>
+</html>

@@ -1,0 +1,44 @@
+[
+  {
+    "id": 1761901361123,
+    "name": "rolex",
+    "price": 1300,
+    "category": "watches",
+    "image": "/uploads/1761901361111-529874713.jpg"
+  },
+  {
+    "id": 1761979816566,
+    "name": "sarka",
+    "price": 2000,
+    "category": "necklaces",
+    "image": "/uploads/1761979816562-851737238.jpg"
+  },
+  {
+    "id": 1762067181959,
+    "name": "rolex",
+    "price": 2500,
+    "category": "watches",
+    "image": "/uploads/1762067181948-725989960.jpg"
+  },
+  {
+    "id": 1762067245848,
+    "name": "sarka",
+    "price": 1700,
+    "category": "necklaces",
+    "image": "/uploads/1762067245829-590142426.jpg"
+  },
+  {
+    "id": 1762067309257,
+    "name": "soft ear",
+    "price": 1000,
+    "category": "earrings",
+    "image": "/uploads/1762067309249-21519920.jpg"
+  },
+  {
+    "id": 1762067348405,
+    "name": "bangle",
+    "price": 1200,
+    "category": "bracelets",
+    "image": "/uploads/1762067348394-9889193.jpg"
+  }
+]

@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Support Tickets - Admin Panel</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/admin-shell.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+  />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #1a1a1a, #2d2d2d);
+      color: #333;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    /* HEADER */
+    .header {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .header h1 {
+      font-size: 1.8rem;
+      color: #333;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header h1 i {
+      color: #d4af37;
+    }
+
+    /* TOOLBAR */
+    .toolbar {
+      background: white;
+      padding: 16px 24px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: center;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .search-box {
+      flex: 1;
+      min-width: 250px;
+      position: relative;
+    }
+
+    .search-box input {
+      width: 100%;
+      padding: 10px 16px 10px 40px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: border-color 0.3s;
+    }
+
+    .search-box input:focus {
+      outline: none;
+      border-color: #d4af37;
+    }
+
+    .search-box i {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #999;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      padding: 10px 16px;
+      border: 2px solid #e0e0e0;
+      background: white;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: all 0.3s;
+      font-weight: 500;
+      color: #666;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      border-color: #d4af37;
+      color: #d4af37;
+      background: #fff9f0;
+    }
+
+    /* STATS */
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    .stat-number {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #d4af37;
+      margin-bottom: 8px;
+    }
+
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* TABLE */
+    .table-wrapper {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background: #f8f8f8;
+      border-bottom: 2px solid #e0e0e0;
+    }
+
+    th {
+      padding: 16px;
+      text-align: left;
+      font-weight: 600;
+      color: #333;
+      font-size: 0.95rem;
+    }
+
+    td {
+      padding: 16px;
+      border-bottom: 1px solid #e0e0e0;
+      font-size: 0.9rem;
+    }
+
+    tbody tr:hover {
+      background-color: #f9f9f9;
+    }
+
+    tbody tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* STATUS BADGE */
+    .status-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-pending {
+      background: #fff3cd;
+      color: #856404;
+    }
+
+    .status-closed {
+      background: #d4edda;
+      color: #155724;
+    }
+
+    .status-inprogress {
+      background: #cfe2ff;
+      color: #084298;
+    }
+
+    /* PRIORITY BADGE */
+    .priority-badge {
+      display: inline-block;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .priority-low {
+      background: #e8f5e9;
+      color: #2e7d32;
+    }
+
+    .priority-medium {
+      background: #fff3e0;
+      color: #e65100;
+    }
+
+    .priority-high {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .priority-normal {
+      background: #f3e5f5;
+      color: #6a1b9a;
+    }
+
+    /* ACTIONS */
+    .action-btns {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.3s;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-view {
+      background: #e3f2fd;
+      color: #1565c0;
+    }
+
+    .btn-view:hover {
+      background: #1565c0;
+      color: white;
+    }
+
+    .btn-delete {
+      background: #ffebee;
+      color: #c62828;
+    }
+
+    .btn-delete:hover {
+      background: #c62828;
+      color: white;
+    }
+
+    /* MODAL */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.active {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      border-bottom: 2px solid #e0e0e0;
+      padding-bottom: 16px;
+    }
+
+    .modal-header h2 {
+      color: #333;
+      font-size: 1.4rem;
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #999;
+      transition: color 0.3s;
+    }
+
+    .modal-close:hover {
+      color: #333;
+    }
+
+    .modal-body {
+      margin-bottom: 24px;
+    }
+
+    .detail-row {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .detail-row:last-child {
+      border-bottom: none;
+    }
+
+    .detail-label {
+      font-weight: 600;
+      color: #666;
+      min-width: 120px;
+    }
+
+    .detail-value {
+      color: #333;
+      word-break: break-word;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #d4af37, #b6912e);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
+    }
+
+    .btn-secondary {
+      background: #e0e0e0;
+      color: #333;
+      padding: 10px 20px;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s;
+    }
+
+    .btn-secondary:hover {
+      background: #d0d0d0;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: #999;
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      color: #ddd;
+      margin-bottom: 16px;
+    }
+
+    .empty-state p {
+      font-size: 1.1rem;
+      margin-bottom: 8px;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 768px) {
+      .header {
+        flex-direction: column;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .toolbar {
+        flex-direction: column;
+      }
+
+      .filter-group {
+        width: 100%;
+      }
+
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      table {
+        font-size: 0.85rem;
+      }
+
+      th,
+      td {
+        padding: 12px 8px;
+      }
+
+      .action-btns {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .modal-content {
+        padding: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+      <h1><i class="fas fa-ticket-alt"></i> Support Tickets</h1>
+      <div id="logoutBtn" style="cursor: pointer; color: #d4af37;">
+        <i class="fas fa-sign-out-alt"></i> Logout
+      </div>
+    </div>
+
+    <!-- TOOLBAR -->
+    <div class="toolbar">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="Search by title, email, or description..."
+        />
+      </div>
+      <div class="filter-group">
+        <button class="filter-btn active" data-status="all">All</button>
+        <button class="filter-btn" data-status="pending">Pending</button>
+        <button class="filter-btn" data-status="inprogress">In Progress</button>
+        <button class="filter-btn" data-status="closed">Closed</button>
+      </div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number" id="totalCount">0</div>
+        <div class="stat-label">Total Tickets</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="pendingCount">0</div>
+        <div class="stat-label">Pending</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="inprogressCount">0</div>
+        <div class="stat-label">In Progress</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="closedCount">0</div>
+        <div class="stat-label">Closed</div>
+      </div>
+    </div>
+
+    <!-- TABLE -->
+    <div class="table-wrapper">
+      <table>
+        <thead>
+          <tr>
+            <th>Ticket ID</th>
+            <th>Title</th>
+            <th>Customer Email</th>
+            <th>Status</th>
+            <th>Priority</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="ticketsList">
+          <tr>
+            <td colspan="7" class="empty-state">
+              <i class="fas fa-inbox"></i>
+              <p>Loading tickets...</p>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- TICKET DETAIL MODAL -->
+  <div class="modal" id="ticketModal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Ticket Details</h2>
+        <button class="modal-close" onclick="closeModal()">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-row">
+          <div class="detail-label">Ticket ID:</div>
+          <div class="detail-value" id="modalTicketId">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Title:</div>
+          <div class="detail-value" id="modalTitle">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Email:</div>
+          <div class="detail-value" id="modalEmail">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Status:</div>
+          <div class="detail-value" id="modalStatus">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Priority:</div>
+          <div class="detail-value" id="modalPriority">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Created:</div>
+          <div class="detail-value" id="modalCreated">-</div>
+        </div>
+        <div class="detail-row">
+          <div class="detail-label">Description:</div>
+          <div class="detail-value" id="modalDescription" style="max-height: 200px; overflow-y: auto;">-</div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn-secondary" onclick="closeModal()">Close</button>
+        <button class="btn-primary" id="updateStatusBtn">Update Status</button>
+        <button class="btn-primary" id="deleteBtn" style="background: #c62828;">Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      alert("Please sign in first");
+      location.href = "/login.html";
+    }
+
+    let allTickets = [];
+    let currentStatus = "all";
+    let searchTerm = "";
+    let currentTicketId = null;
+
+    // Fetch and load tickets
+    async function loadTickets() {
+      try {
+        const res = await fetch("/api/tickets", {
+          headers: { Authorization: "Bearer " + token },
+        });
+        const data = await res.json();
+        allTickets = Array.isArray(data) ? data : data.tickets || [];
+        filterAndDisplayTickets();
+        updateStats();
+      } catch (e) {
+        console.error("Error loading tickets:", e);
+        document.getElementById("ticketsList").innerHTML =
+          '<tr><td colspan="7" class="empty-state"><i class="fas fa-exclamation-circle"></i><p>Error loading tickets</p></td></tr>';
+      }
+    }
+
+    // Filter and display tickets
+    function filterAndDisplayTickets() {
+      let filtered = allTickets;
+
+      if (currentStatus !== "all") {
+        filtered = filtered.filter((t) => t.status === currentStatus);
+      }
+
+      if (searchTerm) {
+        const search = searchTerm.toLowerCase();
+        filtered = filtered.filter(
+          (t) =>
+            (t.title && t.title.toLowerCase().includes(search)) ||
+            (t.email && t.email.toLowerCase().includes(search)) ||
+            (t.description && t.description.toLowerCase().includes(search))
+        );
+      }
+
+      if (filtered.length === 0) {
+        document.getElementById("ticketsList").innerHTML =
+          '<tr><td colspan="7" class="empty-state"><i class="fas fa-inbox"></i><p>No tickets found</p></td></tr>';
+        return;
+      }
+
+      const html = filtered
+        .map((t) => {
+          const statusClass =
+            "status-" + (t.status || "pending").toLowerCase();
+          const priorityClass =
+            "priority-" + (t.priority || "normal").toLowerCase();
+          const created = new Date(t.createdAt).toLocaleDateString("en-US", {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          });
+          const shortId = t._id ? t._id.substring(0, 8) : "N/A";
+
+          return `
+          <tr>
+            <td><code style="color: #d4af37; font-weight: 600;">${shortId}</code></td>
+            <td><strong>${t.title || "Untitled"}</strong></td>
+            <td>${t.email || "-"}</td>
+            <td><span class="status-badge ${statusClass}">${t.status || "pending"}</span></td>
+            <td><span class="priority-badge ${priorityClass}">${t.priority || "normal"}</span></td>
+            <td>${created}</td>
+            <td>
+              <div class="action-btns">
+                <button class="btn btn-view" onclick="viewTicket('${t._id}')">
+                  <i class="fas fa-eye"></i> View
+                </button>
+                <button class="btn btn-delete" onclick="deleteTicket('${t._id}')">
+                  <i class="fas fa-trash"></i> Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+        })
+        .join("");
+
+      document.getElementById("ticketsList").innerHTML = html;
+    }
+
+    // Update stats
+    function updateStats() {
+      document.getElementById("totalCount").textContent = allTickets.length;
+      document.getElementById("pendingCount").textContent = allTickets.filter(
+        (t) => t.status === "pending"
+      ).length;
+      document.getElementById("inprogressCount").textContent = allTickets.filter(
+        (t) => t.status === "inprogress"
+      ).length;
+      document.getElementById("closedCount").textContent = allTickets.filter(
+        (t) => t.status === "closed"
+      ).length;
+    }
+
+    // View ticket details
+    function viewTicket(id) {
+      const ticket = allTickets.find((t) => t._id === id);
+      if (!ticket) return;
+
+      currentTicketId = id;
+      document.getElementById("modalTicketId").textContent =
+        id.substring(0, 12) + "...";
+      document.getElementById("modalTitle").textContent = ticket.title || "-";
+      document.getElementById("modalEmail").textContent = ticket.email || "-";
+      document.getElementById("modalStatus").innerHTML =
+        `<span class="status-badge status-${(ticket.status || "pending").toLowerCase()}">${ticket.status || "pending"}</span>`;
+      document.getElementById("modalPriority").innerHTML =
+        `<span class="priority-badge priority-${(ticket.priority || "normal").toLowerCase()}">${ticket.priority || "normal"}</span>`;
+      document.getElementById("modalCreated").textContent = new Date(
+        ticket.createdAt
+      ).toLocaleString();
+      document.getElementById("modalDescription").textContent =
+        ticket.description || "-";
+
+      document.getElementById("ticketModal").classList.add("active");
+    }
+
+    // Close modal
+    function closeModal() {
+      document.getElementById("ticketModal").classList.remove("active");
+      currentTicketId = null;
+    }
+
+    // Update ticket status
+    async function updateTicketStatus() {
+      if (!currentTicketId) return;
+
+      const newStatus = prompt(
+        "Enter new status (pending, inprogress, closed):",
+        "inprogress"
+      );
+      if (!newStatus) return;
+
+      try {
+        await fetch("/api/tickets/" + currentTicketId, {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({ status: newStatus }),
+        });
+        closeModal();
+        loadTickets();
+      } catch (e) {
+        console.error("Error updating status:", e);
+        alert("Failed to update status");
+      }
+    }
+
+    // Delete ticket
+    async function deleteTicket(id) {
+      if (!confirm("Are you sure you want to delete this ticket?")) return;
+
+      try {
+        await fetch("/api/tickets/" + id, {
+          method: "DELETE",
+          headers: { Authorization: "Bearer " + token },
+        });
+        loadTickets();
+      } catch (e) {
+        console.error("Error deleting ticket:", e);
+        alert("Failed to delete ticket");
+      }
+    }
+
+    // Search functionality
+    document
+      .getElementById("searchInput")
+      .addEventListener("keyup", function (e) {
+        searchTerm = e.target.value;
+        filterAndDisplayTickets();
+      });
+
+    // Filter buttons
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        document.querySelectorAll(".filter-btn").forEach((b) => {
+          b.classList.remove("active");
+        });
+        this.classList.add("active");
+        currentStatus = this.dataset.status;
+        filterAndDisplayTickets();
+      });
+    });
+
+    // Modal button handlers
+    document
+      .getElementById("updateStatusBtn")
+      .addEventListener("click", updateTicketStatus);
+    document
+      .getElementById("deleteBtn")
+      .addEventListener("click", function () {
+        if (currentTicketId) {
+          deleteTicket(currentTicketId);
+        }
+      });
+
+    // Logout
+    document.getElementById("logoutBtn").addEventListener("click", function () {
+      localStorage.removeItem("authToken");
+      location.href = "/login.html";
+    });
+
+    // Close modal on outside click
+    document
+      .getElementById("ticketModal")
+      .addEventListener("click", function (e) {
+        if (e.target === this) {
+          closeModal();
+        }
+      });
+
+    // Initial load
+    loadTickets();
+
+    // Auto-refresh every 30 seconds
+    setInterval(loadTickets, 30000);
+  </script>
+<script src="/admin-shell.js"></script>
+</body>
+</html>

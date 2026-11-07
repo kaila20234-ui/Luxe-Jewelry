@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Staff Login | Luxe Jewelry</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link href="/styles.css" rel="stylesheet" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <style>
+      /* Hide header and footer on this page */
+      header,
+      nav,
+      .navbar,
+      .topnav,
+      footer,
+      .footer-container {
+        display: none !important;
+      }
+
+      body {
+        font-family: Poppins, sans-serif;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        width: 100%;
+        max-width: 900px;
+      }
+      .header {
+        text-align: center;
+        margin-bottom: 50px;
+        color: white;
+      }
+      .header h1 {
+        font-size: 48px;
+        margin: 0 0 10px 0;
+      }
+      .header p {
+        font-size: 18px;
+        opacity: 0.9;
+        margin: 0;
+      }
+      .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+      }
+      .login-card {
+        background: white;
+        border-radius: 16px;
+        overflow: hidden;
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        transition: all 0.3s;
+        cursor: pointer;
+      }
+      .login-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      }
+      .card-header {
+        padding: 40px 30px 30px;
+        text-align: center;
+      }
+      .card-icon {
+        font-size: 64px;
+        margin-bottom: 20px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .admin-card .card-icon {
+        color: #e74c3c;
+      }
+      .admin-card .card-header {
+        background: linear-gradient(135deg, #fce4ec, #ffebee);
+      }
+      .manager-card .card-icon {
+        color: #f39c12;
+      }
+      .manager-card .card-header {
+        background: linear-gradient(135deg, #fff8e1, #f4e7c5);
+      }
+      .card-title {
+        font-size: 28px;
+        font-weight: 700;
+        margin: 0 0 10px 0;
+        color: #333;
+      }
+      .card-desc {
+        color: #666;
+        font-size: 14px;
+        line-height: 1.6;
+        margin: 0 0 30px 0;
+      }
+      .card-features {
+        list-style: none;
+        padding: 0;
+        margin: 0 0 30px 0;
+      }
+      .card-features li {
+        padding: 8px 0;
+        color: #666;
+        font-size: 14px;
+      }
+      .card-features li:before {
+        content: "✓ ";
+        color: #27ae60;
+        font-weight: 700;
+        margin-right: 8px;
+      }
+      .card-button {
+        display: inline-block;
+        background: linear-gradient(135deg, #d4af37, #b8941e);
+        color: white;
+        padding: 12px 40px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s;
+        border: none;
+        cursor: pointer;
+        font-size: 16px;
+        width: 100%;
+        text-align: center;
+        box-sizing: border-box;
+      }
+      .card-button:hover {
+        transform: scale(1.02);
+        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+      }
+      .card-button i {
+        margin-right: 8px;
+      }
+      .footer {
+        text-align: center;
+        margin-top: 50px;
+        color: white;
+        font-size: 14px;
+      }
+      .footer a {
+        color: #d4af37;
+        text-decoration: none;
+      }
+      @media (max-width: 600px) {
+        .header h1 {
+          font-size: 32px;
+        }
+        .cards-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1><i class="fas fa-crown"></i> Luxe Jewelry</h1>
+        <p>Staff Portal - Select your login role</p>
+      </div>
+
+      <div class="cards-grid">
+        <!-- Admin Login Card -->
+        <div class="login-card admin-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h2 class="card-title">Admin</h2>
+            <p class="card-desc">Full system access and management</p>
+          </div>
+          <div style="padding: 0 30px 30px">
+            <ul class="card-features">
+              <li>Manage products & categories</li>
+              <li>View all customers & sales</li>
+              <li>Manage users & roles</li>
+              <li>System settings & reports</li>
+              <li>Full analytics access</li>
+            </ul>
+            <a href="/admin-login.html" class="card-button">
+              <i class="fas fa-sign-in-alt"></i> Admin Login
+            </a>
+          </div>
+        </div>
+
+        <!-- Manager Login Card -->
+        <div class="login-card manager-card">
+          <div class="card-header">
+            <div class="card-icon">
+              <i class="fas fa-briefcase"></i>
+            </div>
+            <h2 class="card-title">Manager</h2>
+            <p class="card-desc">Support and customer management</p>
+          </div>
+          <div style="padding: 0 30px 30px">
+            <ul class="card-features">
+              <li>Support ticket management</li>
+              <li>Customer communication</li>
+              <li>Message handling</li>
+              <li>Complaint tracking</li>
+              <li>Basic reporting</li>
+            </ul>
+            <a href="/manager-login.html" class="card-button">
+              <i class="fas fa-sign-in-alt"></i> Manager Login
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer">
+        <p>
+          © 2024 Luxe Jewelry. All rights reserved. |
+          <a href="/">Back to Home</a>
+        </p>
+      </div>
+    </div>
+  </body>
+  <script src="/cart-manager.js"></script>
+  <script src="/load-components.js"></script>
+</html>

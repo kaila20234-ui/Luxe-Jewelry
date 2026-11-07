@@ -1,0 +1,214 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Test job
+  test:
+    runs-on: ubuntu-latest
+    
+    services:
+      mongodb:
+        image: mongo:7
+        options: >-
+          --health-cmd "mongosh --eval \"db.adminCommand('ping')\"" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+        ports:
+          - 27017:27017
+      
+      redis:
+        image: redis:7-alpine
+        options: >-
+          --health-cmd "redis-cli ping" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Lint code
+        run: npm run lint --if-present || echo "No lint script"
+      
+      - name: Run tests
+        run: npm test -- --coverage
+        env:
+          MONGODB_URI: mongodb://localhost:27017/siwes-test
+          REDIS_HOST: localhost
+          JWT_SECRET: test-secret
+      
+      - name: Upload coverage
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage/lcov.info
+
+  # Build job
+  build:
+    needs: test
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      
+      - name: Build and push
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ secrets.DOCKER_USERNAME }}/siwes:${{ github.sha }},latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # Security scanning
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Check for exposed secrets
+        run: |
+          echo "🔍 Scanning for exposed secrets and hardcoded credentials..."
+          ERROR_FOUND=0
+          
+          # Check for exposed environment files
+          if [ -f ".env" ]; then
+            echo "❌ ERROR: .env file committed to repository!"
+            echo "   This file should NOT be committed - it contains secrets"
+            ERROR_FOUND=1
+          fi
+          
+          # Check for hardcoded credentials in code
+          if grep -r "password.*=" . \
+            --include="*.js" --include="*.json" --include="*.ts" \
+            --exclude-dir=node_modules --exclude-dir=.git 2>/dev/null | \
+            grep -v "placeholder\|example\|change_this\|your_\|\[YOUR\]" | \
+            grep -E "=\s*['\"][^'\"]*['\"]" ; then
+            echo "⚠️  WARNING: Possible hardcoded credentials detected"
+          fi
+          
+          # Check for common API key patterns
+          if grep -rE "(sk_live_|pk_live_|api_key.*=|secret_key.*=|Bearer\s+[a-zA-Z0-9._\-]+)" . \
+            --include="*.js" --include="*.json" --include="*.ts" \
+            --exclude-dir=node_modules --exclude-dir=.git 2>/dev/null | \
+            grep -v "process.env\|example\|placeholder"; then
+            echo "⚠️  WARNING: API keys or secrets may be hardcoded"
+          fi
+          
+          if [ $ERROR_FOUND -eq 1 ]; then
+            exit 1
+          fi
+          echo "✓ Secret scan complete"
+      
+      - name: Verify .env.example exists
+        run: |
+          if [ ! -f ".env.example" ]; then
+            echo "❌ ERROR: .env.example template not found!"
+            exit 1
+          fi
+          echo "✓ .env.example template found"
+      
+      - name: Check .gitignore
+        run: |
+          if grep -q "\.env" .gitignore 2>/dev/null; then
+            echo "✓ .env properly ignored in .gitignore"
+          else
+            echo "⚠️  WARNING: .env not found in .gitignore"
+          fi
+      
+      - name: Run Snyk scan
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        continue-on-error: true
+
+  # Deploy to staging
+  deploy-staging:
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/develop' && github.event_name == 'push'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Deploy to staging
+        env:
+          STAGING_SERVER: ${{ secrets.STAGING_SERVER }}
+          STAGING_KEY: ${{ secrets.STAGING_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$STAGING_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H $STAGING_SERVER >> ~/.ssh/known_hosts 2>/dev/null
+          
+          ssh -i ~/.ssh/deploy_key user@$STAGING_SERVER << 'EOF'
+          cd /app/siwes
+          docker-compose pull
+          docker-compose up -d
+          echo "Deployment complete"
+          EOF
+
+  # Deploy to production
+  deploy-production:
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Create release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: v${{ github.run_number }}
+          release_name: Release v${{ github.run_number }}
+          body: |
+            Changes in this Release
+            - Automated release from CI/CD pipeline
+            - Build: ${{ github.sha }}
+      
+      - name: Deploy to production
+        env:
+          PROD_SERVER: ${{ secrets.PROD_SERVER }}
+          PROD_KEY: ${{ secrets.PROD_KEY }}
+        run: |
+          mkdir -p ~/.ssh
+          echo "$PROD_KEY" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          ssh-keyscan -H $PROD_SERVER >> ~/.ssh/known_hosts 2>/dev/null
+          
+          ssh -i ~/.ssh/deploy_key user@$PROD_SERVER << 'EOF'
+          cd /app/siwes
+          docker-compose pull
+          docker-compose up -d
+          docker-compose exec -T app npm run migrate
+          echo "Production deployment complete"
+          EOF

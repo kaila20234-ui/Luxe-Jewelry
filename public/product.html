@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Product</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="/cart-manager.js"></script>
+    <link href="/styles.css" rel="stylesheet" />
+    <style>
+      body {
+        font-family: "Poppins", sans-serif;
+        margin: 0;
+        background: #f7f5f2;
+        color: #222;
+      }
+      .container {
+        max-width: 900px;
+        margin: 24px auto;
+        padding: 12px;
+      }
+      .back {
+        margin-bottom: 10px;
+        display: inline-block;
+        color: #555;
+        text-decoration: none;
+        font-size: 0.9rem;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        align-items: start;
+      }
+      .image-wrap {
+        background: #fff;
+        padding: 14px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      .image-wrap img {
+        width: 100%;
+        height: 320px;
+        object-fit: contain;
+      }
+      .meta {
+        background: #fff;
+        padding: 14px;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+      }
+      .meta h1 {
+        margin: 0 0 6px 0;
+        font-size: 1.4rem;
+      }
+      .meta .cat {
+        color: #888;
+        font-weight: 600;
+        margin-bottom: 8px;
+        font-size: 0.85rem;
+      }
+      .meta .price {
+        color: #b6912e;
+        font-weight: 800;
+        font-size: 1.2rem;
+        margin-bottom: 10px;
+      }
+      .meta p.desc {
+        color: #666;
+        line-height: 1.5;
+        font-size: 0.9rem;
+      }
+      .actions {
+        margin-top: 14px;
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .qty {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .qty button {
+        width: 32px;
+        height: 32px;
+        border-radius: 6px;
+        border: none;
+        background: #eee;
+        cursor: pointer;
+        font-size: 0.9rem;
+      }
+      .qty input {
+        width: 50px;
+        text-align: center;
+        border: none;
+        font-weight: 700;
+        font-size: 0.9rem;
+      }
+      .btn {
+        padding: 8px 12px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 0.85rem;
+      }
+      .btn-primary {
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        color: white;
+      }
+      .btn-outline {
+        background: linear-gradient(135deg, #d4af37, #b6912e);
+        color: white;
+        border: none;
+      }
+      .toast {
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        max-width: calc(100vw - 40px);
+        background: #d4af37;
+        color: #1b1b1b;
+        padding: 14px 20px;
+        border-radius: 12px;
+        display: none;
+        font-size: 0.95rem;
+        font-weight: 700;
+        box-shadow: 0 16px 32px rgba(0, 0, 0, 0.18);
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.2s ease, transform 0.2s ease;
+      }
+      .toast.show {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+      }
+      @media (max-width: 900px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .image-wrap img {
+          height: 280px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <a href="/" class="back"
+        ><i class="fas fa-chevron-left"></i> Back to shop</a
+      >
+      <div id="productWrap" class="grid">
+        <div class="image-wrap">
+          <img id="prodImage" src="/uploads/default.png" alt="product" />
+        </div>
+        <div class="meta">
+          <div class="cat" id="prodCategory">Category</div>
+          <h1 id="prodName">Product Name</h1>
+          <div class="price" id="prodPrice">₦0</div>
+          <p class="desc" id="prodDesc">Description not available.</p>
+          <div class="actions">
+            <div class="qty">
+              <button id="decQty">−</button>
+              <input id="qtyInput" type="number" value="1" min="1" />
+              <button id="incQty">+</button>
+            </div>
+            <button id="addCartBtn" class="btn btn-primary">
+              <i class="fas fa-shopping-bag"></i> Add to Cart
+            </button>
+            <button id="checkoutNow" class="btn btn-outline">
+              <i class="fas fa-credit-card"></i> Buy Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script>
+      // read id from query string
+      function qs(name) {
+        const url = new URL(location.href);
+        return url.searchParams.get(name);
+      }
+      const id = qs("id");
+      const prodImage = document.getElementById("prodImage");
+      const prodName = document.getElementById("prodName");
+      const prodPrice = document.getElementById("prodPrice");
+      const prodCategory = document.getElementById("prodCategory");
+      const prodDesc = document.getElementById("prodDesc");
+      const qtyInput = document.getElementById("qtyInput");
+      const decQty = document.getElementById("decQty");
+      const incQty = document.getElementById("incQty");
+      const addCartBtn = document.getElementById("addCartBtn");
+      const toast = document.getElementById("toast");
+
+      function showToast(msg, type = 'success') {
+        toast.textContent = msg;
+        toast.style.background = type === 'error' ? '#dc3545' : '#d4af37';
+        toast.style.color = type === 'error' ? 'white' : '#1b1b1b';
+        toast.classList.add('show');
+        setTimeout(() => {
+          toast.classList.remove('show');
+          setTimeout(() => (toast.style.display = 'none'), 200);
+        }, 2500);
+      }
+
+      async function loadProduct() {
+        if (!id) {
+          document.getElementById("productWrap").innerHTML =
+            "<p>Product ID missing</p>";
+          return;
+        }
+        try {
+          const res = await fetch("/api/products/" + encodeURIComponent(id));
+          if (!res.ok) {
+            document.getElementById("productWrap").innerHTML =
+              "<p>Product not found</p>";
+            return;
+          }
+          const p = await res.json();
+          prodImage.src = p.image ? p.image : "/uploads/default.png";
+          prodImage.alt = p.name || "Product";
+          prodName.textContent = p.name || "";
+          prodPrice.textContent = "₦" + Number(p.price || 0).toLocaleString();
+          prodCategory.textContent = p.category || "";
+          prodDesc.textContent = p.description || p.name || "";
+          if (!p.available) {
+            addCartBtn.disabled = true;
+            addCartBtn.textContent = "Out of stock";
+          }
+        } catch (err) {
+          console.error(err);
+          document.getElementById("productWrap").innerHTML =
+            "<p>Error loading product</p>";
+        }
+      }
+
+      decQty.addEventListener("click", () => {
+        let v = Number(qtyInput.value) || 1;
+        if (v > 1) qtyInput.value = v - 1;
+      });
+      incQty.addEventListener("click", () => {
+        let v = Number(qtyInput.value) || 1;
+        qtyInput.value = v + 1;
+      });
+
+      addCartBtn.addEventListener("click", () => {
+        const q = Math.max(1, Number(qtyInput.value) || 1);
+        if (!id) return showToast("Product ID missing");
+        fetch("/api/products/" + encodeURIComponent(id))
+          .then((r) => {
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            return r.json();
+          })
+          .then((p) => {
+            if (!p || !p._id) return showToast("Product not available", 'error');
+            
+            // Use CartManager to add item (syncs locally + backend if logged in)
+            CartManager.addToCart(p, q).then(() => {
+              showToast("✓ Added to cart");
+            }).catch((e) => {
+              console.error("Cart error:", e);
+              showToast("Failed to add to cart", 'error');
+            });
+          })
+          .catch((e) => {
+            console.error("Cart error:", e);
+            showToast("Failed to add to cart", 'error');
+          });
+      });
+
+      document.getElementById("checkoutNow").addEventListener("click", (e) => {
+        const q = Math.max(1, Number(qtyInput.value) || 1);
+        if (!id) return showToast("Product ID missing");
+
+        fetch("/api/products/" + encodeURIComponent(id))
+          .then((r) => {
+            if (!r.ok) throw new Error(`HTTP ${r.status}`);
+            return r.json();
+          })
+          .then((p) => {
+            if (!p || !p._id) return showToast("Product not available");
+            
+            // Use CartManager to add item
+            CartManager.addToCart(p, q).then(() => {
+              const cart = CartManager.loadLocalCart();
+              
+              // Also store in sessionStorage for payment-summary.html
+              sessionStorage.setItem("cartData", JSON.stringify(cart));
+
+              showToast("💳 Going to checkout...");
+              setTimeout(
+                () => (globalThis.location.href = "/payment-summary.html"),
+                500
+              );
+            }).catch((e) => {
+              console.error("Checkout error:", e);
+              showToast("Failed to proceed");
+            });
+          })
+          .catch((e) => {
+            console.error("Checkout error:", e);
+            showToast("Failed to proceed");
+          });
+      });
+
+      loadProduct();
+    </script>
+    <script src="/load-components.js"></script>
+  </body>
+</html>

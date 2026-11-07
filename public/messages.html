@@ -1,0 +1,1039 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Messages - Manager & Admin Communication</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: #f0f0f0;
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 15px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      display: flex;
+      height: 90vh;
+    }
+
+    /* Sidebar */
+    .sidebar {
+      width: 300px;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      border-right: 1px solid #ddd;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+
+    .sidebar-header {
+      padding: 20px;
+      border-bottom: 2px solid #ddd;
+      background: linear-gradient(135deg, #d4af37 0%, #b8941e 100%);
+      color: #000;
+    }
+
+    .sidebar-header h2 {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .unread-badge {
+      display: inline-block;
+      background: #ff6b6b;
+      color: #000;
+      border-radius: 20px;
+      padding: 2px 8px;
+      font-size: 12px;
+      margin-left: 10px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0;
+    }
+
+    .tab-btn {
+      flex: 1;
+      padding: 12px 15px;
+      background: #f0f0f0;
+      border: none;
+      cursor: pointer;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      border-bottom: 3px solid transparent;
+    }
+
+    .tab-btn.active {
+      background: white;
+      border-bottom-color: #d4af37;
+      color: #000;
+    }
+
+    .tab-btn:hover {
+      background: #e8e8e8;
+    }
+
+    .message-list {
+      flex: 1;
+      overflow-y: auto;
+      padding: 10px;
+    }
+
+    .message-item {
+      padding: 12px 15px;
+      margin-bottom: 8px;
+      background: white;
+      border-left: 4px solid #d4af37;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 1px solid #eee;
+    }
+
+    .message-item:hover {
+      background: #f9f9f9;
+      transform: translateX(5px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .message-item.unread {
+      background: #fffbf0;
+      font-weight: 600;
+    }
+
+    .message-item.active {
+      background: #e8f4f8;
+      border-left-color: #d4af37;
+    }
+
+    .message-sender {
+      font-weight: 600;
+      color: #000;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+
+    .message-subject {
+      font-size: 13px;
+      color: #555;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-bottom: 4px;
+    }
+
+    .message-time {
+      font-size: 12px;
+      color: #999;
+    }
+
+    /* Main Content */
+    .main-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .compose-section {
+      padding: 20px;
+      background: linear-gradient(135deg, #f9f9f9 0%, #f0f0f0 100%);
+      border-bottom: 2px solid #ddd;
+    }
+
+    .compose-btn {
+      background: linear-gradient(135deg, #d4af37 0%, #b8941e 100%);
+      color: #000;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 14px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+    }
+
+    .compose-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    .message-view {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .message-header {
+      padding: 20px;
+      border-bottom: 2px solid #eee;
+      background: white;
+    }
+
+    .message-from {
+      color: #999;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    .message-title {
+      font-size: 22px;
+      font-weight: 600;
+      color: #000;
+      margin-bottom: 10px;
+    }
+
+    .message-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12px;
+      color: #999;
+    }
+
+    .priority-badge {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .priority-high {
+      background: #ff6b6b;
+      color: #000;
+    }
+
+    .priority-normal {
+      background: #4ecdc4;
+      color: #000;
+    }
+
+    .priority-low {
+      background: #95e1d3;
+      color: #333;
+    }
+
+    .message-body {
+      flex: 1;
+      padding: 20px;
+      overflow-y: auto;
+      background: white;
+      line-height: 1.6;
+      color: #555;
+      font-size: 15px;
+    }
+
+    .message-actions {
+      padding: 15px 20px;
+      background: #f9f9f9;
+      display: flex;
+      gap: 10px;
+      border-top: 1px solid #eee;
+    }
+
+    .action-btn {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-reply {
+      background: #4ecdc4;
+      color: #000;
+    }
+
+    .btn-reply:hover {
+      background: #45b8b0;
+    }
+
+    .btn-archive {
+      background: #95e1d3;
+      color: #333;
+    }
+
+    .btn-archive:hover {
+      background: #7cd5c8;
+    }
+
+    .btn-delete {
+      background: #ff6b6b;
+      color: #000;
+    }
+
+    .btn-delete:hover {
+      background: #ee5a52;
+    }
+
+    /* Compose Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.6);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal.show {
+      display: flex;
+    }
+
+    .modal-content {
+      background: white;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .modal-header {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      color: #000;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      font-weight: 600;
+      color: #000;
+      font-size: 14px;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 14px;
+      transition: all 0.3s ease;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #d4af37;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 150px;
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      margin-top: 20px;
+      justify-content: flex-end;
+    }
+
+    .btn-send {
+      background: linear-gradient(135deg, #d4af37 0%, #b8941e 100%);
+      color: #000;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-send:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.4);
+    }
+
+    .btn-cancel {
+      background: #ddd;
+      color: #333;
+      border: none;
+      padding: 12px 30px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-cancel:hover {
+      background: #ccc;
+    }
+
+    /* Empty State */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #999;
+    }
+
+    .empty-state-icon {
+      font-size: 60px;
+      margin-bottom: 15px;
+      opacity: 0.5;
+    }
+
+    /* Navigation */
+    .navbar {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      color: white;
+      padding: 15px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-radius: 10px;
+    }
+
+    .navbar h1 {
+      font-size: 24px;
+      color: #fff;
+    }
+
+    .navbar-right {
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+
+    .user-info {
+      font-size: 14px;
+      text-align: right;
+    }
+
+    .logout-btn {
+      background: #ff6b6b;
+      color: #000;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background: #ee5a52;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .container {
+        height: auto;
+        flex-direction: column;
+      }
+
+      .sidebar {
+        width: 100%;
+        height: 200px;
+        display: flex;
+        flex-direction: row;
+      }
+
+      .tabs {
+        flex: 1;
+      }
+
+      .message-list {
+        display: none;
+      }
+
+      .message-list.active {
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <h1>💌 Internal Messaging</h1>
+    <div class="navbar-right">
+      <div class="user-info">
+        <div id="userNameDisplay">User</div>
+        <div id="userRoleDisplay" style="font-size: 12px; opacity: 0.8;">Role</div>
+      </div>
+      <button class="logout-btn" onclick="logout()">Logout</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Sidebar -->
+    <div class="sidebar">
+      <div class="sidebar-header">
+        <h2>Messages <span class="unread-badge" id="unreadCount">0</span></h2>
+      </div>
+      
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="inbox" onclick="switchTab('inbox')">Inbox</button>
+        <button class="tab-btn" data-tab="sent" onclick="switchTab('sent')">Sent</button>
+        <button class="tab-btn" data-tab="archived" onclick="switchTab('archived')">Archived</button>
+      </div>
+
+      <div class="message-list" id="messageList">
+        <div class="empty-state">
+          <div class="empty-state-icon">📭</div>
+          <p>No messages</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <div class="compose-section">
+        <button class="compose-btn" onclick="openComposeModal()">+ Compose New Message</button>
+      </div>
+
+      <div class="message-view" id="messageView">
+        <div class="empty-state">
+          <div class="empty-state-icon">✉️</div>
+          <p>Select a message to read</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Compose Modal -->
+  <div class="modal" id="composeModal">
+    <div class="modal-content">
+      <div class="modal-header">Compose New Message</div>
+      <form id="composeForm">
+        <div class="form-group">
+          <label for="recipientId">Send To *</label>
+          <select id="recipientId" required>
+            <option value="">-- Select Recipient --</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="subject">Subject *</label>
+          <input type="text" id="subject" placeholder="Message subject" required>
+        </div>
+
+        <div class="form-group">
+          <label for="body">Message *</label>
+          <textarea id="body" placeholder="Write your message here..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="priority">Priority</label>
+          <select id="priority">
+            <option value="low">Low</option>
+            <option value="normal" selected>Normal</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" onclick="closeComposeModal()">Cancel</button>
+          <button type="submit" class="btn-send">Send Message</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Reply Modal -->
+  <div class="modal" id="replyModal">
+    <div class="modal-content">
+      <div class="modal-header">Reply to Message</div>
+      <form id="replyForm">
+        <div class="form-group">
+          <label for="replyOriginalFrom">Original Message From:</label>
+          <div style="padding: 10px; background: #f5f5f5; border-radius: 5px; margin-bottom: 10px;">
+            <p id="replyOriginalFrom" style="margin: 0; color: #666;"></p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="replySubject">Original Subject:</label>
+          <input type="text" id="replySubject" readonly style="background: #f5f5f5;">
+        </div>
+
+        <div class="form-group">
+          <label for="replyBody">Your Reply *</label>
+          <textarea id="replyBody" placeholder="Write your reply here..." required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="replyPriority">Priority</label>
+          <select id="replyPriority">
+            <option value="low">Low</option>
+            <option value="normal" selected>Normal</option>
+            <option value="high">High</option>
+          </select>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel" onclick="closeReplyModal()">Cancel</button>
+          <button type="submit" class="btn-send">Send Reply</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const API_BASE = "/api";
+    let currentTab = 'inbox';
+    let currentMessageId = null;
+    let messages = [];
+
+    // ✅ Mandatory authentication check
+    const authToken = localStorage.getItem('authToken');
+    const authRole = localStorage.getItem('authRole');
+    const authUser = localStorage.getItem('authUser');
+    if (!authToken || !['admin', 'manager'].includes(authRole)) {
+      alert('Access Denied — please sign in as Admin or Manager.');
+      globalThis.location.href = '/login.html';
+    }
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', () => {
+      displayUserInfo();
+      loadMessages();
+      loadStaff();
+      setInterval(loadMessages, 30000); // Refresh every 30 seconds
+      setInterval(updateUnreadCount, 10000);
+    });
+
+    function displayUserInfo() {
+      const user = authUser || 'User';
+      document.getElementById('userNameDisplay').textContent = user;
+      document.getElementById('userRoleDisplay').textContent = (authRole || 'user').toUpperCase();
+    }
+
+    async function loadMessages() {
+      try {
+        let endpoint;
+        if (currentTab === 'inbox') {
+          endpoint = '/messages/inbox';
+        } else if (currentTab === 'sent') {
+          endpoint = '/messages/sent';
+        } else {
+          endpoint = '/messages/archived';
+        }
+        const response = await fetch(`${API_BASE}${endpoint}`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        
+        const data = await response.json();
+        if (data.success) {
+          messages = data.messages;
+          renderMessageList();
+        }
+      } catch (error) {
+        console.error('Error loading messages:', error);
+      }
+    }
+
+    function renderMessageList() {
+      const listContainer = document.getElementById('messageList');
+      
+      if (messages.length === 0) {
+        listContainer.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <p>No messages</p>
+          </div>
+        `;
+        return;
+      }
+
+      listContainer.innerHTML = messages.map(msg => `
+        <div class="message-item ${msg.isRead ? '' : 'unread'} ${currentMessageId === msg._id ? 'active' : ''}" 
+             data-message-id="${msg._id}"
+             data-sender="${msg.senderName || msg.senderEmail || msg.senderId?.name || msg.senderId?.email || 'Unknown'}"
+             data-subject="${msg.subject || ''}"
+             onclick="selectMessage('${msg._id}')">
+          <div class="message-sender">
+            ${msg.senderName || msg.senderEmail || msg.senderId?.name || msg.senderId?.email || 'Unknown'}
+          </div>
+          <div class="message-subject">${msg.subject}</div>
+          <div class="message-time">${new Date(msg.createdAt).toLocaleString()}</div>
+        </div>
+      `).join('');
+    }
+
+    async function selectMessage(messageId) {
+      currentMessageId = messageId;
+      const message = messages.find(m => m._id === messageId);
+      
+      if (!message) return;
+
+      // Mark as read
+      if (!message.isRead && currentTab === 'inbox') {
+        try {
+          const res = await fetch(`${API_BASE}/messages/${messageId}/read`, {
+            method: 'PUT',
+            headers: { 'Authorization': `Bearer ${authToken}` }
+          });
+          
+          if (res.ok) {
+            const data = await res.json();
+            if (data.success) {
+              message.isRead = true;
+              console.log('Message marked as read:', messageId);
+              updateUnreadCount();
+              renderMessageList(); // Re-render list with updated read status
+            }
+          }
+        } catch (error) {
+          console.error('Error marking as read:', error);
+        }
+      }
+
+      renderMessageView(message);
+      renderMessageList();
+    }
+
+    function renderMessageView(message) {
+      const viewContainer = document.getElementById('messageView');
+      const sender = message.senderName || message.senderEmail || message.senderId?.name || message.senderId?.email || 'Unknown';
+      const senderRole = (message.senderRole || 'Unknown').toUpperCase();
+      const emailSpan = message.senderEmail ? ` <span style="font-size:12px;color:#777;">&lt;${message.senderEmail}&gt;</span>` : '';
+      const senderContact = message.senderName || message.senderEmail ? emailSpan : '';
+
+      viewContainer.innerHTML = `
+        <div class="message-header">
+          <div class="message-from">From: <strong>${sender}</strong>${senderContact} (${senderRole})</div>
+          <div class="message-title">${message.subject}</div>
+          <div class="message-meta">
+            <span>${new Date(message.createdAt).toLocaleString()}</span>
+            <span class="priority-badge priority-${message.priority}">${message.priority.toUpperCase()}</span>
+          </div>
+        </div>
+        <div class="message-body">${message.body}</div>
+        <div class="message-actions">
+          <button class="action-btn btn-reply" onclick="openReplyModal('${message._id}')">Reply</button>
+          ${message.isArchived ? `<button class="action-btn btn-archive" onclick="unarchiveMessage('${message._id}')">Unarchive</button>` : `<button class="action-btn btn-archive" onclick="archiveMessage('${message._id}')">Archive</button>`}
+          <button class="action-btn btn-delete" onclick="deleteMessage('${message._id}')">Delete</button>
+        </div>
+      `;
+    }
+
+    function openComposeModal() {
+      document.getElementById('composeModal').classList.add('show');
+    }
+
+    function closeComposeModal() {
+      document.getElementById('composeModal').classList.remove('show');
+      document.getElementById('composeForm').reset();
+    }
+
+    async function loadStaff() {
+      try {
+        const response = await fetch(`${API_BASE}/users/staff`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+        
+        const data = await response.json();
+        if (data.success && data.staff) {
+          const select = document.getElementById('recipientId');
+          select.innerHTML = '<option value="">Select recipient...</option>';
+          data.staff.forEach(staff => {
+            if (staff._id && staff.role !== authRole) {
+              const option = document.createElement('option');
+              option.value = staff._id;
+              option.textContent = `${staff.name} (${staff.role.toUpperCase()})`;
+              select.appendChild(option);
+            }
+          });
+          if (select.children.length === 1) {
+            select.innerHTML = '<option value="">No staff available</option>';
+          }
+        } else {
+          document.getElementById('recipientId').innerHTML = '<option value="">Error: Unable to load staff</option>';
+        }
+      } catch (error) {
+        console.error('Error loading staff:', error);
+        document.getElementById('recipientId').innerHTML = '<option value="">Error loading staff</option>';
+      }
+    }
+
+    document.getElementById('composeForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const recipientId = document.getElementById('recipientId').value;
+      const subject = document.getElementById('subject').value;
+      const body = document.getElementById('body').value;
+      const priority = document.getElementById('priority').value;
+
+      // Validation
+      if (!recipientId) {
+        alert('⚠️ Please select a recipient');
+        return;
+      }
+      if (!subject.trim()) {
+        alert('⚠️ Please enter a subject');
+        return;
+      }
+      if (!body.trim()) {
+        alert('⚠️ Please enter a message');
+        return;
+      }
+
+      try {
+        const response = await fetch(`${API_BASE}/messages`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ recipientId, subject, body, priority })
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          alert(`❌ Error: ${errorData.message || 'Failed to send message'}`);
+          return;
+        }
+
+        const data = await response.json();
+        if (data.success) {
+          alert('✅ Message sent successfully!');
+          closeComposeModal();
+          document.getElementById('composeForm').reset();
+          setTimeout(() => {
+            loadMessages();
+            loadStaff();
+          }, 500);
+        } else {
+          alert(`❌ Error: ${data.message || 'Failed to send'}`);
+        }
+      } catch (error) {
+        console.error('Error sending message:', error);
+        alert(`❌ Error sending message: ${error.message}`);
+      }
+    });
+
+    function switchTab(tab) {
+      currentTab = tab;
+      currentMessageId = null;
+      document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+      const btn = document.querySelector(`.tab-btn[data-tab="${tab}"]`);
+      if (btn) btn.classList.add('active');
+      loadMessages();
+    }
+
+    async function archiveMessage(messageId) {
+      if (!confirm('Archive this message?')) return;
+      
+      try {
+        const response = await fetch(`${API_BASE}/messages/${messageId}/archive`, {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
+        if (response.ok) {
+          alert('Message archived');
+          loadMessages();
+        }
+      } catch (error) {
+        console.error('Error archiving:', error);
+      }
+    }
+
+    async function unarchiveMessage(messageId) {
+      try {
+        const response = await fetch(`${API_BASE}/messages/${messageId}/unarchive`, {
+          method: 'PUT',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
+        if (response.ok) {
+          alert('Message restored from archive');
+          loadMessages();
+        } else {
+          const err = await response.json().catch(() => ({}));
+          alert('Failed to unarchive: ' + (err.message || response.statusText));
+        }
+      } catch (error) {
+        console.error('Error unarchiving:', error);
+        alert('Error unarchiving message');
+      }
+    }
+
+    async function deleteMessage(messageId) {
+      if (!confirm('Delete this message permanently?')) return;
+      
+      try {
+        const response = await fetch(`${API_BASE}/messages/${messageId}`, {
+          method: 'DELETE',
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
+        if (response.ok) {
+          alert('Message deleted');
+          loadMessages();
+        }
+      } catch (error) {
+        console.error('Error deleting:', error);
+      }
+    }
+
+    async function updateUnreadCount() {
+      try {
+        const response = await fetch(`${API_BASE}/messages/unread/count`, {
+          headers: { 'Authorization': `Bearer ${authToken}` }
+        });
+
+        const data = await response.json();
+        if (data.success) {
+          const badge = document.getElementById('unreadCount');
+          badge.textContent = data.unreadCount;
+          badge.style.display = data.unreadCount > 0 ? 'inline-block' : 'none';
+        }
+      } catch (error) {
+        console.error('Error updating unread count:', error);
+      }
+    }
+
+    function openReplyModal(messageId) {
+      // Find the message
+      const allMessages = document.querySelectorAll('.message-item');
+      let targetMessage = null;
+      
+      allMessages.forEach(item => {
+        if (item.dataset.messageId === messageId) {
+          targetMessage = item;
+        }
+      });
+      
+      if (!targetMessage) {
+        alert('Message not found');
+        return;
+      }
+      
+      // Extract message details
+      const sender = targetMessage.querySelector('[data-sender]')?.dataset.sender || 'Unknown';
+      const subject = targetMessage.querySelector('[data-subject]')?.dataset.subject || 'No Subject';
+      
+      // Populate reply modal
+      document.getElementById('replyOriginalFrom').textContent = `From: ${sender}`;
+      document.getElementById('replySubject').value = subject.startsWith('Re:') ? subject : `Re: ${subject}`;
+      document.getElementById('replyBody').value = '';
+      
+      // Store message ID for sending
+      document.getElementById('replyForm').dataset.messageId = messageId;
+      
+      // Show modal
+      document.getElementById('replyModal').classList.add('show');
+    }
+
+    function closeReplyModal() {
+      document.getElementById('replyModal').classList.remove('show');
+      document.getElementById('replyForm').reset();
+    }
+
+    // Handle reply form submission
+    document.getElementById('replyForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const messageId = document.getElementById('replyForm').dataset.messageId;
+      const subject = document.getElementById('replySubject').value;
+      const body = document.getElementById('replyBody').value;
+      const priority = document.getElementById('replyPriority').value;
+      const token = localStorage.getItem('authToken');
+      
+      if (!body.trim()) {
+        alert('Please write a reply');
+        return;
+      }
+      
+      try {
+        // Find the original message to get recipient info
+        const inboxRes = await fetch(`${API_BASE}/messages/inbox`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const inboxData = await inboxRes.json();
+        const originalMessage = inboxData.messages.find(m => m._id === messageId);
+        
+        if (!originalMessage) {
+          alert('Original message not found');
+          return;
+        }
+        
+        // Get the sender ID of the original message (who we're replying to)
+        const recipientId = originalMessage.senderId;
+        const conversationId = originalMessage.conversationId;
+        
+        // Send reply
+        const response = await fetch(`${API_BASE}/messages`, {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            recipientId,
+            subject,
+            body,
+            priority,
+            conversationId
+          })
+        });
+        
+        if (response.ok) {
+          alert('✅ Reply sent successfully!');
+          closeReplyModal();
+          loadMessages(); // Refresh the message list
+        } else {
+          const error = await response.json();
+          alert(`❌ Error: ${error.message || 'Failed to send reply'}`);
+        }
+      } catch (error) {
+        console.error('Error sending reply:', error);
+        alert('❌ Error sending reply');
+      }
+    });
+
+    function logout() {
+      if (confirm('Logout?')) {
+        localStorage.clear();
+        globalThis.location.href = '/login.html';
+      }
+    }
+  </script>
+  <script src="/cart-manager.js"></script>
+  <script src="/load-components.js"></script>
+</body>
+</html>

@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luxe Jewelry | Premium Jewelry Collection</title>
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css" />
+
+  <style>
+    /* ========== CUSTOMER AUTH STYLES ========== */
+    .customer-auth {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .auth-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      background: linear-gradient(135deg, #d4af37, #b6912e);
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 8px rgba(212, 175, 55, 0.3);
+    }
+
+    .auth-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(212, 175, 55, 0.5);
+    }
+
+    /* Profile Dropdown */
+    .profile-dropdown {
+      position: relative;
+    }
+
+    .profile-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: transparent;
+      border: 1px solid var(--muted);
+      border-radius: 8px;
+      cursor: pointer;
+      color: var(--secondary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.25s ease;
+    }
+
+    .profile-btn:hover {
+      border-color: var(--primary);
+      background: rgba(212, 175, 55, 0.05);
+    }
+
+    .profile-btn i:last-child {
+      font-size: 0.75rem;
+      transition: transform 0.25s ease;
+    }
+
+    .profile-btn.active i:last-child {
+      transform: rotate(180deg);
+    }
+
+    /* Dropdown Menu */
+    .dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      min-width: 220px;
+      background: var(--card-bg);
+      border: 1px solid var(--muted);
+      border-radius: 10px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+      margin-top: 8px;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: all 0.25s ease;
+      z-index: 5000;
+    }
+
+    .dropdown-menu.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      background: transparent;
+      border: none;
+      color: var(--secondary);
+      cursor: pointer;
+      font-size: 0.95rem;
+      width: 100%;
+      text-align: left;
+      text-decoration: none;
+      transition: all 0.25s ease;
+    }
+
+    .dropdown-item:hover {
+      background: rgba(212, 175, 55, 0.1);
+      color: var(--primary);
+    }
+
+    .dropdown-item i {
+      min-width: 20px;
+      text-align: center;
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: var(--muted);
+      margin: 4px 0;
+    }
+
+    .logout-item {
+      color: #dc3545;
+    }
+
+    .logout-item:hover {
+      background: rgba(220, 53, 69, 0.1);
+      color: #dc3545;
+    }
+
+    /* OUT OF STOCK */
+    .unavailable { opacity: 0.6; pointer-events: none; }
+    .out-of-stock {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: red;
+      color: white;
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 4px;
+    }
+    #cartOverlay {
+      display: none !important;
+    }
+    .cart-wrapper {
+      position: relative !important;
+    }
+
+    /* make sure cart header and close button appear nicely */
+    .cart-header {
+      display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--muted);
+      padding-bottom:8px; gap:8px;
+    }
+    .cart-close-btn {
+      background: transparent;
+      border: none;
+      font-size: 18px;
+      cursor: pointer;
+      color: var(--secondary);
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .cart-close-btn:hover { background: rgba(0,0,0,0.04); }
+
+    /* Ensure cart-panel layout still matches existing cart-actions */
+    .cart-panel .cart-actions { margin-top:12px; }
+
+    /* POPUP CART (Next to Cart Button) */
+    .cart-wrapper {
+      position: relative;
+    }
+
+    .cart-panel {
+      position: absolute;
+      top: 60px; /* distance below cart button */
+      right: 0;
+      width: 350px;
+      max-height: 90vh;
+      background: var(--card-bg);
+      border-radius: 14px;
+      box-shadow: 0 8px 30px rgba(0,0,0,0.18);
+      padding: 12px 12px 8px 12px;
+
+      /* Popup visibility behavior */
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: all .25s ease;
+      z-index: 4000;
+    
+      /* Layout fix → THIS IS IMPORTANT */
+      display: flex;
+      flex-direction: column;
+    }
+
+    .cart-panel.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* The product list scrolls */
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding-bottom: 10px;
+    }
+
+    /* Buttons section stays visible ALWAYS */
+    .cart-actions {
+      position: sticky;
+      bottom: 0;
+      background: var(--card-bg);
+      padding: 8px 0 4px 0px;
+      border-top: 1px solid var(--muted);
+      z-index: 10;
+    }
+
+  </style>
+</head>
+
+<body>
+  <!-- overlay for centered cart -->
+  <div id="cartOverlay"></div>
+
+  <div class="container">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+      <div class="sidebar-inner">
+        <div class="logo">
+          <h1>LUXE <span>JEWELRY</span></h1>
+        </div>
+
+        <ul class="nav-links" id="categoryList">
+          <li><a href="#" class="active" data-category="all"><i class="fas fa-home"></i> Home</a></li>
+        </ul>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="Report-btn" onclick="location.href='complain.html'">Report</button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+      <header class="header">
+
+        <div class="left-controls">
+          <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
+          <h2 class="page-title" id="pageTitle">Premium Jewelry Collection</h2>
+        </div>
+
+        <div class="header-actions">
+
+          <!-- Dark Mode -->
+          <button class="dark-mode-toggle" id="darkToggle">
+            <i class="fas fa-moon"></i>
+          </button>
+
+          <!-- Customer Login / Profile Dropdown -->
+          <div class="customer-auth" id="customerAuth">
+            <!-- Login Button (shown when not logged in) -->
+            <a href="/customer-login.html" id="loginBtn" class="auth-btn login-btn">
+              <i class="fas fa-user"></i> Login
+            </a>
+            
+            <!-- Profile Dropdown (shown when logged in) -->
+            <div class="profile-dropdown" id="profileDropdown" style="display:none;">
+              <button class="profile-btn" id="profileToggle">
+                <i class="fas fa-user-circle"></i>
+                <span id="userNameDisplay">User</span>
+                <i class="fas fa-chevron-down"></i>
+              </button>
+              <div class="dropdown-menu" id="dropdownMenu">
+                <a href="/customer-dashboard.html" class="dropdown-item">
+                  <i class="fas fa-cog"></i> My Account
+                </a>
+                <a href="/customer-dashboard.html#orders" class="dropdown-item">
+                  <i class="fas fa-box"></i> My Orders
+                </a>
+                <a href="/customer-dashboard.html#addresses" class="dropdown-item">
+                  <i class="fas fa-map-marker-alt"></i> Addresses
+                </a>
+                <div class="dropdown-divider"></div>
+                <button class="dropdown-item logout-item" id="logoutBtn">
+                  <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- CART + SEARCH -->
+          <div class="cart-search-group">
+
+            <div class="cart-wrapper">
+              <button id="cartToggle" class="cart-btn">
+                <i class="fas fa-shopping-bag"></i>
+                <span id="cartCount" class="cart-count">0</span>
+              </button>
+
+              <!-- CENTERED CART PANEL (now modal-like) -->
+              <div id="cartPanel" class="cart-panel" aria-hidden="true">
+                <div class="cart-header">
+                  <h3>Your Cart</h3>
+                  <!-- Close X button -->
+                  <button id="cartCloseBtn" class="cart-close-btn" aria-label="Close cart">×</button>
+                </div>
+
+                <ul id="cartItems" class="cart-items"></ul>
+
+                <div class="cart-actions">
+                  <input type="email" id="customerEmail" placeholder="Enter your email" required />
+                  <input type="text" id="customerName" placeholder="Full name" />
+                  <input type="tel" id="customerPhone" placeholder="Phone number" />
+                  <textarea id="customerAddress" placeholder="Shipping address"></textarea>
+
+                  <button id="calcTotal" class="btn gold">Calculate Total</button>
+                  <div id="totalDisplay" class="total-display">Total: ₦0</div>
+                  <button id="checkoutBtn" class="btn">Buy Now</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="search-box">
+              <i class="fas fa-search"></i>
+              <input id="searchInput" type="text" placeholder="Search products...">
+            </div>
+
+          </div>
+        </div>
+      </header>
+
+      <section class="category-header">
+        <div class="category-info"><span id="categoryCount"></span></div>
+        <div class="filter-sort">
+          <select id="sortSelect">
+            <option value="default">Sort</option>
+            <option value="price-asc">Price ↑</option>
+            <option value="price-desc">Price ↓</option>
+            <option value="name-asc">Name A–Z</option>
+          </select>
+        </div>
+      </section>
+
+      <section id="productsContainer" class="products-grid"></section>
+    </main>
+  </div>
+
+  <!-- OTP MODAL -->
+  <div id="otpModal"
+       style="display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);justify-content:center;align-items:center;">
+    <div style="background:white;padding:20px;width:320px;border-radius:8px;text-align:center;">
+      <h3>Enter OTP</h3>
+      <p>We sent a code to your email.</p>
+
+      <input id="otpCode" placeholder="6-digit OTP"
+             style="width:100%;padding:10px;margin-top:10px;text-align:center;font-size:18px;letter-spacing:3px;" />
+
+      <div style="display:flex;gap:10px;margin-top:12px;justify-content:center;">
+        <button id="otpVerifyBtn" class="btn">Verify</button>
+        <button id="otpCancelBtn" class="btn" style="background:transparent;color:red;border:1px solid #ddd;">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Paystack -->
+  <script src="https://js.paystack.co/v1/inline.js"></script>
+
+  <!-- MAIN SCRIPT -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+    const productsContainer = document.getElementById('productsContainer');
+    const searchInput = document.getElementById('searchInput');
+    const sortSelect = document.getElementById('sortSelect');
+    const cartToggle = document.getElementById('cartToggle');
+    const cartPanel = document.getElementById('cartPanel');
+    const cartOverlay = document.getElementById('cartOverlay');
+    const cartCloseBtn = document.getElementById('cartCloseBtn');
+    const cartItems = document.getElementById('cartItems');
+    const totalDisplay = document.getElementById('totalDisplay');
+    const clearCartBtn = document.getElementById('clearCart');
+    const calcTotalBtn = document.getElementById('calcTotal');
+    const cartCount = document.getElementById('cartCount');
+    const checkoutBtn = document.getElementById('checkoutBtn');
+    const darkToggle = document.getElementById('darkToggle');
+    const menuToggle = document.getElementById('menuToggle');
+    const sidebar = document.querySelector('.sidebar');
+    const pageTitle = document.getElementById('pageTitle');
+
+    // OTP modal
+    const otpModal = document.getElementById('otpModal');
+    const otpVerifyBtn = document.getElementById('otpVerifyBtn');
+    const otpCancelBtn = document.getElementById('otpCancelBtn');
+    const otpCodeInput = document.getElementById('otpCode');
+
+    let PRODUCTS = [];
+    let CART = [];
+    let currentSessionId = null;
+    let isProcessing = false;
+
+    /* -------- Menu Toggle -------- */
+    if (menuToggle) menuToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('active');
+    });
+
+    /* -------- Dark Mode -------- */
+    if (localStorage.getItem('darkMode') === 'on') {
+      document.body.classList.add('dark');
+    }
+    if (darkToggle) darkToggle.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      localStorage.setItem('darkMode',
+        document.body.classList.contains('dark') ? 'on' : 'off'
+      );
+    });
+
+    /* -------- Load Products -------- */
+    async function loadProducts() {
+      try {
+        const res = await fetch('/api/products');
+        if (!res.ok) throw new Error('Failed to fetch products');
+        PRODUCTS = await res.json();
+        renderProducts(PRODUCTS);
+      } catch (err) {
+        console.error('Failed to load products:', err);
+        productsContainer.innerHTML = '<p style="padding:18px">Failed to load products.</p>';
+      }
+    }
+
+    function renderProducts(list) {
+      if (!list || !list.length) {
+        productsContainer.innerHTML = '<p style="padding:18px">No products available.</p>';
+        return;
+      }
+
+      productsContainer.innerHTML = list.map(p => `
+        <div class="product-card ${!p.available ? 'unavailable' : ''}" data-id="${p._id}">
+          <div class="product-image" style="position:relative;">
+            <img src="${p.image ? p.image : '/uploads/default.png'}" alt="${p.name}" style="width:100%;height:180px;object-fit:cover;border-radius:6px;">
+            ${!p.available ? '<span class="out-of-stock">Out of Stock</span>' : ''}
+          </div>
+          <div class="product-info" style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;">
+            <div class="left">
+              <h4 style="margin:0">${p.name}</h4>
+              <p style="margin:4px 0 0 0">₦${Number(p.price).toLocaleString()}</p>
+            </div>
+            <button class="add-to-cart ${!p.available ? 'unavailable-btn' : ''}" ${!p.available ? 'disabled' : ''}>
+              ${p.available ? 'Add' : 'Unavailable'}
+            </button>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    /* -------- Search -------- */
+    if (searchInput) {
+      searchInput.addEventListener('input', e => {
+        const term = e.target.value.toLowerCase();
+        renderProducts(PRODUCTS.filter(p => (p.name || '').toLowerCase().includes(term)));
+      });
+    }
+
+    /* -------- Sort -------- */
+    if (sortSelect) {
+      sortSelect.addEventListener('change', e => {
+        const val = e.target.value;
+        let sorted = [...PRODUCTS];
+
+        if (val === 'price-asc') sorted.sort((a, b) => a.price - b.price);
+        if (val === 'price-desc') sorted.sort((a, b) => b.price - a.price);
+        if (val === 'name-asc') sorted.sort((a, b) => a.name.localeCompare(b.name));
+
+        renderProducts(sorted);
+      });
+    }
+
+    /* -------- Add to Cart -------- */
+    productsContainer.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      if (!btn.classList.contains('add-to-cart')) return;
+
+      const card = btn.closest('.product-card');
+      if (!card) return;
+      const id = card.dataset.id;
+      const product = PRODUCTS.find(p => String(p._id) === String(id));
+
+      if (!product) {
+        return alert('Product not found.');
+      }
+      if (!product.available) {
+        return alert(`Sorry, ${product.name} is unavailable.`);
+      }
+
+      const existing = CART.find(i => String(i._id) === String(id));
+      if (existing) existing.qty++;
+      else CART.push({ ...product, qty: 1 });
+
+      updateCart();
+    });
+
+    function updateCart() {
+      cartItems.innerHTML = CART.map(i => `
+        <li class="cart-item" data-id="${i._id}" style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px dashed rgba(0,0,0,0.04);">
+          <img src="${i.image ? i.image : '/uploads/default.png'}" style="width:56px;height:56px;object-fit:cover;border-radius:6px;">
+          <div class="meta" style="flex:1;">
+            <div class="name">${i.name}</div>
+            <div class="price">₦${Number(i.price).toLocaleString()}</div>
+            <div class="qty-controls" style="margin-top:6px;display:flex;gap:8px;align-items:center;">
+              <button class="dec" data-id="${i._id}">-</button>
+              <span>${i.qty}</span>
+              <button class="inc" data-id="${i._id}">+</button>
+            </div>
+          </div>
+          <button class="remove-btn" data-id="${i._id}" title="Remove">×</button>
+        </li>
+      `).join('');
+
+      cartCount.textContent = CART.reduce((a, i) => a + i.qty, 0);
+    }
+
+    /* -------- Cart Quantity Controls -------- */
+    cartItems.addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const id = btn.dataset.id;
+      if (!id) return;
+
+      const item = CART.find(i => String(i._id) === String(id));
+      if (!item) return;
+
+      if (btn.classList.contains('inc')) item.qty++;
+      else if (btn.classList.contains('dec')) {
+        if (item.qty > 1) item.qty--;
+      } else if (btn.classList.contains('remove-btn')) {
+        CART = CART.filter(i => String(i._id) !== String(id));
+      }
+
+      updateCart();
+    });
+
+    /* -------- Total Calculator -------- */
+    if (calcTotalBtn) calcTotalBtn.addEventListener('click', () => {
+      const total = CART.reduce((sum, i) => sum + Number(i.price) * i.qty, 0);
+      totalDisplay.textContent = `Total: ₦${Number(total).toLocaleString()}`;
+    });
+
+    /* -------- Clear Cart -------- */
+    // note: clearCart button exists in original cart header; if not present, this will be ignored
+    if (clearCartBtn) clearCartBtn.addEventListener('click', () => {
+      if (confirm('Clear cart?')) {
+        CART = [];
+        updateCart();
+        totalDisplay.textContent = 'Total: ₦0';
+        closeCart();
+      }
+    });
+    /* -------- Open/Close Cart -------- */
+    function openCart() {
+      cartPanel.classList.add('active');
+      cartPanel.setAttribute('aria-hidden', 'false');
+    }
+    
+    function closeCart() {
+      cartPanel.classList.remove('active');
+      cartPanel.setAttribute('aria-hidden', 'true');
+    }
+    /* -------- Cart Toggle -------- */
+    cartToggle.addEventListener('click', () => {
+        cartPanel.classList.toggle('active');
+    });
+    cartCloseBtn.addEventListener('click', () => {
+        cartPanel.classList.remove('active');
+    });
+
+   
+
+    /* -------- Checkout -------- */
+    if (checkoutBtn) checkoutBtn.addEventListener('click', async () => {
+      if (isProcessing) return;
+      try {
+        const email = document.getElementById('customerEmail').value.trim();
+        const name = document.getElementById('customerName').value.trim();
+        const phone = document.getElementById('customerPhone').value.trim();
+        const address = document.getElementById('customerAddress').value.trim();
+
+        const amount = CART.reduce((sum, i) => sum + Number(i.price) * i.qty, 0);
+
+        if (!amount) return alert("Your cart is empty.");
+        if (!email || !name || !phone || !address)
+          return alert("Please fill in all customer details.");
+
+        const itemsPayload = CART.map(i => ({
+          _id: i._id,
+          id: i._id,
+          name: i.name,
+          price: i.price,
+          qty: i.qty
+        }));
+
+        isProcessing = true;
+        checkoutBtn.disabled = true;
+
+        // Prepare headers with auth token if user is logged in
+        const headers = { 'Content-Type': 'application/json' };
+        const token = localStorage.getItem('authToken');
+        if (token) {
+          headers['Authorization'] = `Bearer ${token}`;
+        }
+
+        const res = await fetch('/api/otp/request', {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify({ email, name, phone, address, items: itemsPayload, amount })
+        });
+
+        const data = await res.json();
+        if (!data.success) {
+          alert(data.message || 'Failed to request OTP.');
+          return;
+        }
+
+        currentSessionId = data.sessionId;
+        otpCodeInput.value = '';
+        otpModal.style.display = 'flex';
+        otpCodeInput.focus();
+
+        // close the cart when OTP modal opens for clarity
+        closeCart();
+
+      } catch (err) {
+        console.error('OTP request error', err);
+        alert('OTP request failed.');
+      } finally {
+        isProcessing = false;
+        checkoutBtn.disabled = false;
+      }
+    });
+
+    /* -------- Verify OTP -------- */
+    if (otpVerifyBtn) otpVerifyBtn.addEventListener('click', async () => {
+      if (!currentSessionId) return alert('Session missing.');
+
+      const code = otpCodeInput.value.trim();
+      if (!code) return alert('Enter the OTP code sent to your email.');
+
+      try {
+        otpVerifyBtn.disabled = true;
+
+        const vRes = await fetch('/api/otp/verify', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: currentSessionId, code })
+        });
+        const vData = await vRes.json();
+        if (!vData.success) {
+          alert(vData.message || 'OTP verification failed.');
+          return;
+        }
+
+        const payRes = await fetch('/api/pay', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ sessionId: currentSessionId })
+        });
+
+        const payData = await payRes.json();
+        if (!payData || !payData.status || !payData.url) {
+          alert(payData.message || 'Failed to initialize payment.');
+          return;
+        }
+
+        window.location.href = payData.url;
+
+      } catch (err) {
+        console.error('OTP verify/payment error', err);
+        alert('Verification or payment failed.');
+      } finally {
+        otpVerifyBtn.disabled = false;
+      }
+    });
+
+    otpCancelBtn.addEventListener('click', () => {
+      otpModal.style.display = 'none';
+    });
+
+    /* -------- Categories -------- */
+    async function loadCategories() {
+      try {
+        const res = await fetch('/api/categories');
+        if (!res.ok) throw new Error('Failed to load categories');
+        const categories = await res.json();
+
+        const list = document.getElementById('categoryList');
+        list.innerHTML = `<li><a href="#" class="active" data-category="all"><i class="fas fa-home"></i> Home</a></li>`;
+
+        categories.forEach(cat => {
+          const li = document.createElement('li');
+          li.innerHTML = `<a href="#" data-category="${cat.name.toLowerCase()}"><i class="fas fa-circle"></i> ${cat.name}</a>`;
+          list.appendChild(li);
+        });
+
+        const links = list.querySelectorAll('a');
+        links.forEach(link => {
+          link.addEventListener('click', e => {
+            e.preventDefault();
+            links.forEach(l => l.classList.remove('active'));
+            link.classList.add('active');
+
+            const cat = link.dataset.category;
+            if (cat === 'all') {
+              pageTitle.textContent = 'Premium Jewelry Collection';
+              renderProducts(PRODUCTS);
+            } else {
+              const nameText = link.textContent.trim();
+              pageTitle.textContent = `Premium ${nameText} Collection`;
+              renderProducts(PRODUCTS.filter(p => (p.category || '').toLowerCase() === cat));
+            }
+          });
+        });
+
+      } catch (err) {
+        console.error('Categories error', err);
+      }
+    }
+
+    /* -------- INITIAL LOAD -------- */
+    loadProducts();
+    loadCategories();
+
+    /* ========== CUSTOMER AUTHENTICATION ========== */
+    const customerAuth = document.getElementById('customerAuth');
+    const loginBtn = document.getElementById('loginBtn');
+    const profileDropdown = document.getElementById('profileDropdown');
+    const profileToggle = document.getElementById('profileToggle');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const logoutBtn = document.getElementById('logoutBtn');
+    const userNameDisplay = document.getElementById('userNameDisplay');
+
+    // Check if user is logged in
+    function checkUserAuth() {
+      const token = localStorage.getItem('authToken');
+      const user = localStorage.getItem('user');
+
+      if (token && user) {
+        try {
+          const userData = JSON.parse(user);
+          // Show profile dropdown, hide login button
+          loginBtn.style.display = 'none';
+          profileDropdown.style.display = 'flex';
+          userNameDisplay.textContent = userData.name || 'User';
+        } catch (err) {
+          console.error('Error parsing user data:', err);
+          logout();
+        }
+      } else {
+        // Show login button, hide profile dropdown
+        loginBtn.style.display = 'inline-flex';
+        profileDropdown.style.display = 'none';
+      }
+    }
+
+    // Toggle dropdown menu
+    profileToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      dropdownMenu.classList.toggle('active');
+      profileToggle.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!e.target.closest('.profile-dropdown')) {
+        dropdownMenu.classList.remove('active');
+        profileToggle.classList.remove('active');
+      }
+    });
+
+    // Logout functionality
+    logoutBtn.addEventListener('click', () => {
+      logout();
+    });
+
+    function logout() {
+      localStorage.removeItem('authToken');
+      localStorage.removeItem('user');
+      dropdownMenu.classList.remove('active');
+      profileToggle.classList.remove('active');
+      checkUserAuth();
+      alert('You have been logged out.');
+      window.location.href = '/index.html';
+    }
+
+    // Auto-populate checkout form with logged-in user data
+    function autoFillCheckout() {
+      const token = localStorage.getItem('authToken');
+      const user = localStorage.getItem('user');
+
+      if (token && user) {
+        try {
+          const userData = JSON.parse(user);
+          const emailInput = document.getElementById('customerEmail');
+          const nameInput = document.getElementById('customerName');
+          const phoneInput = document.getElementById('customerPhone');
+
+          if (emailInput && !emailInput.value) emailInput.value = userData.email || '';
+          if (nameInput && !nameInput.value) nameInput.value = userData.name || '';
+          if (phoneInput && !phoneInput.value) phoneInput.value = userData.phone || '';
+        } catch (err) {
+          console.error('Error auto-filling form:', err);
+        }
+      }
+    }
+
+    // Initialize auth on page load
+    checkUserAuth();
+    autoFillCheckout();
+
+    // Listen for storage changes (logout from another tab)
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'authToken' || e.key === 'user') {
+        checkUserAuth();
+      }
+    });
+
+      }); // END DOMContentLoaded
+  </script>
+</body>
+</html>

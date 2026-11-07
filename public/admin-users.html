@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Admin - Users</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/admin-shell.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>body{font-family:Poppins, sans-serif;padding:20px}table{width:100%;border-collapse:collapse}th,td{padding:8px;border:1px solid #eee}input,select{padding:8px;width:100%}button{padding:8px 12px;background:#d4af37;border:none;color:#fff;border-radius:6px;cursor:pointer}</style>
+</head>
+<body>
+  <h1>Users Management</h1>
+  <div style="display:flex;gap:20px;align-items:flex-start">
+    <div style="flex:1">
+      <h3>Create User</h3>
+      <form id="createForm">
+        <label>Email</label><input id="email" required>
+        <label>Name</label><input id="name">
+        <label>Phone</label><input id="phone">
+        <label>Password</label><input id="password" type="password" required>
+        <label>Role</label>
+        <select id="role"><option value="manager">Manager</option><option value="admin">Admin</option><option value="customer">Customer</option></select>
+        <div style="margin-top:8px"><button type="submit">Create</button></div>
+      </form>
+      <div id="msg"></div>
+    </div>
+    <div style="flex:2">
+      <h3>Users</h3>
+      <table id="usersTable"><thead><tr><th>Email</th><th>Name</th><th>Phone</th><th>Role</th><th>Action</th></tr></thead><tbody></tbody></table>
+    </div>
+  </div>
+
+<script>
+const token = localStorage.getItem('authToken');
+if(!token){ alert('Sign in as admin'); location.href='/login.html'; }
+
+async function loadUsers(){
+  const res = await fetch('/api/admin/users',{headers:{'Authorization':'Bearer '+token}});
+  const users = await res.json();
+  const tbody = document.querySelector('#usersTable tbody');
+  tbody.innerHTML = users.map(u=>`<tr data-id="${u._id}"><td>${u.email}</td><td>${u.name||''}</td><td>${u.phone||''}</td><td>${u.role||''}</td><td><button class="edit">Edit</button> <button class="del">Delete</button></td></tr>`).join('');
+  document.querySelectorAll('.del').forEach(b=>b.addEventListener('click',async e=>{
+    const id = e.target.closest('tr').dataset.id;
+    if(!confirm('Delete user?')) return;
+    await fetch('/api/admin/users/'+id,{method:'DELETE',headers:{'Authorization':'Bearer '+token}});
+    loadUsers();
+  }));
+  document.querySelectorAll('.edit').forEach(b=>b.addEventListener('click',e=>{
+    const tr = e.target.closest('tr');
+    const id = tr.dataset.id;
+    const email = tr.children[0].textContent;
+    const name = tr.children[1].textContent;
+    const phone = tr.children[2].textContent;
+    const role = tr.children[3].textContent;
+    document.getElementById('email').value = email;
+    document.getElementById('name').value = name;
+    document.getElementById('phone').value = phone;
+    document.getElementById('role').value = role;
+    document.getElementById('password').placeholder = 'Leave blank to keep';
+    document.getElementById('createForm').dataset.edit = id;
+  }));
+}
+
+document.getElementById('createForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const id = e.target.dataset.edit;
+  const payload = { email: document.getElementById('email').value, name: document.getElementById('name').value, phone: document.getElementById('phone').value, role: document.getElementById('role').value };
+  const pass = document.getElementById('password').value;
+  if(pass) payload.password = pass;
+  if(id){
+    await fetch('/api/admin/users/'+id,{method:'PATCH',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(payload)});
+    delete e.target.dataset.edit;
+    document.getElementById('password').value='';
+  } else {
+    if(!payload.email||!pass) return alert('Email and password required');
+    await fetch('/api/admin/users',{method:'POST',headers:{'Content-Type':'application/json','Authorization':'Bearer '+token},body:JSON.stringify(payload)});
+    document.getElementById('password').value='';
+  }
+  loadUsers();
+});
+
+loadUsers();
+</script>
+<script src="/admin-shell.js"></script>
+</body>
+</html>

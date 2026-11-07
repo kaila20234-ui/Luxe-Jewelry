@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Arrivals - Luxe Jewelry</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/style.css" />
+  <link rel="stylesheet" href="/components.css" />
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <style>
+    .arrivals-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 25px 15px 40px;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 35px;
+    }
+
+    .page-title h1 {
+      font-size: 2rem;
+      color: var(--primary);
+      margin-bottom: 10px;
+      font-weight: 600;
+      letter-spacing: 1px;
+    }
+
+    .page-title p {
+      font-size: 0.95rem;
+      color: var(--muted);
+      max-width: 700px;
+      margin: 0 auto;
+      line-height: 1.5;
+    }
+
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: var(--primary);
+      color: var(--secondary);
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      text-decoration: none;
+      margin-bottom: 20px;
+      transition: all 0.3s ease;
+      font-size: 0.9rem;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(212, 175, 55, 0.3);
+      background: #c9a834;
+    }
+
+    .filter-section {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      padding: 6px 12px;
+      background: var(--card-bg);
+      color: var(--secondary);
+      border: 2px solid var(--border);
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--primary);
+      color: var(--secondary);
+      border-color: var(--primary);
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 18px;
+      margin-top: 25px;
+    }
+
+    .product-card {
+      background: var(--card-bg);
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.3s ease;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
+    .product-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(212, 175, 55, 0.25);
+    }
+
+    .new-badge {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      background: linear-gradient(135deg, #ff6b6b, #ff5252);
+      color: white;
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 0.7rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      z-index: 10;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 160px;
+      background: linear-gradient(135deg, var(--primary), #b6912e);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      color: white;
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-info {
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      min-height: 130px;
+    }
+
+    .product-category {
+      font-size: 0.75rem;
+      color: var(--primary);
+      font-weight: 600;
+      text-transform: uppercase;
+      margin-bottom: 3px;
+      letter-spacing: 0.5px;
+    }
+
+    .product-name {
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 3px;
+      color: var(--secondary);
+      line-height: 1.3;
+    }
+
+    .product-description {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+
+    .product-price {
+      font-size: 1rem;
+      color: var(--primary);
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .add-to-cart-btn {
+      width: 100%;
+      padding: 10px;
+      background: var(--primary) !important;
+      color: var(--secondary) !important;
+      border: none !important;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 0.85rem;
+      transition: all 0.3s ease;
+      margin-top: auto;
+    }
+
+    .add-to-cart-btn:hover {
+      background: #c9a834;
+      transform: scale(1.02);
+    }
+
+    .empty-state {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--muted);
+    }
+
+    .empty-state i {
+      font-size: 3rem;
+      margin-bottom: 20px;
+      opacity: 0.5;
+    }
+
+    @media (max-width: 768px) {
+      .arrivals-container {
+        padding: 30px 15px 50px;
+      }
+
+      .page-title h1 {
+        font-size: 1.8rem;
+      }
+
+      .filter-section {
+        gap: 8px;
+      }
+
+      .filter-btn {
+        padding: 6px 12px;
+        font-size: 0.85rem;
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 15px;
+      }
+
+      .product-image {
+        height: 150px;
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="arrivals-container">
+    <a href="/index.html" class="back-btn">
+      <i class="fas fa-arrow-left"></i> Back to Home
+    </a>
+
+    <div class="page-title">
+      <h1>New Arrivals</h1>
+      <p>Discover our latest collection of exquisite jewelry pieces. Recently added items showcasing the newest designs and styles from our artisans.</p>
+    </div>
+
+    <div class="filter-section">
+      <button class="filter-btn active" data-category="all">All Items</button>
+      <button class="filter-btn" data-category="rings">Rings</button>
+      <button class="filter-btn" data-category="necklaces">Necklaces</button>
+      <button class="filter-btn" data-category="bracelets">Bracelets</button>
+      <button class="filter-btn" data-category="earrings">Earrings</button>
+    </div>
+
+    <div class="products-grid" id="productsGrid">
+      <!-- Products will be loaded here -->
+    </div>
+  </div>
+
+  <script>
+    const API_URL = '/api';
+
+    async function loadNewArrivals() {
+      try {
+        console.log('[NEW-ARRIVALS] Fetching products');
+        
+        const response = await fetch(`${API_URL}/products`);
+
+        if (!response.ok) {
+          console.error('[NEW-ARRIVALS] Error fetching products:', response.status);
+          renderProducts([]);
+          return;
+        }
+
+        const data = await response.json();
+        console.log('[NEW-ARRIVALS] API Response:', data);
+        
+        // Handle both wrapped and direct array responses
+        const products = data.products || data;
+        if (!Array.isArray(products)) {
+          console.error('[NEW-ARRIVALS] Products is not an array:', products);
+          renderProducts([]);
+          return;
+        }
+        
+        console.log('[NEW-ARRIVALS] Fetched', products.length, 'products');
+
+        const sorted = products.sort((a, b) => (b.createdAt ? new Date(b.createdAt) : 0) - (a.createdAt ? new Date(a.createdAt) : 0));
+        
+        const newArrivals = sorted.map(product => ({
+          _id: product._id || product.id,
+          name: product.name || 'Jewelry Item',
+          category: (product.category || 'jewelry').toLowerCase(),
+          price: product.price || 50000,
+          description: product.description || `Premium ${product.category} collection piece`,
+          image: product.image,
+          id: product._id || product.id,
+          dateAdded: product.createdAt ? new Date(product.createdAt) : new Date()
+        }));
+
+        renderProducts(newArrivals);
+      } catch (err) {
+        console.error('[NEW-ARRIVALS] Error:', err);
+        renderProducts([]);
+      }
+    }
+
+    function getCategoryIcon(category) {
+      const icons = {
+        'watches': 'fa-clock',
+        'necklaces': 'fa-ring',
+        'earrings': 'fa-gem',
+        'bracelets': 'fa-link',
+        'rings': 'fa-ring',
+        'pendants': 'fa-key'
+      };
+      return icons[category?.toLowerCase()] || 'fa-gem';
+    }
+
+    let allProducts = [];
+    let selectedCategory = 'all';
+
+    function renderProducts(products = []) {
+      const grid = document.getElementById('productsGrid');
+      grid.innerHTML = '';
+      allProducts = products;
+
+      const filtered = selectedCategory === 'all' 
+        ? products 
+        : products.filter(p => p.category === selectedCategory);
+
+      if (filtered.length === 0) {
+        grid.innerHTML = `
+          <div class="empty-state" style="grid-column: 1 / -1;">
+            <i class="fas fa-box-open"></i>
+            <p>No new arrivals in this category yet</p>
+          </div>
+        `;
+        return;
+      }
+
+      filtered.forEach(product => {
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        
+        const daysOld = Math.floor((Date.now() - product.dateAdded) / (24 * 60 * 60 * 1000));
+        const isNew = daysOld <= 30;
+
+        card.innerHTML = `
+          <div class="product-image" style="position: relative;">
+            ${product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" />` : `<i class="fas ${getCategoryIcon(product.category)}" style="font-size: 3rem; color: white;"></i>`}
+            ${isNew ? '<div class="new-badge"><i class="fas fa-star"></i> NEW</div>' : ''}
+          </div>
+          <div class="product-info">
+            <div class="product-category"><i class="fas ${getCategoryIcon(product.category)}"></i> ${product.category}</div>
+            <div class="product-name">${product.name}</div>
+            <div class="product-description">${product.description}</div>
+            <div class="product-price">₦${product.price.toLocaleString('en-US')}</div>
+            <button class="add-to-cart-btn" data-product-id="${product.id}">
+              <i class="fas fa-shopping-bag"></i> Add to Cart
+            </button>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+
+      // Use event delegation for add-to-cart buttons (prevents duplicate listeners)
+      const gridElement = document.getElementById('arrivalsGrid');
+      
+      // Check if listener already exists to prevent duplicates
+      if (!gridElement._cartListenerAttached) {
+        gridElement.addEventListener('click', async (e) => {
+          const btn = e.target.closest('.add-to-cart-btn');
+          if (!btn) return;
+
+          const productId = btn.getAttribute('data-product-id');
+          const product = allProducts.find(p => p.id === productId);
+          
+          if (!product) {
+            showToast('Product not found');
+            return;
+          }
+
+          btn.disabled = true;
+          btn.innerHTML = 'Adding...';
+
+          try {
+            await CartManager.addToCart(product, 1);
+            showToast('✓ Added to Cart');
+            btn.innerHTML = '✓ Added to Cart';
+            btn.style.background = '#d4af37';
+            setTimeout(() => {
+              btn.disabled = false;
+              btn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
+              btn.style.background = '';
+            }, 1500);
+          } catch (error) {
+            console.error('Error adding to cart:', error);
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
+            showToast('Failed to add to cart', 'error');
+          }
+        });
+        gridElement._cartListenerAttached = true;
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.createElement('div');
+      toast.textContent = message;
+      toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #333;
+        color: white;
+        padding: 12px 20px;
+        border-radius: 4px;
+        z-index: 9999;
+        animation: slideIn 0.3s ease;
+      `;
+      document.body.appendChild(toast);
+      
+      setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+      }, 2000);
+    }
+
+    document.querySelectorAll('.filter-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedCategory = btn.getAttribute('data-category');
+        renderProducts(allProducts);
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', loadNewArrivals);
+  </script>
+  <script src="/cart-manager.js"></script>
+  <script src="/load-components.js"></script>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<header>
+  <div class="header-container">
+    <a href="/" class="logo">LUXE <span>JEWELRY</span></a>
+
+    <nav class="center-nav" id="centerNav">
+      <button class="nav-item active" data-category="all">All Products</button>
+    </nav>
+
+    <div class="header-actions">
+      <div class="search-box">
+        <i class="fas fa-search"></i>
+        <input id="searchInput" type="text" placeholder="Search products..." />
+      </div>
+
+      <button class="icon-btn" id="darkToggle" title="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
+
+      <button class="icon-btn cart-btn" id="cartToggle" title="Open cart">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="cart-count" id="cartCount">0</span>
+      </button>
+
+      <div class="auth-group" id="authGroup">
+        <!-- NOSONAR: contrast -->
+        <a
+          href="/login.html"
+          class="login-btn"
+          style="
+            background: linear-gradient(135deg, #d4af37 0%, #b8941e 100%);
+            color: white;
+            padding: 10px 16px;
+            border-radius: 6px;
+            margin-right: 8px;
+            font-weight: 600;
+          "
+        >
+          <i class="fas fa-lock"></i> Staff Login
+        </a>
+        <a href="/customer-login.html" class="login-btn" id="loginBtn">
+          <i class="fas fa-user"></i> Customer Login
+        </a>
+      </div>
+
+      <div class="profile-dropdown" id="profileDropdown" style="display: none">
+        <button class="profile-btn" id="profileToggle">
+          <i class="fas fa-user-circle"></i>
+          <span id="userNameDisplay">User</span>
+          <i class="fas fa-chevron-down"></i>
+        </button>
+        <div class="dropdown-menu" id="dropdownMenu">
+          <a href="/customer-dashboard.html#profile" class="dropdown-item">
+            <i class="fas fa-user"></i> Profile
+          </a>
+          <a href="/customer-dashboard.html#orders" class="dropdown-item">
+            <i class="fas fa-box"></i> Orders
+          </a>
+          <a href="/customer-dashboard.html#addresses" class="dropdown-item">
+            <i class="fas fa-map-marker-alt"></i> Addresses
+          </a>
+          <div style="height: 1px; background: var(--border); margin: 4px 0"></div>
+          <button class="dropdown-item logout-item" id="logoutBtn">
+            <i class="fas fa-sign-out-alt"></i> Logout
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- Cart Panel -->
+<div class="cart-panel" id="cartPanel" aria-hidden="true">
+  <div class="cart-header">
+    <h3><i class="fas fa-shopping-bag"></i> Your Cart</h3>
+    <button class="cart-close" id="cartClose">&times;</button>
+  </div>
+  <ul class="cart-items" id="cartItems"></ul>
+  <div class="cart-summary" id="cartSummary" style="display: none;">
+    <div class="cart-total">
+      <span>Total:</span>
+      <span class="amount" id="cartTotal">₦0.00</span>
+    </div>
+    <div class="cart-buttons">
+      <a class="btn-checkout" href="/checkout.html">Checkout</a>
+      <button class="btn-continue" type="button">Continue Shopping</button>
+    </div>
+  </div>
+  <div class="cart-empty" id="cartEmpty">
+    <i class="fas fa-shopping-bag"></i>
+    <p>Your cart is empty</p>
+  </div>
+</div>
