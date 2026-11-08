@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../services/auth_service.dart';
+import '../services/api_config.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({super.key});
@@ -14,8 +15,6 @@ class _CartScreenState extends State<CartScreen> {
   List<CartItem> cartItems = [];
   bool isLoading = true;
   final authService = AuthService();
-  final String apiUrl =
-      'http://10.235.150.87:5000/api/customer/cart';
 
   @override
   void initState() {
@@ -44,7 +43,7 @@ class _CartScreenState extends State<CartScreen> {
 
       final response = await http
           .get(
-            Uri.parse(apiUrl),
+            ApiConfig.uri('customer/cart'),
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer $token',
@@ -92,7 +91,7 @@ class _CartScreenState extends State<CartScreen> {
 
       final response = await http
           .put(
-            Uri.parse('$apiUrl/$itemId'),
+            ApiConfig.uri('customer/cart/$itemId'),
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer $token',
@@ -116,7 +115,7 @@ class _CartScreenState extends State<CartScreen> {
 
       final response = await http
           .delete(
-            Uri.parse('$apiUrl/$itemId'),
+            ApiConfig.uri('customer/cart/$itemId'),
             headers: {
               'Content-Type': 'application/json',
               'Authorization': 'Bearer $token',

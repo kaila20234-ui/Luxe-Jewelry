@@ -1,0 +1,47 @@
+# Deploying to Vercel
+
+This project serves the storefront and API from one Express app. Vercel detects
+the root `server.js` Express app and deploys it as a function. Files under
+`public/` are served from Vercel's CDN.
+
+## Deploy
+
+1. Push this project to a Git provider and import the repository in Vercel.
+2. Keep the **Root Directory** set to the repository root.
+3. Add the environment variables below in **Project Settings → Environment
+   Variables** for Production (and Preview if needed).
+4. Deploy. Vercel sets `NODE_ENV=production` and `VERCEL` automatically.
+
+No separate build or output-directory setting is needed. Vercel installs
+dependencies from `package-lock.json` and detects `server.js` automatically.
+
+## Required environment variables
+
+- `JWT_SECRET`: a private, random secret of at least 32 characters.
+- `ADMIN_PASS_HASH`: bcrypt hash for the manager account. Production startup
+  exits if this is missing.
+- `MONGO_URI`: connection string for a remotely hosted MongoDB database
+  (for example, MongoDB Atlas). A local `127.0.0.1` database is not accessible
+  from Vercel.
+
+Set these additional variables for the corresponding features:
+
+- Payments: `PAYSTACK_SECRET_KEY`
+- Email and OTP: `SMTP_USER`, `SMTP_PASS` (or `EMAIL_USER`, `EMAIL_PASS`);
+  configure `SMTP_HOST` and `SMTP_PORT` if your provider requires them.
+- Site admin login: `SITE_ADMIN_USER` and `SITE_ADMIN_PASS_HASH` (or the
+  supported `ADMIN2_USER` / `ADMIN2_PASS_HASH` alternatives).
+- Absolute links in emails: `FRONTEND_URL` and `SHOP_URL` set to the deployed
+  site URL.
+
+Do not put secrets in source control or expose secret keys in frontend code.
+
+## Important limitations
+
+Vercel functions are stateless and their writable filesystem is temporary.
+Product image uploads are written under `/tmp` on Vercel and will not persist.
+Configure durable object storage such as S3 or Cloudinary before relying on
+uploaded product images in production. The `mobile/` directory is outside
+Vercel's static `public/` directory; move any mobile files that must be
+published to `public/mobile/`. Use managed Redis if enabling Redis-backed
+features.

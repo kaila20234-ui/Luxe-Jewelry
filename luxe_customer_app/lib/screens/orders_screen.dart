@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import '../services/auth_service.dart';
+import '../services/api_config.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
@@ -14,7 +15,6 @@ class OrdersScreen extends StatefulWidget {
 class _OrdersScreenState extends State<OrdersScreen> {
   late Future<List<Order>> futureOrders;
   int _selectedTab = 0;
-  final String apiUrl = 'https://1mb0ksxv-5000.uks1.devtunnels.ms/api/customer/orders';
   final authService = AuthService();
 
   final List<String> tabs = ['Processing', 'Delivered', 'Paid', 'Cancelled'];
@@ -33,23 +33,34 @@ class _OrdersScreenState extends State<OrdersScreen> {
         return [];
       }
 
-      final response = await http.get(
-        Uri.parse(apiUrl),
+      final response = await http
+          .get(
+            ApiConfig.uri('customer/orders'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
         },
-      ).timeout(const Duration(seconds: 60));
+          )
+          .timeout(const Duration(seconds: 60));
 
-      developer.log('[ORDERS] Response status: ${response.statusCode}', name: 'OrdersScreen');
-      developer.log('[ORDERS] Response body: ${response.body}', name: 'OrdersScreen');
+      developer.log(
+        '[ORDERS] Response status: ${response.statusCode}',
+        name: 'OrdersScreen',
+      );
+      developer.log(
+        '[ORDERS] Response body: ${response.body}',
+        name: 'OrdersScreen',
+      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         final List<dynamic> orders = data['orders'] ?? data['data'] ?? [];
         return orders.map((o) => Order.fromJson(o)).toList();
       } else if (response.statusCode == 401) {
-        developer.log('[ORDERS] Unauthorized - user not logged in', name: 'OrdersScreen');
+        developer.log(
+          '[ORDERS] Unauthorized - user not logged in',
+          name: 'OrdersScreen',
+        );
         return [];
       } else {
         throw Exception('Failed to load orders: ${response.statusCode}');
@@ -110,7 +121,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
                     backgroundColor: Colors.grey[200],
                     selectedColor: const Color(0xFFd4af37),
                     labelStyle: TextStyle(
-                      color: _selectedTab == index ? Colors.white : Colors.black,
+                      color: _selectedTab == index
+                          ? Colors.white
+                          : Colors.black,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -125,9 +138,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const Center(
-                    child: CircularProgressIndicator(
-                      color: Color(0xFFd4af37),
-                    ),
+                    child: CircularProgressIndicator(color: Color(0xFFd4af37)),
                   );
                 }
 
@@ -149,9 +160,7 @@ class _OrdersScreenState extends State<OrdersScreen> {
                 }
 
                 if (!snapshot.hasData || snapshot.data!.isEmpty) {
-                  return const Center(
-                    child: Text('No orders yet'),
-                  );
+                  return const Center(child: Text('No orders yet'));
                 }
 
                 final allOrders = snapshot.data!;
@@ -159,7 +168,9 @@ class _OrdersScreenState extends State<OrdersScreen> {
 
                 if (filteredOrders.isEmpty) {
                   return Center(
-                    child: Text('No ${tabs[_selectedTab].toLowerCase()} orders'),
+                    child: Text(
+                      'No ${tabs[_selectedTab].toLowerCase()} orders',
+                    ),
                   );
                 }
 
@@ -203,7 +214,8 @@ class Order {
       status: json['status'] ?? 'pending',
       total: (json['total'] ?? 0).toDouble(),
       date: DateTime.parse(json['createdAt'] ?? DateTime.now().toString()),
-      items: (json['items'] as List?)
+      items:
+          (json['items'] as List?)
               ?.map((i) => OrderItem.fromJson(i))
               .toList() ??
           [],
@@ -217,11 +229,7 @@ class OrderItem {
   final int quantity;
   final double price;
 
-  OrderItem({
-    required this.name,
-    required this.quantity,
-    required this.price,
-  });
+  OrderItem({required this.name, required this.quantity, required this.price});
 
   factory OrderItem.fromJson(Map<String, dynamic> json) {
     return OrderItem(
@@ -272,9 +280,7 @@ class OrderCard extends StatelessWidget {
     return Card(
       elevation: 2,
       margin: const EdgeInsets.only(bottom: 12),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-      ),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       child: Padding(
         padding: const EdgeInsets.all(12),
         child: Column(
@@ -328,8 +334,7 @@ class OrderCard extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             // Order Items
-            ...order.items.asMap().entries.map(
-              (entry) {
+            ...order.items.asMap().entries.map((entry) {
                 final item = entry.value;
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 8),
@@ -355,8 +360,7 @@ class OrderCard extends StatelessWidget {
                     ],
                   ),
                 );
-              },
-            ),
+            }),
             const Divider(height: 24),
             // Order Total
             Row(
@@ -364,10 +368,7 @@ class OrderCard extends StatelessWidget {
               children: [
                 const Text(
                   'Total',
-                  style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                 ),
                 Text(
                   '\$${order.total.toStringAsFixed(2)}',
@@ -387,7 +388,9 @@ class OrderCard extends StatelessWidget {
                 onPressed: () {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Order #${order.id.substring(0, 8)} details'),
+                      content: Text(
+                        'Order #${order.id.substring(0, 8)} details',
+                      ),
                       backgroundColor: const Color(0xFFd4af37),
                     ),
                   );

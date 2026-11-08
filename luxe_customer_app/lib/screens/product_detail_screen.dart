@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'shop_screen.dart';
 import '../services/auth_service.dart';
+import '../services/api_config.dart';
 
 class ProductDetailScreen extends StatefulWidget {
   final Product product;
@@ -18,7 +19,6 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
   late PageController _imageController;
   int _currentImageIndex = 0;
   late Future<List<Product>> _relatedProducts;
-  final String apiUrl = 'http://10.235.150.87:5000/api/products';
   final authService = AuthService();
   bool isAddingToCart = false;
 
@@ -37,10 +37,18 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Future<List<Product>> fetchRelatedProducts() async {
     try {
-      final response = await http.get(
-        Uri.parse('$apiUrl?category=${widget.product.category}&limit=10'),
+      final response = await http
+          .get(
+            ApiConfig.uri(
+              'products',
+              queryParameters: {
+                'category': widget.product.category ?? '',
+                'limit': '10',
+              },
+            ),
         headers: {'Content-Type': 'application/json'},
-      ).timeout(const Duration(seconds: 60));
+          )
+          .timeout(const Duration(seconds: 60));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -54,7 +62,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       }
       return [];
     } catch (e) {
-      developer.log('[PRODUCT] Error fetching related products: $e', name: 'ProductDetail');
+      developer.log(
+        '[PRODUCT] Error fetching related products: $e',
+        name: 'ProductDetail',
+      );
       return [];
     }
   }
@@ -85,8 +96,9 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         return;
       }
 
-      final response = await http.post(
-        Uri.parse('http://10.235.150.87:5000/api/customer/cart'),
+      final response = await http
+          .post(
+            ApiConfig.uri('customer/cart'),
         headers: {
           'Content-Type': 'application/json',
           'Authorization': 'Bearer $token',
@@ -95,13 +107,19 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
           'id': widget.product.id,
           'name': widget.product.name,
           'price': widget.product.price,
-          'image': widget.product.images.isNotEmpty ? widget.product.images[0] : '',
+              'image': widget.product.images.isNotEmpty
+                  ? widget.product.images[0]
+                  : '',
           'category': widget.product.category,
           'qty': 1,
         }),
-      ).timeout(const Duration(seconds: 60));
+          )
+          .timeout(const Duration(seconds: 60));
 
-      developer.log('[PRODUCT] Add to cart response: ${response.statusCode}', name: 'ProductDetail');
+      developer.log(
+        '[PRODUCT] Add to cart response: ${response.statusCode}',
+        name: 'ProductDetail',
+      );
 
       if (mounted) {
         if (response.statusCode == 200) {
@@ -118,7 +136,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
             ),
           );
           // Pop back to shop screen to show updated cart
-          Navigator.pop(context, true); // Return true to indicate item was added
+          Navigator.pop(
+            context,
+            true,
+          ); // Return true to indicate item was added
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -135,7 +156,10 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
         setState(() => isAddingToCart = false);
       }
     } catch (e) {
-      developer.log('[PRODUCT] Error adding to cart: $e', name: 'ProductDetail');
+      developer.log(
+        '[PRODUCT] Error adding to cart: $e',
+        name: 'ProductDetail',
+      );
       if (!mounted) return;
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -191,7 +215,12 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                               fit: BoxFit.cover,
                               errorBuilder: (context, error, stackTrace) {
                                 return Container(
-                                  color: const Color.fromRGBO(212, 175, 55, 0.1),
+                                  color: const Color.fromRGBO(
+                                    212,
+                                    175,
+                                    55,
+                                    0.1,
+                                  ),
                                   child: const Icon(
                                     Icons.diamond,
                                     size: 80,
@@ -374,10 +403,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 children: [
                   const Text(
                     'Related Products',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 12),
                   FutureBuilder<List<Product>>(
@@ -394,7 +420,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         );
                       }
 
-                      if (snapshot.hasError || !snapshot.hasData ||
+                      if (snapshot.hasError ||
+                          !snapshot.hasData ||
                           snapshot.data!.isEmpty) {
                         return const Padding(
                           padding: EdgeInsets.symmetric(vertical: 16),
@@ -410,7 +437,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                           itemCount: relatedProducts.length,
                           itemBuilder: (context, index) {
                             final product = relatedProducts[index];
-                            final imageUrl = product.images.isNotEmpty &&
+                            final imageUrl =
+                                product.images.isNotEmpty &&
                                     product.images.first.isNotEmpty
                                 ? product.images.first
                                 : null;
@@ -446,23 +474,37 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                               ? Image.network(
                                                   imageUrl,
                                                   fit: BoxFit.cover,
-                                                  errorBuilder: (context,
-                                                      error, stackTrace) {
+                                                  errorBuilder:
+                                                      (
+                                                        context,
+                                                        error,
+                                                        stackTrace,
+                                                      ) {
                                                     return Container(
-                                                      color: const Color.fromRGBO(
-                                                          212, 175, 55, 0.1),
+                                                          color:
+                                                              const Color.fromRGBO(
+                                                                212,
+                                                                175,
+                                                                55,
+                                                                0.1,
+                                                              ),
                                                       child: const Icon(
                                                         Icons.diamond,
                                                         size: 30,
                                                         color: Color(
-                                                            0xFFd4af37),
+                                                              0xFFd4af37,
+                                                            ),
                                                       ),
                                                     );
                                                   },
                                                 )
                                               : Container(
                                                   color: const Color.fromRGBO(
-                                                      212, 175, 55, 0.1),
+                                                    212,
+                                                    175,
+                                                    55,
+                                                    0.1,
+                                                  ),
                                                   child: const Icon(
                                                     Icons.diamond,
                                                     size: 30,

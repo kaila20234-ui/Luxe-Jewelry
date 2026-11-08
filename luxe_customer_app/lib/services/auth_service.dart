@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'api_config.dart';
 
 class AuthResponse {
   final bool success;
@@ -11,10 +12,6 @@ class AuthResponse {
 }
 
 class AuthService {
-  // Use your computer's IP address (10.235.150.87) or 10.0.2.2 for Android emulator
-  // If testing on emulator, try both - some systems require the actual IP address
-  static const String _apiUrl = 'http://10.235.150.87:5000/api';
-  // static const String _apiUrl = 'http://10.0.2.2:5000/api'; // Alternative for emulator
   static const String _tokenKey = 'auth_token';
   static const String _userKey = 'user_data';
   static String? _lastError;
@@ -43,21 +40,34 @@ class AuthService {
   Future<bool> login(String email, String password) async {
     try {
       developer.log('[AUTH] Attempting login for: $email', name: 'AuthService');
-      developer.log('[AUTH] API URL: $_apiUrl/auth/login', name: 'AuthService');
-      
-      final response = await http.post(
-        Uri.parse('$_apiUrl/auth/login'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-        }),
-      ).timeout(const Duration(seconds: 60), onTimeout: () {
-        throw Exception('Request timeout - server not responding. Check if server is running on port 5000');
-      });
+      developer.log(
+        '[AUTH] API URL: ${ApiConfig.uri('auth/login')}',
+        name: 'AuthService',
+      );
 
-      developer.log('[AUTH] Response status: ${response.statusCode}', name: 'AuthService');
-      developer.log('[AUTH] Response body: ${response.body}', name: 'AuthService');
+      final response = await http
+          .post(
+            ApiConfig.uri('auth/login'),
+        headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({'email': email, 'password': password}),
+          )
+          .timeout(
+            const Duration(seconds: 60),
+            onTimeout: () {
+              throw Exception(
+                'Request timeout - server not responding. Check if server is running on port 5000',
+              );
+            },
+          );
+
+      developer.log(
+        '[AUTH] Response status: ${response.statusCode}',
+        name: 'AuthService',
+      );
+      developer.log(
+        '[AUTH] Response body: ${response.body}',
+        name: 'AuthService',
+      );
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
@@ -74,12 +84,16 @@ class AuthService {
         } catch (_) {
           _lastError = 'Invalid email or password';
         }
-        developer.log('[AUTH] Invalid credentials: $_lastError', name: 'AuthService');
+        developer.log(
+          '[AUTH] Invalid credentials: $_lastError',
+          name: 'AuthService',
+        );
         return false;
       } else {
         try {
           final data = jsonDecode(response.body);
-          _lastError = data['message'] ?? 'Server error: ${response.statusCode}';
+          _lastError =
+              data['message'] ?? 'Server error: ${response.statusCode}';
         } catch (_) {
           _lastError = 'Server error: ${response.statusCode}';
         }
@@ -87,7 +101,8 @@ class AuthService {
         return false;
       }
     } on http.ClientException catch (e) {
-      _lastError = 'Connection error: ${e.message}. Check if server is running.';
+      _lastError =
+          'Connection error: ${e.message}. Check if server is running.';
       developer.log('[AUTH] Connection error: $e', name: 'AuthService');
       return false;
     } catch (e) {
@@ -99,19 +114,27 @@ class AuthService {
 
   Future<bool> register(String email, String password, String name) async {
     try {
-      developer.log('[AUTH] Attempting register for: $email', name: 'AuthService');
-      
-      final response = await http.post(
-        Uri.parse('$_apiUrl/auth/register'),
+      developer.log(
+        '[AUTH] Attempting register for: $email',
+        name: 'AuthService',
+      );
+
+      final response = await http
+          .post(
+            ApiConfig.uri('auth/register'),
         headers: {'Content-Type': 'application/json'},
         body: jsonEncode({
           'email': email,
           'password': password,
           'name': name,
         }),
-      ).timeout(const Duration(seconds: 60));
+          )
+          .timeout(const Duration(seconds: 60));
 
-      developer.log('[AUTH] Response status: ${response.statusCode}', name: 'AuthService');
+      developer.log(
+        '[AUTH] Response status: ${response.statusCode}',
+        name: 'AuthService',
+      );
 
       if (response.statusCode == 201) {
         final data = jsonDecode(response.body);

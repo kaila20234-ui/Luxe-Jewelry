@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'product_detail_screen.dart';
+import '../services/api_config.dart';
 
 class ShopScreen extends StatefulWidget {
   const ShopScreen({super.key});
@@ -13,7 +14,6 @@ class ShopScreen extends StatefulWidget {
 
 class _ShopScreenState extends State<ShopScreen> {
   late Future<List<Product>> futureProducts;
-  final String apiUrl = 'http://10.235.150.87:5000/api/products';
 
   @override
   void initState() {
@@ -23,14 +23,19 @@ class _ShopScreenState extends State<ShopScreen> {
 
   Future<List<Product>> fetchProducts() async {
     try {
-      final response = await http.get(
-        Uri.parse('$apiUrl?limit=100'),
+      final response = await http
+          .get(
+            ApiConfig.uri('products', queryParameters: {'limit': '100'}),
         headers: {'Content-Type': 'application/json'},
-      ).timeout(const Duration(seconds: 60));
+          )
+          .timeout(const Duration(seconds: 60));
 
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        developer.log('[SHOP] Products loaded: ${data['products'].length}', name: 'ShopScreen');
+        developer.log(
+          '[SHOP] Products loaded: ${data['products'].length}',
+          name: 'ShopScreen',
+        );
         final List<dynamic> products = data['products'] ?? [];
         return products.map((p) => Product.fromJson(p)).toList();
       } else {
@@ -56,9 +61,7 @@ class _ShopScreenState extends State<ShopScreen> {
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFFd4af37),
-              ),
+              child: CircularProgressIndicator(color: Color(0xFFd4af37)),
             );
           }
 
@@ -67,11 +70,7 @@ class _ShopScreenState extends State<ShopScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red,
-                  ),
+                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
                   const SizedBox(height: 16),
                   Text(
                     'Error: ${snapshot.error}',
@@ -93,9 +92,7 @@ class _ShopScreenState extends State<ShopScreen> {
           }
 
           if (!snapshot.hasData || snapshot.data!.isEmpty) {
-            return const Center(
-              child: Text('No products available'),
-            );
+            return const Center(child: Text('No products available'));
           }
 
           final products = snapshot.data!;
@@ -173,7 +170,8 @@ class ProductCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isOutOfStock = product.stock != null && product.stock! <= 0;
-    final imageUrl = product.images.isNotEmpty && product.images.first.isNotEmpty
+    final imageUrl =
+        product.images.isNotEmpty && product.images.first.isNotEmpty
         ? product.images.first
         : null;
 
@@ -187,9 +185,7 @@ class ProductCard extends StatelessWidget {
       },
       child: Card(
         elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(10),
           child: Column(
@@ -208,8 +204,7 @@ class ProductCard extends StatelessWidget {
                             fit: BoxFit.cover,
                             errorBuilder: (context, error, stackTrace) {
                               return Container(
-                                color:
-                                    const Color.fromRGBO(212, 175, 55, 0.1),
+                                color: const Color.fromRGBO(212, 175, 55, 0.1),
                                 child: const Icon(
                                   Icons.diamond,
                                   size: 40,
@@ -345,7 +340,12 @@ class ProductCard extends StatelessWidget {
                                         overflow: TextOverflow.ellipsis,
                                       ),
                                       behavior: SnackBarBehavior.floating,
-                                      margin: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+                                      margin: const EdgeInsets.fromLTRB(
+                                        16,
+                                        16,
+                                        16,
+                                        0,
+                                      ),
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(12),
                                       ),
