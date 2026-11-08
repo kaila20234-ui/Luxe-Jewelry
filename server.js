@@ -422,9 +422,12 @@ OtpSessionSchema.index({ otpExpiry: 1 }, { expireAfterSeconds: 0 });
 const OtpSession = mongoose.model("OtpSession", OtpSessionSchema);
 
 /* ================== UPLOADS / MULTER ================== */
-fs.ensureDirSync(path.join(__dirname, "uploads"));
+const uploadsDir = process.env.VERCEL
+  ? path.join("/tmp", "luxe-jewelry-uploads")
+  : path.join(__dirname, "uploads");
+fs.ensureDirSync(uploadsDir);
 const storage = multer.diskStorage({
-  destination: (req, file, cb) => cb(null, "uploads/"),
+  destination: (req, file, cb) => cb(null, uploadsDir),
   filename: (req, file, cb) => {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
     cb(null, uniqueSuffix + path.extname(file.originalname));
@@ -882,11 +885,11 @@ if (fs.existsSync(mobileDir)) {
 
 if (fs.existsSync(publicDir)) {
   app.use(express.static(publicDir));
-  app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+  app.use("/uploads", express.static(uploadsDir));
   console.log("[SERVER] Serving static files from ./public");
 } else {
   // fallback: serve uploads and warn
-  app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+  app.use("/uploads", express.static(uploadsDir));
   console.warn(
     "[WARNING] ./public not found — falling back to root/static. Consider moving frontend files to ./public for safety."
   );
@@ -4553,70 +4556,72 @@ const couponRoutes = require("./routes/coupons");
 app.use("/api/coupons", couponRoutes);
 
 /* START SERVER */
-console.log("[DEBUG] About to start listening on port " + PORT);
-try {
-  console.log("[DEBUG] Creating server instance...");
+if (require.main === module) {
+  console.log("[DEBUG] About to start listening on port " + PORT);
+  try {
+    console.log("[DEBUG] Creating server instance...");
 
-  const server = app.listen(PORT, "localhost", () => {
-    console.log(
-      `[SERVER] Callback fired - Server is ready at http://localhost:${PORT}`
-    );
-    console.log(`[SERVER] 🎉 Server is ready to accept requests`);
-  });
-
-  server.on("listening", () => {
-    console.log(
-      `[SERVER] 'listening' event - Server successfully bound to port ${PORT}`
-    );
-    if (!PAYSTACK_SECRET_KEY)
-      console.warn(
-        "[WARNING] PAYSTACK_SECRET_KEY not set — payments will fail until configured."
+    const server = app.listen(PORT, () => {
+      console.log(
+        `[SERVER] Callback fired - Server is ready at http://localhost:${PORT}`
       );
-    if (!EMAIL_USER || !EMAIL_PASS)
-      console.warn(
-        "[WARNING] EMAIL_USER/EMAIL_PASS not set — OTP emails will fail until configured."
-      );
-    if (!ADMIN_PASS_HASH)
-      console.warn(
-        "[WARNING] ADMIN_PASS_HASH not set — manager login will be disabled until configured."
-      );
-  });
+      console.log(`[SERVER] 🎉 Server is ready to accept requests`);
+    });
 
-  console.log("[DEBUG] Listen call completed, setting error handler");
+    server.on("listening", () => {
+      console.log(
+        `[SERVER] 'listening' event - Server successfully bound to port ${PORT}`
+      );
+      if (!PAYSTACK_SECRET_KEY)
+        console.warn(
+          "[WARNING] PAYSTACK_SECRET_KEY not set — payments will fail until configured."
+        );
+      if (!EMAIL_USER || !EMAIL_PASS)
+        console.warn(
+          "[WARNING] EMAIL_USER/EMAIL_PASS not set — OTP emails will fail until configured."
+        );
+      if (!ADMIN_PASS_HASH)
+        console.warn(
+          "[WARNING] ADMIN_PASS_HASH not set — manager login will be disabled until configured."
+        );
+    });
 
-  server.on("error", (err) => {
-    console.error(`[ERROR-SERVER] Server error event: ${err.code}`);
-    if (err.code === "EADDRINUSE") {
-      console.error(`[ERROR] Port ${PORT} is already in use`);
-      process.exit(1);
-    } else if (err.code === "EACCES") {
-      console.error(`[ERROR] Permission denied binding to port ${PORT}`);
-      process.exit(1);
-    } else {
-      console.error(`[ERROR] Server error: ${err.code} - ${err.message}`);
-      process.exit(1);
+    console.log("[DEBUG] Listen call completed, setting error handler");
+
+    server.on("error", (err) => {
+      console.error(`[ERROR-SERVER] Server error event: ${err.code}`);
+      if (err.code === "EADDRINUSE") {
+        console.error(`[ERROR] Port ${PORT} is already in use`);
+        process.exit(1);
+      } else if (err.code === "EACCES") {
+        console.error(`[ERROR] Permission denied binding to port ${PORT}`);
+        process.exit(1);
+      } else {
+        console.error(`[ERROR] Server error: ${err.code} - ${err.message}`);
+        process.exit(1);
+      }
+    });
+
+    console.log("[DEBUG] Server error handler attached");
+  } catch (err) {
+    console.error(`[ERROR] Failed to start server: ${err.message}`);
+    console.error(`[ERROR] Stack: ${err.stack}`);
+    process.exit(1);
+  }
+
+  process.on("unhandledRejection", (reason, promise) => {
+    console.error("[ERROR] Unhandled Rejection - reason:", reason);
+    if (reason instanceof Error) {
+      console.error(reason.stack);
     }
   });
 
-  console.log("[DEBUG] Server error handler attached");
-} catch (err) {
-  console.error(`[ERROR] Failed to start server: ${err.message}`);
-  console.error(`[ERROR] Stack: ${err.stack}`);
-  process.exit(1);
+  process.on("uncaughtException", (error) => {
+    console.error("[ERROR] Uncaught Exception:", error.message);
+    console.error(error.stack);
+    process.exit(1);
+  });
 }
-
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("[ERROR] Unhandled Rejection - reason:", reason);
-  if (reason instanceof Error) {
-    console.error(reason.stack);
-  }
-});
-
-process.on("uncaughtException", (error) => {
-  console.error("[ERROR] Uncaught Exception:", error.message);
-  console.error(error.stack);
-  process.exit(1);
-});
 
 // CSRF error handler: catch csurf ForbiddenError and return JSON 403
 app.use((err, req, res, next) => {
@@ -4865,3 +4870,5 @@ app.get(
     }
   }
 );
+
+module.exports = app;
