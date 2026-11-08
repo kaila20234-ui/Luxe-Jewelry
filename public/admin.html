@@ -312,38 +312,6 @@
         animation: fadeIn 0.3s ease;
       }
 
-      .newsletter-nav {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 10px;
-        margin: 20px 0;
-        border-bottom: 1px solid #e8e1d2;
-      }
-
-      .newsletter-nav-btn {
-        padding: 12px 16px;
-        border: 0;
-        border-bottom: 3px solid transparent;
-        background: transparent;
-        color: #666;
-        cursor: pointer;
-        font: inherit;
-        font-weight: 600;
-      }
-
-      .newsletter-nav-btn:hover,
-      .newsletter-nav-btn.active {
-        color: #a88620;
-      }
-
-      .newsletter-nav-btn.active {
-        border-bottom-color: #d4af37;
-      }
-
-      .newsletter-panel[hidden] {
-        display: none;
-      }
-
       @keyframes fadeIn {
         from {
           opacity: 0;
@@ -1433,27 +1401,7 @@
             <!-- NEWSLETTER SECTION -->
             <div class="content-section" id="newsletter">
               <h2><i class="fas fa-envelope"></i> Newsletter</h2>
-              <nav class="newsletter-nav" role="tablist" aria-label="Newsletter sections">
-                <button type="button" class="newsletter-nav-btn active" id="newsletter-compose-tab" role="tab" aria-controls="newsletter-compose-panel" data-newsletter-tab="compose" aria-selected="true" tabindex="0" onclick="switchNewsletterTab('compose')">
-                  <i class="fas fa-pen-to-square"></i> Compose
-                </button>
-                <button type="button" class="newsletter-nav-btn" id="newsletter-subscribers-tab" role="tab" aria-controls="newsletter-subscribers-panel" data-newsletter-tab="subscribers" aria-selected="false" tabindex="-1" onclick="switchNewsletterTab('subscribers')">
-                  <i class="fas fa-users"></i> Subscribers
-                </button>
-                <button type="button" class="newsletter-nav-btn" id="newsletter-campaigns-tab" role="tab" aria-controls="newsletter-campaigns-panel" data-newsletter-tab="campaigns" aria-selected="false" tabindex="-1" onclick="switchNewsletterTab('campaigns')">
-                  <i class="fas fa-clock-rotate-left"></i> Campaign History
-                </button>
-              </nav>
-              <div id="newsletter-compose-panel" class="newsletter-panel" role="tabpanel" aria-labelledby="newsletter-compose-tab">
-                <div id="newsletterContent"></div>
-              </div>
-              <div id="newsletter-subscribers-panel" class="newsletter-panel" role="tabpanel" aria-labelledby="newsletter-subscribers-tab" hidden>
-                <h3>Manage Subscribers</h3>
-              </div>
-              <div id="newsletter-campaigns-panel" class="newsletter-panel" role="tabpanel" aria-labelledby="newsletter-campaigns-tab" hidden>
-                <h3>Campaign History</h3>
-                <div id="campaignHistory" style="max-width: 700px;"></div>
-              </div>
+              <div id="newsletterContent"></div>
             </div>
 
             <!-- ORDER ALERTS SECTION -->
@@ -1641,6 +1589,7 @@
         messages: "Messages",
         complaints: "Complaints",
         "top-customers": "Top Customers",
+        subscribers: "Subscribers",
         referrals: "Referrals",
         "status-levels": "Status Level Settings",
         sales: "Sales Report",
@@ -1660,6 +1609,7 @@
         Messages: "messages",
         Complaints: "complaints",
         "Top Customers": "top-customers",
+        Subscribers: "subscribers",
         Referrals: "referrals",
         "Status Level Settings": "status-levels",
         "Sales Report": "sales",
@@ -1785,12 +1735,6 @@
       }
 
       window.switchSection = function switchSection(sectionId) {
-        if (sectionId === "subscribers") {
-          window.switchSection("newsletter");
-          window.switchNewsletterTab("subscribers");
-          return;
-        }
-
         console.log("[ADMIN] switchSection called with:", sectionId);
         sections = Array.from(document.querySelectorAll(".content-section"));
         menuItems = Array.from(document.querySelectorAll(".menu-item, .sidebar .menu-item"));
@@ -1956,7 +1900,7 @@
               </div>
               <div class="form-group">
                 <label>Stock</label>
-                <input type="number" id="productStock" value="1" min="0" step="1">
+                <input type="number" id="productStock" value="1">
               </div>
             </div>
             <div class="form-group">
@@ -1980,7 +1924,7 @@
                   <th>Image</th>
                   <th>Name</th>
                   <th>Price</th>
-                  <th>Available Stock</th>
+                  <th>Stock</th>
                   <th>Category</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -1994,24 +1938,7 @@
                     <td><img src="${p.image ? (p.image.startsWith('http') || p.image.startsWith('/') ? p.image : '/uploads/' + p.image) : '/placeholder.png'}" style="width:40px; height:40px; object-fit:cover; border-radius:4px;" alt="" onerror="this.src='/placeholder.png'" /></td>
                     <td>${p.name}</td>
                     <td>₦${p.price.toLocaleString()}</td>
-                    <td>
-                      <div style="display: flex; align-items: center; gap: 6px;">
-                        <input
-                          type="number"
-                          id="product-stock-${p._id}"
-                          value="${Number.isFinite(Number(p.stock)) ? Math.max(0, Math.floor(Number(p.stock))) : 1}"
-                          min="0"
-                          step="1"
-                          aria-label="Available stock for ${p.name}"
-                          style="width: 76px;"
-                        />
-                        <button
-                          class="btn-small"
-                          type="button"
-                          onclick="updateProductStock('${p._id}')"
-                        >Save</button>
-                      </div>
-                    </td>
+                    <td>${p.stock || 1}</td>
                     <td>${p.category}</td>
                     <td><span style="color:${p.available ? "green" : "red"}">${
                       p.available ? "✓ Available" : "✗ Out of Stock"
@@ -3432,11 +3359,8 @@
 
       // Switch between newsletter and opted-in tabs
       function switchSubscriberTab(tabName) {
-        const subscriberPanel = document.getElementById(
-          "newsletter-subscribers-panel"
-        );
-        const tabs = subscriberPanel.querySelectorAll(".subscriber-tab");
-        const buttons = subscriberPanel.querySelectorAll(".tabs .tab-btn");
+        const tabs = document.querySelectorAll(".subscriber-tab");
+        const buttons = document.querySelectorAll(".tabs .tab-btn");
 
         tabs.forEach((tab) => (tab.style.display = "none"));
         buttons.forEach((btn) => {
@@ -3610,91 +3534,8 @@
         }
       }
 
-      function moveSubscribersIntoNewsletter() {
-        const subscriberSection = document.getElementById("subscribers");
-        const subscriberPanel = document.getElementById(
-          "newsletter-subscribers-panel"
-        );
-
-        if (
-          !subscriberSection ||
-          !subscriberPanel ||
-          subscriberPanel.dataset.initialized
-        ) {
-          return;
-        }
-
-        const heading = subscriberSection.querySelector("h2");
-        if (!heading) {
-          console.error("Could not find the Subscribers section heading.");
-          return;
-        }
-
-        let content = heading.nextElementSibling;
-        while (content) {
-          const next = content.nextElementSibling;
-          subscriberPanel.appendChild(content);
-          content = next;
-        }
-        subscriberSection.remove();
-        subscriberPanel.dataset.initialized = "true";
-      }
-
-      window.switchNewsletterTab = function switchNewsletterTab(tabName) {
-        const validTabs = ["compose", "subscribers", "campaigns"];
-        if (!validTabs.includes(tabName)) {
-          console.error("Unknown newsletter tab:", tabName);
-          return;
-        }
-
-        document.querySelectorAll(".newsletter-nav-btn").forEach((button) => {
-          const isActive = button.dataset.newsletterTab === tabName;
-          button.classList.toggle("active", isActive);
-          button.setAttribute("aria-selected", String(isActive));
-          button.tabIndex = isActive ? 0 : -1;
-        });
-
-        document.querySelectorAll(".newsletter-panel").forEach((panel) => {
-          panel.hidden = panel.id !== `newsletter-${tabName}-panel`;
-        });
-
-        if (tabName === "subscribers") {
-          moveSubscribersIntoNewsletter();
-          loadSubscribers();
-        } else if (tabName === "campaigns") {
-          loadCampaignHistory();
-        }
-      };
-
-      document
-        .querySelector(".newsletter-nav")
-        ?.addEventListener("keydown", (event) => {
-          const tabs = Array.from(
-            document.querySelectorAll(".newsletter-nav-btn")
-          );
-          const currentIndex = tabs.indexOf(document.activeElement);
-          let nextIndex;
-
-          if (event.key === "ArrowRight") {
-            nextIndex = (currentIndex + 1) % tabs.length;
-          } else if (event.key === "ArrowLeft") {
-            nextIndex = (currentIndex - 1 + tabs.length) % tabs.length;
-          } else if (event.key === "Home") {
-            nextIndex = 0;
-          } else if (event.key === "End") {
-            nextIndex = tabs.length - 1;
-          } else {
-            return;
-          }
-
-          event.preventDefault();
-          tabs[nextIndex].focus();
-          window.switchNewsletterTab(tabs[nextIndex].dataset.newsletterTab);
-        });
-
       async function loadNewsletter() {
         try {
-          moveSubscribersIntoNewsletter();
           // Fetch all subscribers
           const res = await fetch("/api/subscribers");
           const subscribers = await res.json();
@@ -3745,6 +3586,8 @@
             </button>
           </form>
 
+          <h3 style="margin-top: 40px;">Recent Campaigns</h3>
+          <div id="campaignHistory" style="max-width: 700px;"></div>
           `;
           
           document.getElementById("newsletterContent").innerHTML = html;
@@ -3753,6 +3596,9 @@
           document.querySelectorAll('.subscriber-checkbox').forEach(checkbox => {
             checkbox.addEventListener('change', updateSelectedCount);
           });
+
+          // Load campaign history
+          loadCampaignHistory();
 
         } catch (e) {
           console.error("Error loading newsletter:", e);
@@ -4296,37 +4142,9 @@
           } else {
             showToast("Error: " + (data.message || "Could not update product"));
           }
-
         } catch (e) {
           console.error("toggleAvailability error", e);
           showToast("Network error while updating product");
-        }
-      }
-
-      async function updateProductStock(id) {
-        const stockInput = document.getElementById(`product-stock-${id}`);
-        const stock = Number(stockInput?.value);
-        if (!Number.isInteger(stock) || stock < 0) {
-          showToast("Enter a whole stock quantity of 0 or more");
-          return;
-        }
-
-        try {
-          const data = await fetchAdminJson(`/api/products/${id}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ stock }),
-          });
-          if (!data?.success) {
-            showToast("Error: " + (data?.message || "Could not update stock"));
-            return;
-          }
-
-          showToast("Available stock updated");
-          await loadProducts();
-        } catch (error) {
-          console.error("updateProductStock error", error);
-          showToast("Could not update available stock");
         }
       }
 

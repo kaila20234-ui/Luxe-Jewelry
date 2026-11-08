@@ -49,9 +49,10 @@ class _LoginScreenState extends State<LoginScreen> {
       }
     } else {
       if (mounted) {
-        String errorMsg = authService.getLastError() ?? 
-          (_isLogin ? 'Login failed' : 'Registration failed');
-        
+        String errorMsg =
+            authService.getLastError() ??
+            (_isLogin ? 'Login failed' : 'Registration failed');
+
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(errorMsg),
@@ -83,11 +84,7 @@ class _LoginScreenState extends State<LoginScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Icon(
-                  Icons.diamond,
-                  size: 80,
-                  color: Colors.white,
-                ),
+                const Icon(Icons.diamond, size: 80, color: Colors.white),
                 const SizedBox(height: 24),
                 const Text(
                   'Luxe Jewelry',
@@ -100,10 +97,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 8),
                 Text(
                   _isLogin ? 'Login to your account' : 'Create new account',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    color: Colors.white70,
-                  ),
+                  style: const TextStyle(fontSize: 16, color: Colors.white70),
                 ),
                 const SizedBox(height: 40),
                 if (!_isLogin)
@@ -123,7 +117,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         borderRadius: BorderRadius.circular(12),
                         borderSide: BorderSide.none,
                       ),
-                      prefixIcon: const Icon(Icons.person, color: Color(0xFFd4af37)),
+                      prefixIcon: const Icon(
+                        Icons.person,
+                        color: Color(0xFFd4af37),
+                      ),
                     ),
                   ),
                 if (!_isLogin) const SizedBox(height: 16),
@@ -143,7 +140,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    prefixIcon: const Icon(Icons.email, color: Color(0xFFd4af37)),
+                    prefixIcon: const Icon(
+                      Icons.email,
+                      color: Color(0xFFd4af37),
+                    ),
                   ),
                   keyboardType: TextInputType.emailAddress,
                 ),
@@ -164,7 +164,10 @@ class _LoginScreenState extends State<LoginScreen> {
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide.none,
                     ),
-                    prefixIcon: const Icon(Icons.lock, color: Color(0xFFd4af37)),
+                    prefixIcon: const Icon(
+                      Icons.lock,
+                      color: Color(0xFFd4af37),
+                    ),
                   ),
                   obscureText: true,
                 ),
@@ -187,8 +190,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             width: 24,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              valueColor:
-                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                              valueColor: AlwaysStoppedAnimation<Color>(
+                                Colors.white,
+                              ),
                             ),
                           )
                         : Text(
@@ -210,10 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     _isLogin
                         ? "Don't have an account? Register"
                         : "Already have an account? Login",
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 16,
-                    ),
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
               ],

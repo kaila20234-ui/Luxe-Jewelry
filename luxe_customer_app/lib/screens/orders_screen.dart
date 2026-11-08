@@ -36,10 +36,10 @@ class _OrdersScreenState extends State<OrdersScreen> {
       final response = await http
           .get(
             ApiConfig.uri('customer/orders'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
           )
           .timeout(const Duration(seconds: 60));
 
@@ -335,31 +335,31 @@ class OrderCard extends StatelessWidget {
             const SizedBox(height: 12),
             // Order Items
             ...order.items.asMap().entries.map((entry) {
-                final item = entry.value;
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 8),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Expanded(
-                        child: Text(
-                          '${item.name} x${item.quantity}',
-                          style: const TextStyle(fontSize: 13),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                        ),
+              final item = entry.value;
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: Text(
+                        '${item.name} x${item.quantity}',
+                        style: const TextStyle(fontSize: 13),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '\$${(item.price * item.quantity).toStringAsFixed(2)}',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold,
-                          fontSize: 13,
-                        ),
+                    ),
+                    const SizedBox(width: 8),
+                    Text(
+                      '\$${(item.price * item.quantity).toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13,
                       ),
-                    ],
-                  ),
-                );
+                    ),
+                  ],
+                ),
+              );
             }),
             const Divider(height: 24),
             // Order Total

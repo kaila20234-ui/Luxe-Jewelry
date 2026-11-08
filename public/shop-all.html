@@ -92,35 +92,6 @@
       font-size: 2.5rem;
       color: white;
       overflow: hidden;
-      position: relative;
-    }
-
-    .stock-badge {
-      position: absolute;
-      top: 8px;
-      left: 8px;
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      padding: 5px 10px;
-      border: 1px solid rgba(255, 255, 255, 0.65);
-      border-radius: 999px;
-      color: white;
-      font-size: 0.7rem;
-      font-weight: 700;
-      line-height: 1.2;
-      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.22);
-      backdrop-filter: blur(6px);
-      z-index: 1;
-    }
-
-    .stock-badge.in-stock {
-      background: linear-gradient(135deg, #d4af37, #b6912e);
-      color: #252525;
-    }
-
-    .stock-badge.out-of-stock {
-      background: #dc3545;
     }
 
     .product-image img {
@@ -158,40 +129,6 @@
       color: var(--primary);
       font-weight: 700;
       margin-bottom: 8px;
-    }
-
-    .shop-qty-control {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      margin-top: 6px;
-    }
-
-    .shop-qty-control button {
-      width: 30px;
-      height: 30px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: var(--card-bg);
-      color: var(--secondary);
-      cursor: pointer;
-      font-size: 1rem;
-    }
-
-    .shop-qty-control button:disabled {
-      cursor: not-allowed;
-      opacity: 0.5;
-    }
-
-    .shop-qty-control input {
-      width: 48px;
-      height: 30px;
-      border: 1px solid var(--border);
-      border-radius: 4px;
-      background: var(--card-bg);
-      color: var(--secondary);
-      text-align: center;
     }
 
     .add-to-cart-btn {
@@ -311,32 +248,17 @@
       }
 
       products.forEach(product => {
-        const stockValue = Number(product.stock);
-        const stock =
-          product.stock == null || product.stock === "" || !Number.isFinite(stockValue)
-            ? 1
-            : Math.max(0, Math.floor(stockValue));
-        const isAvailable = product.available !== false && stock > 0;
         const card = document.createElement('div');
-        card.className = `product-card${isAvailable ? '' : ' unavailable'}`;
+        card.className = 'product-card';
         card.innerHTML = `
           <div class="product-image" style="background: linear-gradient(135deg, #d4af37, #b6912e); display: flex; align-items: center; justify-content: center;">
-            <div class="stock-badge ${isAvailable ? 'in-stock' : 'out-of-stock'}" role="status">
-              <i class="fas ${isAvailable ? 'fa-check-circle' : 'fa-circle-xmark'}"></i>
-              ${isAvailable ? `Available · ${stock}` : 'Out of Stock'}
-            </div>
             ${product.image ? `<img src="${product.image}" alt="${product.name}" style="width: 100%; height: 100%; object-fit: cover;" />` : '<i class="fas fa-gem" style="font-size: 3rem; color: white;"></i>'}
           </div>
           <div class="product-info">
             <div class="product-name">${product.name}</div>
             <div style="color: #d4af37; font-weight: 600; margin-bottom: 5px; font-size: 0.9rem;">${product.category || 'Jewelry'}</div>
-            <div class="product-price">₦${Number(product.price).toLocaleString('en-US')}</div>
-            <div class="shop-qty-control" aria-label="Quantity">
-              <button type="button" class="quantity-change" data-product-id="${product._id}" data-change="-1" aria-label="Decrease quantity" ${isAvailable ? '' : 'disabled'}>−</button>
-              <input type="number" class="qty-${product._id}" value="1" min="1" max="${stock}" readonly aria-label="Quantity for ${product.name}" />
-              <button type="button" class="quantity-change" data-product-id="${product._id}" data-change="1" aria-label="Increase quantity" ${isAvailable ? '' : 'disabled'}>+</button>
-            </div>
-            <button class="add-to-cart-btn" data-product-id="${product._id}" ${isAvailable ? '' : 'disabled'} style="width: 100%; margin-top: 10px; padding: 8px 12px; background: #d4af37; color: #333; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background 0.3s;">
+            <div class="product-price">₦${(product.price * 100000).toLocaleString('en-US')}</div>
+            <button class="add-to-cart-btn" data-product-id="${product._id}" style="width: 100%; margin-top: 10px; padding: 8px 12px; background: #d4af37; color: #333; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; transition: background 0.3s;">
               <i class="fas fa-shopping-bag"></i> Add to Cart
             </button>
           </div>
@@ -350,26 +272,6 @@
       // Check if listener already exists to prevent duplicates
       if (!gridElement._cartListenerAttached) {
         gridElement.addEventListener('click', async (e) => {
-          const quantityButton = e.target.closest('.quantity-change');
-          if (quantityButton) {
-            const productId = quantityButton.getAttribute('data-product-id');
-            const quantityInput = gridElement.querySelector(`.qty-${productId}`);
-            if (quantityInput) {
-              const currentQuantity = Number.parseInt(quantityInput.value, 10) || 1;
-              const change = Number.parseInt(quantityButton.getAttribute('data-change'), 10);
-              const product = allProducts.find(item => String(item._id) === String(productId));
-              const stockValue = Number(product?.stock);
-              const stock =
-                product?.stock == null ||
-                product.stock === "" ||
-                !Number.isFinite(stockValue)
-                  ? 1
-                  : Math.max(0, Math.floor(stockValue));
-              quantityInput.value = Math.min(stock, Math.max(1, currentQuantity + change));
-            }
-            return;
-          }
-
           const btn = e.target.closest('.add-to-cart-btn');
           if (!btn) return;
 
@@ -381,13 +283,11 @@
             return;
           }
 
-          const quantityInput = gridElement.querySelector(`.qty-${productId}`);
-          const quantity = Math.max(1, Number.parseInt(quantityInput?.value, 10) || 1);
           btn.disabled = true;
           btn.innerHTML = 'Adding...';
 
           try {
-            await CartManager.addToCart(product, quantity);
+            await CartManager.addToCart(product, 1);
             showToast('✓ Added to Cart');
             btn.innerHTML = '✓ Added to Cart';
             btn.style.background = '#d4af37';
@@ -395,7 +295,6 @@
               btn.disabled = false;
               btn.innerHTML = '<i class="fas fa-shopping-bag"></i> Add to Cart';
               btn.style.background = '';
-              if (quantityInput) quantityInput.value = '1';
             }, 1500);
           } catch (error) {
             console.error('Error adding to cart:', error);

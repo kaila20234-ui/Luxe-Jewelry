@@ -46,7 +46,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                 'limit': '10',
               },
             ),
-        headers: {'Content-Type': 'application/json'},
+            headers: {'Content-Type': 'application/json'},
           )
           .timeout(const Duration(seconds: 60));
 
@@ -72,7 +72,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
 
   Future<void> addToCart() async {
     if (isAddingToCart) return;
-    
+
     setState(() {
       isAddingToCart = true;
     });
@@ -99,20 +99,20 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
       final response = await http
           .post(
             ApiConfig.uri('customer/cart'),
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $token',
-        },
-        body: jsonEncode({
-          'id': widget.product.id,
-          'name': widget.product.name,
-          'price': widget.product.price,
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': 'Bearer $token',
+            },
+            body: jsonEncode({
+              'id': widget.product.id,
+              'name': widget.product.name,
+              'price': widget.product.price,
               'image': widget.product.images.isNotEmpty
                   ? widget.product.images[0]
                   : '',
-          'category': widget.product.category,
-          'qty': 1,
-        }),
+              'category': widget.product.category,
+              'qty': 1,
+            }),
           )
           .timeout(const Duration(seconds: 60));
 
@@ -382,8 +382,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                         isAddingToCart
                             ? 'Adding...'
                             : isOutOfStock
-                                ? 'Out of Stock'
-                                : 'Add to Cart',
+                            ? 'Out of Stock'
+                            : 'Add to Cart',
                         style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
@@ -480,7 +480,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                         error,
                                                         stackTrace,
                                                       ) {
-                                                    return Container(
+                                                        return Container(
                                                           color:
                                                               const Color.fromRGBO(
                                                                 212,
@@ -488,15 +488,15 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                                                                 55,
                                                                 0.1,
                                                               ),
-                                                      child: const Icon(
-                                                        Icons.diamond,
-                                                        size: 30,
-                                                        color: Color(
+                                                          child: const Icon(
+                                                            Icons.diamond,
+                                                            size: 30,
+                                                            color: Color(
                                                               0xFFd4af37,
                                                             ),
-                                                      ),
-                                                    );
-                                                  },
+                                                          ),
+                                                        );
+                                                      },
                                                 )
                                               : Container(
                                                   color: const Color.fromRGBO(

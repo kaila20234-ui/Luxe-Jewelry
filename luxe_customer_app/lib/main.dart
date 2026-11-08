@@ -65,9 +65,7 @@ class _AuthWrapperState extends State<AuthWrapper> {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const Scaffold(
             body: Center(
-              child: CircularProgressIndicator(
-                color: Color(0xFFd4af37),
-              ),
+              child: CircularProgressIndicator(color: Color(0xFFd4af37)),
             ),
           );
         }
@@ -112,26 +110,17 @@ class _HomeScreenState extends State<HomeScreen> {
             : Colors.white,
         type: BottomNavigationBarType.fixed,
         items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.shop),
-            label: 'Shop',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.shop), label: 'Shop'),
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Cart',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.receipt),
-            label: 'Orders',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.receipt), label: 'Orders'),
           BottomNavigationBarItem(
             icon: Icon(Icons.favorite),
             label: 'Wishlist',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
         onTap: (index) {
           setState(() {

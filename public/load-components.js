@@ -49,24 +49,6 @@ async function loadHeader() {
 
 async function loadFooter() {
   try {
-    // Check if this page should NOT have a footer
-    const currentPath = window.location.pathname;
-    const pagesWithoutFooter = [
-      '/customer-profile-settings.html',
-      '/customer-dashboard.html',
-      '/checkout.html',
-      '/admin',
-      '/admin-',
-      '/customer-profile'
-    ];
-    
-    // Skip footer loading for certain pages
-    const shouldSkipFooter = pagesWithoutFooter.some(path => currentPath.includes(path));
-    if (shouldSkipFooter) {
-      console.log('[LOAD FOOTER] Page ' + currentPath + ' should not have footer - skipping');
-      return;
-    }
-    
     // Avoid inserting duplicate footer if one already exists
     if (document.querySelector('footer')) {
       console.log('[LOAD FOOTER] Footer already present in DOM — skipping insertion');
@@ -90,15 +72,6 @@ async function loadFooter() {
 
 function initializeHeader() {
   console.log("[INIT HEADER] Initializing header...");
-  
-  // Guard: Only attach delegated listeners once
-  if (window._cartDelegatedListenerAttached) {
-    console.log("[INIT HEADER] Delegated listener already attached, skipping...");
-    updateCartCount();
-    updateHeaderAuthState();
-    return;
-  }
-  window._cartDelegatedListenerAttached = true;
   
   // Toggle cart
   const cartToggle = document.getElementById("cartToggle");
@@ -133,50 +106,6 @@ function initializeHeader() {
     });
   }
 
-  // Logout button handler
-  const logoutBtn = document.getElementById("logoutBtn");
-  console.log("[INIT HEADER] logoutBtn element found:", !!logoutBtn);
-  
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", function (e) {
-      e.preventDefault();
-      console.log("[INIT HEADER] Logout clicked!");
-      
-      if (confirm("Are you sure you want to logout?")) {
-        // Clear authentication data
-        localStorage.removeItem("authToken");
-        localStorage.removeItem("user");
-        localStorage.removeItem("authRole");
-        console.log("[INIT HEADER] Auth data cleared from localStorage");
-        
-        // Redirect to home or login page
-        window.location.href = "/customer-login.html";
-      }
-    });
-  }
-
-  // Profile dropdown toggle
-  const profileToggle = document.getElementById("profileToggle");
-  const dropdownMenu = document.getElementById("dropdownMenu");
-  const profileDropdown = document.getElementById("profileDropdown");
-
-  if (profileToggle && dropdownMenu) {
-    profileToggle.addEventListener("click", function (e) {
-      e.preventDefault();
-      dropdownMenu.classList.toggle("active");
-    });
-  }
-
-  document.addEventListener("click", function (e) {
-    if (
-      dropdownMenu &&
-      profileDropdown &&
-      !profileDropdown.contains(e.target)
-    ) {
-      dropdownMenu.classList.remove("active");
-    }
-  });
-
   // Dark mode toggle
   const darkToggle = document.getElementById("darkToggle");
   if (darkToggle) {
@@ -207,7 +136,6 @@ function initializeHeader() {
 
   // Update cart count
   updateCartCount();
-  updateHeaderAuthState();
   
   // Listen for cart updates from CartManager (on both window and document for compatibility)
   window.addEventListener('cartUpdated', function() {
@@ -233,109 +161,6 @@ function initializeHeader() {
       renderCart();
     }
   });
-
-  // Delegated click handler for cart actions (robust against dynamic content)
-  document.addEventListener('click', function cartActionDelegate(e) {
-    try {
-      const dec = e.target.closest('.qty-decrease');
-      const inc = e.target.closest('.qty-increase');
-      const rem = e.target.closest('.remove-item');
-      const checkout = e.target.closest('.btn-checkout');
-      const cont = e.target.closest('.btn-continue');
-
-      if (dec) {
-        console.log("[CART DELEGATE] Decrease button clicked");
-        const id = dec.dataset.id;
-        const newQty = parseInt(dec.dataset.newqty, 10);
-        console.log("[CART DELEGATE] id:", id, "newQty:", newQty);
-        if (id && !isNaN(newQty)) {
-          updateCartQty(id, newQty);
-        }
-        return;
-      }
-
-      if (inc) {
-        console.log("[CART DELEGATE] Increase button clicked");
-        const id = inc.dataset.id;
-        const newQty = parseInt(inc.dataset.newqty, 10);
-        console.log("[CART DELEGATE] id:", id, "newQty:", newQty);
-        if (id && !isNaN(newQty)) {
-          updateCartQty(id, newQty);
-        }
-        return;
-      }
-
-      if (rem) {
-        console.log("[CART DELEGATE] Remove button clicked");
-        const id = rem.dataset.id;
-        console.log("[CART DELEGATE] id:", id);
-        if (id) {
-          removeFromCart(id);
-        }
-        return;
-      }
-
-      if (checkout) {
-        console.log("[CART DELEGATE] Checkout button clicked!");
-        e.preventDefault();
-        e.stopPropagation();
-        window.location.href = '/checkout.html';
-        return;
-      }
-
-      if (cont) {
-        console.log("[CART DELEGATE] Continue Shopping button clicked!");
-        e.preventDefault();
-        e.stopPropagation();
-        const panel = document.getElementById('cartPanel') || document.querySelector('.cart-panel');
-        if (panel) {
-          panel.classList.remove('active');
-          console.log("[CART DELEGATE] Cart panel closed");
-        }
-        return;
-      }
-    } catch (err) {
-      console.error("[CART DELEGATE] Error in delegated handler:", err);
-    }
-  }, { capture: false });
-  console.log("[INIT HEADER] ✅ Delegated event listener attached to document");
-}
-
-function updateHeaderAuthState() {
-  const authToken = localStorage.getItem("authToken");
-  const user = JSON.parse(localStorage.getItem("user") || "{}");
-  const authGroup = document.getElementById("authGroup");
-  const loginBtn = document.getElementById("loginBtn");
-  const loginBtnText = document.getElementById("loginBtnText");
-  const profileDropdown = document.getElementById("profileDropdown");
-  const userNameDisplay = document.getElementById("userNameDisplay");
-
-  const isAuthenticated = !!authToken && user && user.email;
-
-  if (authGroup) {
-    authGroup.style.display = isAuthenticated ? "none" : "flex";
-  }
-
-  if (loginBtn) {
-    loginBtn.style.display = isAuthenticated ? "none" : "inline-flex";
-    loginBtn.href = isAuthenticated ? "/customer-dashboard.html" : "/customer-login.html";
-  }
-
-  if (loginBtnText) {
-    loginBtnText.textContent = isAuthenticated
-      ? user.name || "Account"
-      : "Customer Login";
-  }
-
-  if (profileDropdown) {
-    profileDropdown.style.display = isAuthenticated ? "flex" : "none";
-  }
-
-  if (userNameDisplay) {
-    userNameDisplay.textContent = isAuthenticated
-      ? user.name || "User"
-      : "User";
-  }
 }
 
 function initializeFooter() {
@@ -353,20 +178,19 @@ function updateCartCount() {
   const cartCountEl = document.getElementById("cartCount");
   if (!cartCountEl) return;
 
-  if (CartManager.isLoggedIn()) {
-    CartManager.loadFromBackend()
-      .then((cart) => {
-        const count = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-        cartCountEl.textContent = count;
-      })
-      .catch((err) => {
-        console.error('[UPDATE CART COUNT] Failed to load backend cart', err);
-        const cart = CartManager.loadLocalCart();
-        cartCountEl.textContent = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
-      });
+  const authToken = localStorage.getItem("authToken");
+  
+  if (authToken) {
+    // Load from backend if logged in
+    loadCartFromBackend().then(cart => {
+      const count = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+      cartCountEl.textContent = count;
+    });
   } else {
-    const cart = CartManager.loadLocalCart();
-    cartCountEl.textContent = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+    // Load from localStorage if not logged in
+    const cart = JSON.parse(localStorage.getItem("CART_v1") || "[]");
+    const count = cart.reduce((sum, item) => sum + (item.qty || 1), 0);
+    cartCountEl.textContent = count;
   }
 }
 
@@ -586,10 +410,10 @@ function displayCartItems(cart, cartItems, cartEmpty, cartSummary) {
           <div class="cart-item-name">${name}</div>
           <div class="cart-item-price">₦${price.toLocaleString('en-US')}</div>
           <div class="cart-item-controls">
-            <button class="qty-decrease" data-id="${itemId}" data-newqty="${qty - 1}">−</button>
+            <button onclick="updateCartQty('${itemId}', ${qty - 1})">−</button>
             <span style="min-width: 30px; text-align: center;">${qty}</span>
-            <button class="qty-increase" data-id="${itemId}" data-newqty="${qty + 1}">+</button>
-            <button class="remove-item" data-id="${itemId}"><i class="fas fa-trash"></i></button>
+            <button onclick="updateCartQty('${itemId}', ${qty + 1})">+</button>
+            <button onclick="removeFromCart('${itemId}')"><i class="fas fa-trash"></i></button>
           </div>
         </div>
       </li>
@@ -599,7 +423,6 @@ function displayCartItems(cart, cartItems, cartEmpty, cartSummary) {
   console.log("[DISPLAY CART] 📝 Generated HTML length:", itemsHTML.length);
   cartItems.innerHTML = itemsHTML;
   console.log("[DISPLAY CART] ✅ Items HTML set into DOM");
-  console.log("[DISPLAY CART] ✅ Delegated listeners will handle all cart button clicks");
 
   // Update total
   const total = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 1)), 0);
@@ -622,25 +445,83 @@ function updateCartQty(productId, newQty) {
     return;
   }
 
-  CartManager.updateQuantity(productId, newQty).then((ok) => {
-    if (ok) {
+  const authToken = localStorage.getItem("authToken");
+  
+  if (authToken) {
+    // Update on backend
+    updateCartQtyBackend(productId, newQty);
+  } else {
+    // Update locally
+    const cart = JSON.parse(localStorage.getItem("CART_v1") || "[]");
+    const item = cart.find(i => i._id === productId || i.id === productId);
+    
+    if (item) {
+      item.qty = newQty;
+      localStorage.setItem("CART_v1", JSON.stringify(cart));
       updateCartCount();
       renderCart();
-    } else {
-      console.error('[CART] CartManager.updateQuantity failed for', productId, newQty);
     }
-  });
+  }
+}
+
+async function updateCartQtyBackend(productId, qty) {
+  try {
+    const authToken = localStorage.getItem("authToken");
+    const response = await fetch("/api/customer/cart", {
+      method: "PUT",
+      headers: {
+        "Authorization": `Bearer ${authToken}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        id: productId,
+        qty: qty
+      })
+    });
+
+    if (response.ok) {
+      updateCartCount();
+      renderCart();
+    }
+  } catch (error) {
+    console.error("[CART] Error updating quantity on backend:", error);
+  }
 }
 
 function removeFromCart(productId) {
-  CartManager.removeItem(productId).then((ok) => {
-    if (ok) {
+  const authToken = localStorage.getItem("authToken");
+  
+  if (authToken) {
+    // Remove from backend
+    removeFromCartBackend(productId);
+  } else {
+    // Remove locally
+    const cart = JSON.parse(localStorage.getItem("CART_v1") || "[]");
+    const filtered = cart.filter(i => i._id !== productId && i.id !== productId);
+    localStorage.setItem("CART_v1", JSON.stringify(filtered));
+    updateCartCount();
+    renderCart();
+  }
+}
+
+async function removeFromCartBackend(productId) {
+  try {
+    const authToken = localStorage.getItem("authToken");
+    const response = await fetch(`/api/customer/cart/${productId}`, {
+      method: "DELETE",
+      headers: {
+        "Authorization": `Bearer ${authToken}`,
+        "Content-Type": "application/json"
+      }
+    });
+
+    if (response.ok) {
       updateCartCount();
       renderCart();
-    } else {
-      console.error('[CART] CartManager.removeItem failed for', productId);
     }
-  });
+  } catch (error) {
+    console.error("[CART] Error removing from backend:", error);
+  }
 }
 
 // Listen for cart updates

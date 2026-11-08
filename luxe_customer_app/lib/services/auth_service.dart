@@ -7,7 +7,7 @@ import 'api_config.dart';
 class AuthResponse {
   final bool success;
   final String? message;
-  
+
   AuthResponse({required this.success, this.message});
 }
 
@@ -48,7 +48,7 @@ class AuthService {
       final response = await http
           .post(
             ApiConfig.uri('auth/login'),
-        headers: {'Content-Type': 'application/json'},
+            headers: {'Content-Type': 'application/json'},
             body: jsonEncode({'email': email, 'password': password}),
           )
           .timeout(
@@ -122,12 +122,12 @@ class AuthService {
       final response = await http
           .post(
             ApiConfig.uri('auth/register'),
-        headers: {'Content-Type': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-          'password': password,
-          'name': name,
-        }),
+            headers: {'Content-Type': 'application/json'},
+            body: jsonEncode({
+              'email': email,
+              'password': password,
+              'name': name,
+            }),
           )
           .timeout(const Duration(seconds: 60));
 

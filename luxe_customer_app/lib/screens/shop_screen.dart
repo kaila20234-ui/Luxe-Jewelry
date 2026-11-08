@@ -26,7 +26,7 @@ class _ShopScreenState extends State<ShopScreen> {
       final response = await http
           .get(
             ApiConfig.uri('products', queryParameters: {'limit': '100'}),
-        headers: {'Content-Type': 'application/json'},
+            headers: {'Content-Type': 'application/json'},
           )
           .timeout(const Duration(seconds: 60));
 

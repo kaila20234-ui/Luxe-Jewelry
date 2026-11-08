@@ -11,6 +11,7 @@
     { title: 'Messages', icon: 'fas fa-envelope', href: '/admin.html#messages', page: 'admin.html', section: 'messages' },
     { title: 'Complaints', icon: 'fas fa-exclamation-circle', href: '/admin.html#complaints', page: 'admin.html', section: 'complaints' },
     { title: 'Top Customers', icon: 'fas fa-star', href: '/admin.html#top-customers', page: 'admin.html', section: 'top-customers' },
+    { title: 'Subscribers', icon: 'fas fa-envelope-open-text', href: '/admin.html#subscribers', page: 'admin.html', section: 'subscribers' },
     { title: 'Status Level Settings', icon: 'fas fa-sliders-h', href: '/admin.html#status-levels', page: 'admin.html', section: 'status-levels' },
     { title: 'Sales Report', icon: 'fas fa-chart-bar', href: '/admin.html#sales', page: 'admin.html', section: 'sales' },
     { title: 'Address Cards', icon: 'fas fa-map-location-dot', href: '/admin.html#address-cards', page: 'admin.html', section: 'address-cards' },
@@ -32,11 +33,7 @@
       },
       {
         title: 'Admin',
-        items: sidebarItems.slice(11, 15)
-      },
-      {
-        title: 'Marketing',
-        items: sidebarItems.slice(15, 16)
+        items: sidebarItems.slice(11, 16)
       },
       {
         title: 'System',
