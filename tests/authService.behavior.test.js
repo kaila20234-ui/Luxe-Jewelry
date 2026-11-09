@@ -121,6 +121,13 @@ describe('Auth service behavior', () => {
     const payload = jwt.decode(token);
     expect(payload).toMatchObject({ username: 'user@example.com', role: 'manager' });
     expect(payload.exp - payload.iat).toBe(6 * 60 * 60);
+
+    const userToken = authService.generateToken('admin@example.com', 'admin', 'user-id');
+    expect(jwt.decode(userToken)).toMatchObject({
+      username: 'admin@example.com',
+      role: 'admin',
+      userId: 'user-id'
+    });
   });
 
   it('authenticates an admin from environment credentials or the database', async () => {

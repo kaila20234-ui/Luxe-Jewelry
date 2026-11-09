@@ -126,9 +126,9 @@ async function getSingleManagerFromDB() {
  * @param {string} role - User role
  * @returns {string} JWT token
  */
-function generateToken(username, role) {
+function generateToken(username, role, userId) {
   return jwt.sign(
-    { username, role },
+    { username, role, ...(userId ? { userId: String(userId) } : {}) },
     JWT_SECRET,
     { expiresIn: '6h' }
   );
@@ -152,8 +152,8 @@ async function authenticateAdmin(email, password) {
       // Map to DB admin if only one exists
       const dbAdmin = await getSingleAdminFromDB();
       const tokenUsername = dbAdmin ? dbAdmin.email : adminUser;
-      const token = generateToken(tokenUsername, 'admin');
-      return { success: true, token };
+      const token = generateToken(tokenUsername, 'admin', dbAdmin?._id);
+      return { success: true, token, name: dbAdmin?.name };
     }
 
     // Fall back to DB lookup
@@ -167,8 +167,8 @@ async function authenticateAdmin(email, password) {
       return { success: false, message: 'Invalid admin credentials or admin not configured' };
     }
 
-    const token = generateToken(dbUser.email, 'admin');
-    return { success: true, token };
+    const token = generateToken(dbUser.email, 'admin', dbUser._id);
+    return { success: true, token, name: dbUser.name };
   } catch (err) {
     console.error('Admin auth error:', err.message);
     return { success: false, message: 'Server error' };
@@ -193,8 +193,8 @@ async function authenticateManager(email, password) {
       // Map to DB manager if only one exists
       const dbManager = await getSingleManagerFromDB();
       const tokenUsername = dbManager ? dbManager.email : managerUser;
-      const token = generateToken(tokenUsername, 'manager');
-      return { success: true, token };
+      const token = generateToken(tokenUsername, 'manager', dbManager?._id);
+      return { success: true, token, name: dbManager?.name };
     }
 
     // Fall back to DB lookup
@@ -208,8 +208,8 @@ async function authenticateManager(email, password) {
       return { success: false, message: 'Invalid manager credentials' };
     }
 
-    const token = generateToken(dbUser.email, 'manager');
-    return { success: true, token };
+    const token = generateToken(dbUser.email, 'manager', dbUser._id);
+    return { success: true, token, name: dbUser.name };
   } catch (err) {
     console.error('Manager auth error:', err.message);
     return { success: false, message: 'Server error' };

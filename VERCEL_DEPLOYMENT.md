@@ -18,8 +18,6 @@ dependencies from `package-lock.json` and detects `server.js` automatically.
 ## Required environment variables
 
 - `JWT_SECRET`: a private, random secret of at least 32 characters.
-- `ADMIN_PASS_HASH`: bcrypt hash for the manager account. Production startup
-  exits if this is missing.
 - `MONGO_URI`: connection string for a remotely hosted MongoDB database
   (for example, MongoDB Atlas). A local `127.0.0.1` database is not accessible
   from Vercel.
@@ -33,6 +31,9 @@ Set these additional variables for the corresponding features:
   For Gmail, use an app password, not your normal account password.
 - Site admin login: `SITE_ADMIN_USER` and `SITE_ADMIN_PASS_HASH` (or the
   supported `ADMIN2_USER` / `ADMIN2_PASS_HASH` alternatives).
+- Manager environment login: `ADMIN_USER` and `ADMIN_PASS_HASH` (or
+  `ADMIN_PASS` for local development). These are optional when manager accounts
+  are authenticated from MongoDB.
 - Absolute links in emails: `FRONTEND_URL` and `SHOP_URL` set to the deployed
   site URL.
 

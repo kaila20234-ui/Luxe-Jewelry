@@ -14,6 +14,7 @@ const mongoose = require("mongoose");
 const crypto = require("node:crypto");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const authService = require("./services/authService");
 const nodemailer = require("nodemailer");
 const rateLimit = require("express-rate-limit");
 const Joi = require("joi");
@@ -49,19 +50,18 @@ if (!JWT_SECRET || JWT_SECRET === "CHANGE_THIS_SECRET") {
   process.exit(1);
 }
 
-// CRITICAL: Warn if ADMIN_PASS_HASH not set
+// The manager environment credential is optional when authentication is
+// configured through the database or the separate site-admin credentials.
 if (!ADMIN_PASS_HASH) {
   console.warn(
-    "[WARNING] ADMIN_PASS_HASH not configured - admin login will be disabled"
+    "[WARNING] ADMIN_PASS_HASH not configured - manager environment login is disabled"
   );
-  if (process.env.NODE_ENV === "production") {
-    console.error("[FATAL] ADMIN_PASS_HASH required in production environment");
-    process.exit(1);
-  }
 }
 
 console.log("[SECURITY] ✅ JWT_SECRET configured");
-console.log("[SECURITY] ✅ Admin password hash configured");
+if (ADMIN_PASS_HASH) {
+  console.log("[SECURITY] ✅ Manager password hash configured");
+}
 
 /* ================== MIDDLEWARE & CORS ================== */
 // tighten CORS for production if FRONTEND_ORIGIN provided
@@ -2481,21 +2481,8 @@ app.post(
 app.post("/api/staff-login", authLimiter, async (req, res) => {
   try {
     const { email, password, role } = req.body;
-    console.log("[STAFF-LOGIN] Request received:", {
-      email,
-      password: "***",
-      role,
-    });
 
     if (!email || !password || !role) {
-      console.log(
-        "[STAFF-LOGIN] Missing fields - email:",
-        !!email,
-        "password:",
-        !!password,
-        "role:",
-        !!role
-      );
       return res
         .status(400)
         .json({
@@ -2505,76 +2492,18 @@ app.post("/api/staff-login", authLimiter, async (req, res) => {
     }
 
     if (!["admin", "manager"].includes(role)) {
-      console.log("[STAFF-LOGIN] Invalid role:", role);
       return res.status(400).json({ success: false, message: "Invalid role" });
     }
 
-    // Find user by email with password field
-    console.log("[STAFF-LOGIN] Looking up user with email:", email);
-    const user = await User.findOne({ email }).select("+password");
-    console.log(
-      "[STAFF-LOGIN] User lookup result:",
-      user ? `Found user ${user._id}` : "User not found"
-    );
-
-    if (!user) {
-      console.log("[STAFF-LOGIN] REJECT - User not found for email:", email);
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid credentials" });
+    const result = await authService.authenticate(email, password, role);
+    if (!result.success) {
+      const status = result.message === "Server error" ? 500 : 401;
+      return res.status(status).json(result);
     }
 
-    console.log(
-      "[STAFF-LOGIN] User role:",
-      user.role,
-      "Requested role:",
-      role,
-      "Match:",
-      user.role === role
-    );
-
-    // Check role matches
-    if (user.role !== role) {
-      console.log(
-        "[STAFF-LOGIN] REJECT - Role mismatch. User role:",
-        user.role,
-        "Requested:",
-        role
-      );
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid role for this account" });
-    }
-
-    // Compare password
-    console.log(
-      "[STAFF-LOGIN] Comparing passwords. Hash exists:",
-      !!user.password,
-      "Hash length:",
-      user.password ? user.password.length : 0
-    );
-    const passwordMatch = await bcrypt.compare(password, user.password);
-    console.log("[STAFF-LOGIN] Password match result:", passwordMatch);
-
-    if (!passwordMatch) {
-      console.log("[STAFF-LOGIN] REJECT - Password mismatch");
-      return res
-        .status(401)
-        .json({ success: false, message: "Invalid credentials" });
-    }
-
-    // Generate token
-    console.log("[STAFF-LOGIN] SUCCESS - Generating token");
-    const token = jwt.sign(
-      { username: user.email, role: user.role, userId: user._id.toString() },
-      JWT_SECRET,
-      { expiresIn: "6h" }
-    );
-
-    console.log("[STAFF-LOGIN] Token generated successfully");
-    return res.json({ success: true, token, role: user.role, name: user.name });
+    return res.json({ ...result, role });
   } catch (err) {
-    console.error("[STAFF-LOGIN] Error:", err.message, err.stack);
+    console.error("[STAFF-LOGIN] Authentication failed:", err.message);
     return res.status(500).json({ success: false, message: "Server error" });
   }
 });
