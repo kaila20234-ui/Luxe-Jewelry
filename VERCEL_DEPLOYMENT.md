@@ -20,7 +20,8 @@ dependencies from `package-lock.json` and detects `server.js` automatically.
 - `JWT_SECRET`: a private, random secret of at least 32 characters.
 - `MONGO_URI`: connection string for a remotely hosted MongoDB database
   (for example, MongoDB Atlas). A local `127.0.0.1` database is not accessible
-  from Vercel.
+  from Vercel. Confirm your MongoDB provider allows connections from Vercel and
+  that the database user has read/write access.
 
 Set these additional variables for the corresponding features:
 
@@ -30,7 +31,9 @@ Set these additional variables for the corresponding features:
   with implicit TLS or `587` with STARTTLS; Vercel blocks outbound port `25`.
   For Gmail, use an app password, not your normal account password.
 - Site admin login: `SITE_ADMIN_USER` and `SITE_ADMIN_PASS_HASH` (or the
-  supported `ADMIN2_USER` / `ADMIN2_PASS_HASH` alternatives).
+  supported `ADMIN2_USER` / `ADMIN2_PASS_HASH` alternatives). When the configured
+  user is a short username such as `admin`, the admin login accepts an email
+  whose local part matches that username.
 - Manager environment login: `ADMIN_USER` and `ADMIN_PASS_HASH` (or
   `ADMIN_PASS` for local development). These are optional when manager accounts
   are authenticated from MongoDB.
@@ -38,6 +41,12 @@ Set these additional variables for the corresponding features:
   site URL.
 
 Do not put secrets in source control or expose secret keys in frontend code.
+Customer registration, customer login, and database-backed admin login require
+MongoDB. Check `/api/health` after deployment; it returns `503` when the
+database is not configured or cannot be reached. The server waits for the
+database connection before handling database-backed API requests and responds
+with `503` rather than a misleading registration or credential error when the
+database is unavailable.
 After changing Vercel environment variables, redeploy so the function receives
 the updated values. Check the function logs for `[SMTP]` errors and confirm the
 newsletter subscriber is saved separately from welcome-email delivery.

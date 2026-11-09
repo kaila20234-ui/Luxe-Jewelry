@@ -24,7 +24,8 @@ const app = express();
 /* ================== CONFIG ================== */
 const PORT = process.env.PORT || 5000;
 const MONGO_URI =
-  process.env.MONGO_URI || "mongodb://127.0.0.1:27017/luxe_jewelry";
+  process.env.MONGO_URI ||
+  (process.env.VERCEL ? "" : "mongodb://127.0.0.1:27017/luxe_jewelry");
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || "";
 const EMAIL_USER = (process.env.EMAIL_USER || process.env.SMTP_USER || "").trim();
 const EMAIL_PASS = (process.env.EMAIL_PASS || process.env.SMTP_PASS || "").replace(/\s+/g, "");
@@ -182,6 +183,39 @@ app.get("/api/csrf-token", csrfMiddleware, (req, res) => {
   }
 });
 
+app.use("/api", async (req, res, next) => {
+  const requestPath = req.originalUrl.split("?")[0];
+  if (requestPath === "/api/health" || requestPath === "/api/csrf-token") {
+    return next();
+  }
+
+  try {
+    if (
+      requestPath === "/api/staff-login" &&
+      await authService.validateStaffEnvironmentCredentials(
+        req.body?.email,
+        req.body?.password,
+        req.body?.role
+      )
+    ) {
+      return next();
+    }
+
+    await ensureMongoConnection();
+    return next();
+  } catch (error_) {
+    console.error("[DB] API request unavailable:", {
+      path: requestPath,
+      code: error_.code,
+      message: error_.message,
+    });
+    return res.status(503).json({
+      success: false,
+      message: "Database unavailable. Please try again later.",
+    });
+  }
+});
+
 console.log("[SECURITY] ✅ Compression enabled");
 console.log("[SECURITY] ✅ Security headers (Helmet) enabled");
 console.log("[SECURITY] ✅ Payload size limits set to 10MB");
@@ -284,10 +318,35 @@ const validateRequest = (schema) => (req, res, next) => {
 console.log("[SECURITY] ✅ Input validation schemas loaded");
 
 /* ================== DB CONNECT ================== */
-mongoose
-  .connect(MONGO_URI)
-  .then(() => console.log("[DB] MongoDB Connected Successfully"))
-  .catch((error_) => console.error("[DB ERROR] MongoDB Connection Error:", error_.message));
+let mongoConnectionPromise;
+
+async function ensureMongoConnection() {
+  if (mongoose.connection.readyState === 1) {
+    return;
+  }
+
+  if (!MONGO_URI) {
+    throw new Error("MONGO_URI is not configured");
+  }
+
+  if (!mongoConnectionPromise || mongoose.connection.readyState === 0) {
+    mongoConnectionPromise = mongoose
+      .connect(MONGO_URI, {
+        serverSelectionTimeoutMS: 8000,
+        connectTimeoutMS: 8000,
+        maxPoolSize: 10,
+      })
+      .then(() => {
+        console.log("[DB] MongoDB Connected Successfully");
+      })
+      .catch((error_) => {
+        mongoConnectionPromise = null;
+        throw error_;
+      });
+  }
+
+  await mongoConnectionPromise;
+}
 
 /* ================== MODELS ================== */
 // Import User model
@@ -3168,8 +3227,29 @@ const cachedProductsRoutes = require("./routes/cached-products");
 const adminReferralsRoutes = require('./routes/admin-referrals');
 
 // Health check endpoint for mobile app
-app.get("/api/health", (req, res) => {
-  res.json({ success: true, message: "Server is running", port: PORT, timestamp: new Date().toISOString() });
+app.get("/api/health", async (req, res) => {
+  try {
+    await ensureMongoConnection();
+    return res.json({
+      success: true,
+      message: "Server is running",
+      database: "connected",
+      port: PORT,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error_) {
+    console.error("[DB] Health check failed:", {
+      code: error_.code,
+      message: error_.message,
+    });
+    return res.status(503).json({
+      success: false,
+      message: "Database unavailable",
+      database: "disconnected",
+      port: PORT,
+      timestamp: new Date().toISOString(),
+    });
+  }
 });
 
 app.use("/api/auth", authRoutes);

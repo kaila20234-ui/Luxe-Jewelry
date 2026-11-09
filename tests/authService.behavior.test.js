@@ -2,12 +2,17 @@ jest.mock('bcrypt', () => ({
   compare: jest.fn()
 }));
 
+jest.mock('mongoose', () => ({
+  connection: { readyState: 1 }
+}));
+
 jest.mock('../model/user', () => ({
   findOne: jest.fn(),
   find: jest.fn()
 }));
 
 const bcrypt = require('bcrypt');
+const mongoose = require('mongoose');
 const User = require('../model/user');
 const authService = require('../services/authService');
 
@@ -26,6 +31,7 @@ describe('Auth service behavior', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    mongoose.connection.readyState = 1;
     for (const key of envKeys) delete process.env[key];
     jest.spyOn(console, 'warn').mockImplementation(() => {});
     jest.spyOn(console, 'error').mockImplementation(() => {});
@@ -62,6 +68,28 @@ describe('Auth service behavior', () => {
     await expect(
       authService.validateEnvCredentials('admin', 'pw', 'admin', 'bad-hash', 'pw')
     ).resolves.toBe(false);
+
+    process.env.SITE_ADMIN_USER = ' Admin@Example.com ';
+    process.env.SITE_ADMIN_PASS = 'secret';
+    await expect(
+      authService.validateStaffEnvironmentCredentials(
+        'admin@example.com',
+        'secret',
+        'admin'
+      )
+    ).resolves.toBe(true);
+
+    process.env.SITE_ADMIN_USER = 'admin';
+    await expect(
+      authService.validateStaffEnvironmentCredentials(
+        'admin@luxejewelry.com',
+        'secret',
+        'admin'
+      )
+    ).resolves.toBe(true);
+    await expect(
+      authService.validateStaffEnvironmentCredentials('manager', 'secret', 'manager')
+    ).resolves.toBe(false);
   });
 
   it('looks up normalized email and username aliases and handles lookup errors', async () => {
@@ -77,7 +105,9 @@ describe('Auth service behavior', () => {
     User.findOne.mockImplementationOnce(() => {
       throw new Error('database unavailable');
     });
-    await expect(authService.findUserByEmail('admin@example.com')).resolves.toBeNull();
+    await expect(authService.findUserByEmail('admin@example.com')).rejects.toThrow(
+      'database unavailable'
+    );
   });
 
   it('validates database users and rejects missing, wrong-role, and passwordless users', async () => {
@@ -133,6 +163,16 @@ describe('Auth service behavior', () => {
   it('authenticates an admin from environment credentials or the database', async () => {
     process.env.SITE_ADMIN_USER = 'admin';
     process.env.SITE_ADMIN_PASS = 'secret';
+    mongoose.connection.readyState = 0;
+    await expect(
+      authService.authenticate('admin@luxejewelry.com', 'secret', 'admin')
+    ).resolves.toMatchObject({
+      success: true,
+      token: expect.any(String)
+    });
+    expect(User.find).not.toHaveBeenCalled();
+
+    mongoose.connection.readyState = 1;
     User.find.mockReturnValueOnce({ limit: jest.fn().mockResolvedValue([]) });
     await expect(authService.authenticate('admin', 'secret', 'admin')).resolves.toMatchObject({
       success: true,

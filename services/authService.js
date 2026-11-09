@@ -6,6 +6,7 @@
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
 const User = require('../model/user');
 
 const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
@@ -21,8 +22,15 @@ const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
  */
 async function validateEnvCredentials(email, password, envUser, envHash, envPlain) {
   try {
-    // Username must match env user exactly
-    if (!envUser || String(email) !== String(envUser)) {
+    const loginIdentifier = String(email || '').trim().toLowerCase();
+    const configuredIdentifier = String(envUser || '').trim().toLowerCase();
+    const matchesConfiguredUser =
+      configuredIdentifier &&
+      (loginIdentifier === configuredIdentifier ||
+        (!configuredIdentifier.includes('@') &&
+          loginIdentifier.split('@')[0] === configuredIdentifier));
+
+    if (!matchesConfiguredUser) {
       return false;
     }
 
@@ -44,28 +52,46 @@ async function validateEnvCredentials(email, password, envUser, envHash, envPlai
   }
 }
 
+async function validateStaffEnvironmentCredentials(email, password, role) {
+  if (role === 'admin') {
+    return validateEnvCredentials(
+      email,
+      password,
+      process.env.SITE_ADMIN_USER || process.env.ADMIN2_USER || '',
+      process.env.SITE_ADMIN_PASS_HASH || process.env.ADMIN2_PASS_HASH || '',
+      process.env.SITE_ADMIN_PASS || process.env.ADMIN2_PASS || ''
+    );
+  }
+
+  if (role === 'manager') {
+    return validateEnvCredentials(
+      email,
+      password,
+      process.env.ADMIN_USER || '',
+      process.env.ADMIN_PASS_HASH || '',
+      process.env.ADMIN_PASS_PLAIN || ''
+    );
+  }
+
+  return false;
+}
+
 /**
  * Find user by email with multiple fallback attempts
  * @param {string} email - Email to search for
  * @returns {Promise<Object|null>} User object or null
  */
 async function findUserByEmail(email) {
-  try {
-    if (!email) return null;
+  if (!email) return null;
 
-    const uname = String(email || '').trim();
-    const tryEmails = [uname, uname.toLowerCase()];
-    
-    if (!uname.includes('@')) {
-      tryEmails.push(`${uname}@example.com`);
-    }
+  const uname = String(email || '').trim();
+  const tryEmails = [uname, uname.toLowerCase()];
 
-    const dbUser = await User.findOne({ email: { $in: tryEmails } }).select('+password');
-    return dbUser;
-  } catch (err) {
-    console.warn('User lookup error:', err.message);
-    return null;
+  if (!uname.includes('@')) {
+    tryEmails.push(`${uname}@example.com`);
   }
+
+  return User.findOne({ email: { $in: tryEmails } }).select('+password');
 }
 
 /**
@@ -98,6 +124,7 @@ async function validateUserCredentials(dbUser, password, requiredRole) {
  */
 async function getSingleAdminFromDB() {
   try {
+    if (mongoose.connection.readyState !== 1) return null;
     const admins = await User.find({ role: 'admin' }).limit(2);
     return admins?.[0] ?? null;
   } catch (err) {
@@ -112,6 +139,7 @@ async function getSingleAdminFromDB() {
  */
 async function getSingleManagerFromDB() {
   try {
+    if (mongoose.connection.readyState !== 1) return null;
     const managers = await User.find({ role: 'manager' }).limit(2);
     return managers?.[0] ?? null;
   } catch (err) {
@@ -144,10 +172,7 @@ async function authenticateAdmin(email, password) {
   try {
     // Try environment credentials first
     const adminUser = process.env.SITE_ADMIN_USER || process.env.ADMIN2_USER || '';
-    const adminHash = process.env.SITE_ADMIN_PASS_HASH || process.env.ADMIN2_PASS_HASH || '';
-    const adminPlain = process.env.SITE_ADMIN_PASS || process.env.ADMIN2_PASS || '';
-
-    const envValid = await validateEnvCredentials(email, password, adminUser, adminHash, adminPlain);
+    const envValid = await validateStaffEnvironmentCredentials(email, password, 'admin');
     if (envValid) {
       // Map to DB admin if only one exists
       const dbAdmin = await getSingleAdminFromDB();
@@ -185,10 +210,7 @@ async function authenticateManager(email, password) {
   try {
     // Try environment credentials first
     const managerUser = process.env.ADMIN_USER || '';
-    const managerHash = process.env.ADMIN_PASS_HASH || '';
-    const managerPlain = process.env.ADMIN_PASS_PLAIN || '';
-
-    const envValid = await validateEnvCredentials(email, password, managerUser, managerHash, managerPlain);
+    const envValid = await validateStaffEnvironmentCredentials(email, password, 'manager');
     if (envValid) {
       // Map to DB manager if only one exists
       const dbManager = await getSingleManagerFromDB();
@@ -244,6 +266,7 @@ async function authenticate(email, password, role) {
 
 module.exports = {
   validateEnvCredentials,
+  validateStaffEnvironmentCredentials,
   findUserByEmail,
   validateUserCredentials,
   getSingleAdminFromDB,
