@@ -50,7 +50,7 @@ jobs:
       - name: Run tests
         run: npm test -- --coverage
         env:
-          MONGODB_URI: mongodb://localhost:27017/siwes-test
+          MONGO_URI: mongodb://localhost:27017/siwes-test
           REDIS_HOST: localhost
           JWT_SECRET: test-secret
       

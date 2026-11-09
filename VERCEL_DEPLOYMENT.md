@@ -28,13 +28,18 @@ Set these additional variables for the corresponding features:
 
 - Payments: `PAYSTACK_SECRET_KEY`
 - Email and OTP: `SMTP_USER`, `SMTP_PASS` (or `EMAIL_USER`, `EMAIL_PASS`);
-  configure `SMTP_HOST` and `SMTP_PORT` if your provider requires them.
+  configure `SMTP_HOST` and `SMTP_PORT` for your mail provider. Use port `465`
+  with implicit TLS or `587` with STARTTLS; Vercel blocks outbound port `25`.
+  For Gmail, use an app password, not your normal account password.
 - Site admin login: `SITE_ADMIN_USER` and `SITE_ADMIN_PASS_HASH` (or the
   supported `ADMIN2_USER` / `ADMIN2_PASS_HASH` alternatives).
 - Absolute links in emails: `FRONTEND_URL` and `SHOP_URL` set to the deployed
   site URL.
 
 Do not put secrets in source control or expose secret keys in frontend code.
+After changing Vercel environment variables, redeploy so the function receives
+the updated values. Check the function logs for `[SMTP]` errors and confirm the
+newsletter subscriber is saved separately from welcome-email delivery.
 
 ## Important limitations
 

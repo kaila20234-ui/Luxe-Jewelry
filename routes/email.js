@@ -5,13 +5,14 @@ const SMTP_HOST = process.env.SMTP_HOST || 'smtp.gmail.com';
 const SMTP_PORT = parseInt(process.env.SMTP_PORT, 10) || 465;
 const SMTP_USER = (process.env.SMTP_USER || process.env.EMAIL_USER || '').trim();
 const SMTP_PASS = (process.env.SMTP_PASS || process.env.EMAIL_PASS || '').replace(/\s+/g, '');
+const SMTP_SECURE = process.env.SMTP_SECURE === 'true' || SMTP_PORT === 465;
 
 // Configure nodemailer transporter
 const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
   port: SMTP_PORT,
-  secure: true,
-  requireTLS: true,
+  secure: SMTP_SECURE,
+  requireTLS: SMTP_PORT === 587 && !SMTP_SECURE,
   authMethod: 'PLAIN',
   connectionTimeout: 30000,
   greetingTimeout: 20000,
@@ -23,7 +24,6 @@ const transporter = nodemailer.createTransport({
   debug: process.env.NODE_ENV !== 'production',
   logger: process.env.NODE_ENV !== 'production',
   tls: {
-    rejectUnauthorized: false,
     minVersion: 'TLSv1.2',
   },
   auth: {

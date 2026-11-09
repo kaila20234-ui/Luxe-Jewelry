@@ -32,6 +32,41 @@ describe('Cache Service Structure', () => {
   });
 });
 
+describe('Cache Service without Redis', () => {
+  const originalClient = cacheService.client;
+  const originalConnectionState = cacheService.isConnected;
+  const clientMethods = ['del', 'flushDb', 'keys', 'exists', 'expire'];
+
+  beforeEach(() => {
+    cacheService.isConnected = false;
+    cacheService.client = Object.fromEntries(
+      clientMethods.map((method) => [method, jest.fn()])
+    );
+  });
+
+  afterEach(() => {
+    cacheService.client = originalClient;
+    cacheService.isConnected = originalConnectionState;
+  });
+
+  it('should fail fast for Redis-only operations when disconnected', async () => {
+    expect(await cacheService.delete('key')).toBe(false);
+    expect(await cacheService.clear()).toBe(false);
+    expect(await cacheService.invalidatePattern('key:*')).toBe(0);
+    expect(await cacheService.exists('key')).toBe(false);
+    expect(await cacheService.setTTL('key', 60)).toBe(false);
+
+    for (const method of clientMethods) {
+      expect(cacheService.client[method]).not.toHaveBeenCalled();
+    }
+  });
+
+  it('should report bulk writes as unsuccessful when Redis is disconnected', async () => {
+    expect(await cacheService.mset({ first: 1, second: 2 })).toBe(false);
+    expect(await cacheService.warmCache({ first: 1 })).toBe(false);
+  });
+});
+
 describe('Session Cache Structure', () => {
   it('should have all required methods', () => {
     expect(typeof sessionCache.storeSession).toBe('function');

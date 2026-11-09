@@ -11,6 +11,13 @@ document.addEventListener("DOMContentLoaded", function () {
     link.href = '/styles.css';
     document.head.appendChild(link);
   }
+
+  if (!document.querySelector('link[href="/newsletter.css"]')) {
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = '/newsletter.css';
+    document.head.appendChild(link);
+  }
   
   loadHeader();
   loadFooter();
@@ -655,7 +662,7 @@ async function handleNewsletterSubscribe(event) {
     // Subscribe each email
     const results = await Promise.all(
       emails.map(email =>
-        fetch("/api/newsletter", {
+        fetch("/api/newsletter/subscribe", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email }),
@@ -663,20 +670,32 @@ async function handleNewsletterSubscribe(event) {
       )
     );
 
-    const allSuccess = results.every(res => res.ok);
+    const responses = await Promise.all(results.map(async response => {
+      let data = {};
+      try {
+        const payload = await response.json();
+        if (payload && typeof payload === "object") data = payload;
+      } catch (error) {
+        console.error("Newsletter response was not JSON:", error);
+      }
+      return { ...data, success: response.ok && data.success };
+    }));
+    const allSuccess = responses.every(data => data.success);
 
     if (allSuccess) {
-      showNewsletterMessage(
-        `✓ Successfully subscribed ${emails.length} email(s)! Check your inbox.`,
-        "success"
-      );
+      const emailFailed = responses.some(data => data.emailSent === false);
+      showNewsletterMessage(emailFailed
+        ? "Your subscription was saved, but the welcome email could not be sent. Please try again later."
+        : `✓ Successfully subscribed ${emails.length} email(s)! Check your inbox.`,
+      emailFailed ? "warning" : "success");
       emailInputs.forEach(input => input.value = "");
       setTimeout(() => {
         messageEl.style.display = "none";
       }, 5000);
     } else {
       showNewsletterMessage(
-        "Some emails failed to subscribe. Please try again.",
+        responses.find(data => !data.success)?.message ||
+          "Some emails failed to subscribe. Please try again.",
         "error"
       );
     }
@@ -696,8 +715,13 @@ function showNewsletterMessage(message, type) {
   messageEl.textContent = message;
   messageEl.style.display = "block";
   messageEl.style.backgroundColor =
-    type === "success" ? "rgba(40, 167, 69, 0.2)" : "rgba(220, 53, 69, 0.2)";
-  messageEl.style.color = type === "success" ? "#28a745" : "#dc3545";
+    type === "success"
+      ? "rgba(40, 167, 69, 0.2)"
+      : type === "warning"
+        ? "rgba(255, 193, 7, 0.2)"
+        : "rgba(220, 53, 69, 0.2)";
+  messageEl.style.color =
+    type === "success" ? "#28a745" : type === "warning" ? "#ffe082" : "#dc3545";
 }
 
 // Debug cart function for console
@@ -731,4 +755,3 @@ window.debugCart = async function() {
   
   console.log("=== END DEBUG ===");
 };
-

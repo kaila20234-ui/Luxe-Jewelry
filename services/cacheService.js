@@ -8,9 +8,11 @@ const redis = require('redis');
 class CacheService {
   constructor() {
     this.client = redis.createClient({
-      host: process.env.REDIS_HOST || 'localhost',
-      port: process.env.REDIS_PORT || 6379,
-      password: process.env.REDIS_PASSWORD || null
+      socket: {
+        host: process.env.REDIS_HOST || 'localhost',
+        port: Number(process.env.REDIS_PORT) || 6379
+      },
+      password: process.env.REDIS_PASSWORD || undefined
     });
 
     this.stats = {
@@ -80,8 +82,9 @@ class CacheService {
       const data = await this.client.get(key);
       if (data) {
         try {
+          const value = JSON.parse(data);
           this.stats.hits++;
-          return JSON.parse(data);
+          return value;
         } catch (parseError_) {
           console.warn('[CACHE] Parse error:', parseError_.message);
           this.stats.misses++;
@@ -120,6 +123,9 @@ class CacheService {
   async delete(key) {
     this.stats.deletes++;
     try {
+      if (!this.isConnected) {
+        return false;
+      }
       await this.client.del(key);
       return true;
     } catch (err) {
@@ -131,6 +137,9 @@ class CacheService {
 
   async clear() {
     try {
+      if (!this.isConnected) {
+        return false;
+      }
       await this.client.flushDb();
       console.log('[CACHE]  Cache cleared');
       return true;
@@ -161,8 +170,8 @@ class CacheService {
       const promises = Object.entries(data).map(([key, value]) =>
         this.set(key, value, ttl)
       );
-      await Promise.all(promises);
-      return true;
+      const results = await Promise.all(promises);
+      return results.every(Boolean);
     } catch (err) {
       console.warn('[CACHE] Mset error:', err.message);
       this.stats.errors++;
@@ -186,12 +195,13 @@ class CacheService {
 
   async invalidatePattern(pattern) {
     try {
+      if (!this.isConnected) {
+        return 0;
+      }
       const keys = await this.client.keys(pattern);
       if (keys.length === 0) return 0;
 
-      for (const key of keys) {
-        await this.client.del(key);
-      }
+      await Promise.all(keys.map((key) => this.client.del(key)));
 
       console.log(`[CACHE]  Invalidated ${keys.length} keys`);
       return keys.length;
@@ -204,6 +214,9 @@ class CacheService {
 
   async exists(key) {
     try {
+      if (!this.isConnected) {
+        return false;
+      }
       const exists = await this.client.exists(key);
       return exists === 1;
     } catch (err) {
@@ -215,6 +228,9 @@ class CacheService {
 
   async setTTL(key, seconds) {
     try {
+      if (!this.isConnected) {
+        return false;
+      }
       const result = await this.client.expire(key, seconds);
       return result === 1;
     } catch (err) {
@@ -239,7 +255,10 @@ class CacheService {
   async warmCache(data, ttl = 3600) {
     try {
       console.log(`[CACHE]  Warming cache...`);
-      await this.mset(data, ttl);
+      const warmed = await this.mset(data, ttl);
+      if (!warmed) {
+        return false;
+      }
       console.log('[CACHE]  Cache warmed');
       return true;
     } catch (err) {

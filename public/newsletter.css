@@ -1,0 +1,136 @@
+footer {
+  width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.footer-top {
+  width: 100%;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.footer-column {
+  min-width: 0;
+}
+
+.newsletter-form {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 12px;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.newsletter-form #emailInputsContainer {
+  display: grid !important;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+}
+
+.newsletter-email-input-group,
+.newsletter-form .input-icon-wrapper {
+  position: relative;
+  width: 100%;
+  min-width: 0;
+}
+
+.newsletter-form .newsletterEmail {
+  display: block;
+  width: 100% !important;
+  min-width: 0;
+  min-height: 48px;
+  padding: 12px 42px 12px 40px !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #fff !important;
+  font: inherit;
+  font-size: 16px !important;
+  box-sizing: border-box;
+}
+
+.newsletter-form .newsletterEmail:focus {
+  border-color: #d4af37 !important;
+  outline: 2px solid rgba(212, 175, 55, 0.35);
+  outline-offset: 2px;
+}
+
+.newsletter-form > button {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 10px 14px;
+  border-radius: 6px;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.newsletter-form #addEmailBtn {
+  border: 2px solid #d4af37;
+  background: rgba(212, 175, 55, 0.3);
+  color: #d4af37;
+}
+
+.newsletter-form button[type="submit"] {
+  border: 0;
+  background: linear-gradient(135deg, #d4af37, #ffed4e);
+  color: #333;
+}
+
+.newsletter-form .email-input-group > button {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+  min-width: 36px;
+  min-height: 36px;
+  border: 0;
+  border-radius: 4px;
+  background: rgba(220, 53, 69, 0.3);
+  color: #ffb8bf;
+  cursor: pointer;
+}
+
+#newsletterMessage {
+  width: 100%;
+  overflow-wrap: anywhere;
+  line-height: 1.5;
+}
+
+.newsletter-privacy-note {
+  margin-top: 16px !important;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+  .footer-top {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 24px;
+    padding: 28px 20px;
+  }
+
+  .footer-column {
+    width: 100%;
+    padding: 0;
+  }
+}
+
+@media (max-width: 380px) {
+  .footer-top {
+    padding: 24px 14px;
+    gap: 20px;
+  }
+
+  .newsletter-form > button {
+    padding-right: 10px;
+    padding-left: 10px;
+    font-size: 0.95rem;
+  }
+}

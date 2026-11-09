@@ -15,7 +15,6 @@ const crypto = require("node:crypto");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const nodemailer = require("nodemailer");
-const dns = require('dns');
 const rateLimit = require("express-rate-limit");
 const Joi = require("joi");
 
@@ -26,12 +25,12 @@ const PORT = process.env.PORT || 5000;
 const MONGO_URI =
   process.env.MONGO_URI || "mongodb://127.0.0.1:27017/luxe_jewelry";
 const PAYSTACK_SECRET_KEY = process.env.PAYSTACK_SECRET_KEY || "";
-const EMAIL_USER = (process.env.EMAIL_USER || "").trim();
-const EMAIL_PASS = (process.env.EMAIL_PASS || "").replace(/\s+/g, "");
+const EMAIL_USER = (process.env.EMAIL_USER || process.env.SMTP_USER || "").trim();
+const EMAIL_PASS = (process.env.EMAIL_PASS || process.env.SMTP_PASS || "").replace(/\s+/g, "");
 const SMTP_HOST = process.env.SMTP_HOST || "smtp.gmail.com";
 const SMTP_PORT = parseInt(process.env.SMTP_PORT, 10) || 587;
-const SMTP_USER = (process.env.SMTP_USER || "").trim();
-const SMTP_PASS = (process.env.SMTP_PASS || "").replace(/\s+/g, "");
+const SMTP_USER = (process.env.SMTP_USER || EMAIL_USER).trim();
+const SMTP_PASS = (process.env.SMTP_PASS || EMAIL_PASS).replace(/\s+/g, "");
 const ADMIN_USER = process.env.ADMIN_USER || "manager";
 let ADMIN_PASS_HASH = process.env.ADMIN_PASS_HASH || "";
 
@@ -442,21 +441,13 @@ if (!SMTP_USER || !SMTP_PASS) {
   );
 }
 
-// Ensure stable DNS resolution for SMTP host (use public resolvers as fallback)
-try {
-  dns.setServers(['8.8.8.8', '8.8.4.4']);
-  console.log('[DNS] Using public DNS resolvers:', dns.getServers());
-} catch (e) {
-  console.warn('[DNS] Could not set custom DNS servers, using system defaults');
-}
-
 const SMTP_SECURE = process.env.SMTP_SECURE === 'true' || SMTP_PORT === 465;
 const SMTP_DEBUG = process.env.SMTP_DEBUG === 'true';
 const transporter = nodemailer.createTransport({
   host: SMTP_HOST,
   port: SMTP_PORT,
   secure: SMTP_SECURE,
-  requireTLS: SMTP_SECURE,
+  requireTLS: SMTP_PORT === 587 && !SMTP_SECURE,
   authMethod: process.env.SMTP_AUTH_METHOD || 'PLAIN',
   connectionTimeout: 30000,
   greetingTimeout: 20000,
@@ -468,7 +459,6 @@ const transporter = nodemailer.createTransport({
   debug: SMTP_DEBUG,
   logger: SMTP_DEBUG,
   tls: {
-    rejectUnauthorized: false,
     minVersion: 'TLSv1.2',
   },
   auth: {
@@ -479,7 +469,9 @@ const transporter = nodemailer.createTransport({
 
 // Verify SMTP connectivity at startup and log detailed diagnostics
 // NOTE: Commenting out verification as it may interfere with subsequent newsletter sends
-console.log(`[SMTP] Configuration: host=${SMTP_HOST}, port=${SMTP_PORT}, user=${SMTP_USER || '(empty)'}`);
+console.log(
+  `[SMTP] Configuration: host=${SMTP_HOST}, port=${SMTP_PORT}, credentials=${SMTP_USER && SMTP_PASS ? 'configured' : 'missing'}`
+);
 /* DISABLED: Startup verification
 try {
   transporter.verify((err, success) => {
@@ -506,20 +498,29 @@ async function sendOtpEmail(to, subject, text, html) {
 
 // Wrapper to retry sendMail on transient DNS/resolution errors
 async function sendMailWithRetry(mailOptions, maxRetries = 3) {
+  if (!SMTP_USER || !SMTP_PASS) {
+    throw new Error('SMTP credentials are missing. Set SMTP_USER/SMTP_PASS or EMAIL_USER/EMAIL_PASS.');
+  }
+
+  if (process.env.VERCEL && SMTP_PORT === 25) {
+    throw new Error('SMTP_PORT 25 is blocked on Vercel. Configure port 465 or 587.');
+  }
+
   let lastErr = null;
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       if (attempt > 1) {
         console.log(`[SMTP] Retry attempt ${attempt} for ${mailOptions.to}`);
-        // re-apply public DNS resolvers before retrying
-        try { dns.setServers(['8.8.8.8', '8.8.4.4']); } catch (e) {}
       }
       const info = await transporter.sendMail(mailOptions);
       return info;
     } catch (err) {
       lastErr = err;
       const isDnsErr = (err && (err.code === 'EDNS' || String(err.message).includes('queryA ETIMEOUT') || err.code === 'ENOTFOUND' || err.code === 'ETIMEOUT'));
-      console.warn('[SMTP] sendMail error:', err && err.message);
+      console.warn('[SMTP] sendMail error:', {
+        code: err && err.code,
+        message: err && err.message,
+      });
       if (!isDnsErr || attempt === maxRetries) {
         // Non-retryable or out of attempts
         throw err;
@@ -4196,20 +4197,25 @@ app.post(
               <li><span class="highlight">Special Events</span> - VIP invitations to exclusive events</li>
             </ul>
             <p>We respect your privacy and will never share your email. You can unsubscribe anytime.</p>
-            <p style="text-align: center; margin-top: 30px;">
-              <a href="http://localhost:5000" style="display: inline-block; background: #d4af37; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">Visit Our Store</a>
-            </p>
+            ${process.env.SHOP_URL || process.env.FRONTEND_URL ? `
+              <p style="text-align: center; margin-top: 30px;">
+                <a href="${(process.env.SHOP_URL || process.env.FRONTEND_URL).replace(/\/$/, '')}" style="display: inline-block; background: #d4af37; color: white; padding: 12px 24px; border-radius: 6px; text-decoration: none; font-weight: bold;">Visit Our Store</a>
+              </p>
+            ` : ''}
           </div>
           <div class="footer">
             <p>&copy; 2025 Luxe Jewelry. All rights reserved.<br>
-            <a href="http://localhost:5000/privacy.html" style="color: #d4af37; text-decoration: none;">Privacy Policy</a> | 
-            <a href="http://localhost:5000/contact.html" style="color: #d4af37; text-decoration: none;">Contact Us</a></p>
+            ${process.env.SHOP_URL || process.env.FRONTEND_URL ? `
+              <a href="${(process.env.SHOP_URL || process.env.FRONTEND_URL).replace(/\/$/, '')}/privacy.html" style="color: #d4af37; text-decoration: none;">Privacy Policy</a> |
+              <a href="${(process.env.SHOP_URL || process.env.FRONTEND_URL).replace(/\/$/, '')}/contact.html" style="color: #d4af37; text-decoration: none;">Contact Us</a>
+            ` : ''}</p>
           </div>
         </div>
       </body>
       </html>
     `;
 
+      let welcomeEmailSent = true;
       try {
         await sendOtpEmail(
           subscriber.email,
@@ -4218,9 +4224,10 @@ app.post(
           welcomeHtml
         );
       } catch (error_) {
+        welcomeEmailSent = false;
         console.warn(
           "[WARN] Welcome email failed but subscription saved:",
-          error_.message
+          { code: error_.code, message: error_.message }
         );
       }
 
@@ -4228,7 +4235,10 @@ app.post(
         .status(200)
         .json({
           success: true,
-          message: "Successfully subscribed to our newsletter!",
+          emailSent: welcomeEmailSent,
+          message: welcomeEmailSent
+            ? "Successfully subscribed to our newsletter!"
+            : "Subscription saved, but the welcome email could not be sent.",
         });
     } catch (error) {
       console.error("[ERROR] Newsletter subscription error:", error);

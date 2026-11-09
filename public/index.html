@@ -1314,6 +1314,7 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="/newsletter.css" />
   </head>
 
   <body>
@@ -1649,30 +1650,17 @@
           <!-- NOSONAR: contrast -->
           <form
             id="newsletterForm"
+            class="newsletter-form"
             onsubmit="handleNewsletterSubscribe(event)"
-            style="display: flex; flex-direction: column; gap: 12px"
           >
-            <div id="emailInputsContainer" style="display: flex; flex-direction: column; gap: 8px">
-              <div class="input-icon-wrapper" style="position: relative">
+            <div id="emailInputsContainer">
+              <div class="input-icon-wrapper newsletter-email-input-group">
                 <i class="fas fa-envelope field-icon"></i>
                 <input
                   type="email"
                   class="newsletterEmail"
                   placeholder="Your email"
                   required
-                  style="
-                    width: 100%;
-                    padding: 12px 12px 12px 40px;
-                    border: 2px solid rgba(255, 255, 255, 0.3);
-                    border-radius: 6px;
-                    background: rgba(255, 255, 255, 0.1);
-                    color: white;
-                    font-family: 'Poppins', sans-serif;
-                    font-size: 0.95rem;
-                    transition: all 0.3s ease;
-                  "
-                  onfocus="this.style.borderColor='#d4af37'; this.style.backgroundColor='rgba(255,255,255,0.2)'"
-                  onblur="this.style.borderColor='rgba(255,255,255,0.3)'; this.style.backgroundColor='rgba(255,255,255,0.1)'"
                 />
               </div>
             </div>
@@ -1680,48 +1668,13 @@
             <button
               type="button"
               id="addEmailBtn"
-              style="
-                background: rgba(212, 175, 55, 0.3);
-                color: #d4af37;
-                border: 2px solid #d4af37;
-                padding: 10px 16px;
-                border-radius: 6px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 6px;
-                font-size: 0.9rem;
-              "
               onclick="addEmailInput()"
-              onmouseover="this.style.backgroundColor='rgba(212, 175, 55, 0.5)'"
-              onmouseout="this.style.backgroundColor='rgba(212, 175, 55, 0.3)'"
             >
               <i class="fas fa-plus"></i> Add Another Email
             </button>
 
             <button
               type="submit"
-              style="
-                background: linear-gradient(135deg, #d4af37, #ffed4e);
-                color: #333;
-                border: none;
-                padding: 12px 20px;
-                border-radius: 6px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-              "
-              onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(212, 175, 55, 0.4)'"
-              onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212, 175, 55, 0.3)'"
-              onfocus="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 16px rgba(212, 175, 55, 0.4)'"
-              onblur="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(212, 175, 55, 0.3)';"
             >
               <i class="fas fa-paper-plane"></i> Subscribe
             </button>
@@ -1737,7 +1690,7 @@
               text-align: center;
             "
           ></div>
-          <p style="margin-top: 16px; font-size: 0.85rem; opacity: 0.9">
+          <p class="newsletter-privacy-note" style="opacity: 0.9">
             <i class="fas fa-lock" style="margin-right: 6px"></i> We respect
             your privacy. Unsubscribe anytime.
           </p>
@@ -1897,8 +1850,12 @@
         async function loadProducts() {
           try {
             const res = await fetch("/api/products?limit=100");
+            if (!res.ok) throw new Error("Failed to load products");
             const data = await res.json();
-            PRODUCTS = data.products || [];
+            if (!Array.isArray(data.products)) {
+              throw new Error("Invalid products response");
+            }
+            PRODUCTS = data.products;
             console.log("[HOME] Loaded", PRODUCTS.length, "products");
             renderProducts(PRODUCTS);
             loadCategories();
@@ -2637,23 +2594,40 @@
               )
             );
 
-            const allResponses = await Promise.all(results.map(res => res.json()));
+            const allResponses = await Promise.all(
+              results.map(async response => {
+                let data = {};
+                try {
+                  data = await response.json();
+                } catch (error) {
+                  console.error("Newsletter response was not JSON:", error);
+                }
+                return { ...data, success: response.ok && data.success };
+              })
+            );
             const allSuccess = allResponses.every(
               data => data.success || data.message?.includes("already")
             );
 
             if (allSuccess) {
-              messageDiv.textContent = `✓ Thank you! ${emails.length} email(s) subscribed successfully!`;
+              const emailFailed = allResponses.some(data => data.emailSent === false);
+              messageDiv.textContent = emailFailed
+                ? "Your subscription was saved, but the welcome email could not be sent. Please try again later."
+                : `✓ Thank you! ${emails.length} email(s) subscribed successfully!`;
               messageDiv.style.display = "block";
-              messageDiv.style.backgroundColor = "rgba(76, 175, 80, 0.3)";
-              messageDiv.style.color = "#ccffcc";
+              messageDiv.style.backgroundColor = emailFailed
+                ? "rgba(255, 193, 7, 0.25)"
+                : "rgba(76, 175, 80, 0.3)";
+              messageDiv.style.color = emailFailed ? "#ffe082" : "#ccffcc";
               emailInputs.forEach(input => input.value = "");
               setTimeout(() => {
                 messageDiv.style.display = "none";
               }, 3000);
             } else {
-              messageDiv.textContent =
-                "Some emails failed. Please check and try again.";
+              const failure = allResponses.find(data => !data.success);
+              messageDiv.textContent = failure?.message
+                ? `Subscription failed: ${failure.message}`
+                : "Some emails could not be subscribed. Please try again.";
               messageDiv.style.display = "block";
               messageDiv.style.backgroundColor = "rgba(255, 99, 71, 0.3)";
               messageDiv.style.color = "#ffcccc";
@@ -2677,8 +2651,11 @@
           const res = await fetch("/api/settings");
           const settings = await res.json();
           console.log("[MAINTENANCE] Settings fetched:", settings);
-          
-          const maintenanceSetting = settings.find((s) => s.key === "maintenanceMode");
+        if (!res.ok || !Array.isArray(settings)) {
+          throw new Error("Failed to load settings");
+        }
+
+        const maintenanceSetting = settings.find((s) => s.key === "maintenanceMode");
           console.log("[MAINTENANCE] Maintenance setting object:", maintenanceSetting);
           
           const maintenanceMode = maintenanceSetting?.value === "true" || maintenanceSetting?.value === true;

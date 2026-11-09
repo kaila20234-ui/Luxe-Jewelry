@@ -4,7 +4,10 @@
  * Run this before and after optimizations to measure improvements
  */
 
-describe('Performance Baseline Tests', () => {
+const describeRedisBenchmarks =
+  process.env.RUN_REDIS_PERFORMANCE_TESTS === 'true' ? describe : describe.skip;
+
+describeRedisBenchmarks('Performance Baseline Tests', () => {
   const cacheService = require('../services/cacheService');
   const results = {
     cacheSet: [],
