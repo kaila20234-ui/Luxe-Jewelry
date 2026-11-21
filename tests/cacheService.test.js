@@ -3,8 +3,23 @@
  * Validates cache infrastructure without requiring Redis connection
  */
 
+jest.mock('redis', () => ({
+  createClient: jest.fn(() => ({
+    isOpen: true,
+    on: jest.fn(),
+    connect: jest.fn(),
+    quit: jest.fn(async function close() {
+      this.isOpen = false;
+    })
+  }))
+}));
+
 const cacheService = require('../services/cacheService');
 const sessionCache = require('../middleware/sessionCache');
+
+afterAll(async () => {
+  await cacheService.close();
+});
 
 describe('Cache Service Structure', () => {
   it('should have all required methods', () => {

@@ -3,6 +3,22 @@
  * Validates performance test infrastructure (Redis not required)
  */
 
+jest.mock('redis', () => ({
+  createClient: jest.fn(() => ({
+    isOpen: true,
+    on: jest.fn(),
+    connect: jest.fn(),
+    quit: jest.fn(async function close() {
+      this.isOpen = false;
+    })
+  }))
+}));
+
+afterAll(async () => {
+  const cacheService = require('../services/cacheService');
+  await cacheService.close();
+});
+
 describe('Performance Test Infrastructure', () => {
   it('should export performance test structure', () => {
     expect(true).toBe(true);

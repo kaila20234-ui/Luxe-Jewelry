@@ -7,8 +7,9 @@
 const describeRedisBenchmarks =
   process.env.RUN_REDIS_PERFORMANCE_TESTS === 'true' ? describe : describe.skip;
 
+let cacheService;
+
 describeRedisBenchmarks('Performance Baseline Tests', () => {
-  const cacheService = require('../services/cacheService');
   const results = {
     cacheSet: [],
     cacheGet: [],
@@ -16,6 +17,7 @@ describeRedisBenchmarks('Performance Baseline Tests', () => {
   };
 
   beforeAll(async () => {
+    cacheService = require('../services/cacheService');
     await cacheService.clear();
     console.log('\n[PERF] Starting performance baseline tests...\n');
   });
@@ -54,6 +56,8 @@ describeRedisBenchmarks('Performance Baseline Tests', () => {
     console.log(`   ✅ Cache SET: <5ms (Current: ${setAvg.toFixed(3)}ms)`);
     console.log(`   ✅ Cache GET: <2ms (Current: ${getAvg.toFixed(3)}ms)`);
     console.log(`   ✅ Compute time reduction: -50% (Target achieved: ${improvement.toFixed(2)}x)\n`);
+
+    await cacheService.close();
   });
 
   describe('Cache Performance Metrics', () => {

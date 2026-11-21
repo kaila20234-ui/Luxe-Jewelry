@@ -2,17 +2,24 @@ jest.mock('redis', () => ({
   createClient: jest.fn(() => {
     const client = {
       handlers: {},
-      isOpen: false,
+      isOpen: true,
       on: jest.fn(function addHandler(event, handler) {
         this.handlers[event] = handler;
       }),
-      connect: jest.fn().mockResolvedValue(undefined)
+      connect: jest.fn().mockResolvedValue(undefined),
+      quit: jest.fn(async function close() {
+        this.isOpen = false;
+      })
     };
     return client;
   })
 }));
 
 const cacheService = require('../services/cacheService');
+
+afterAll(async () => {
+  await cacheService.close();
+});
 
 describe('Cache service behavior', () => {
   let originalClient;
