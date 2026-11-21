@@ -14,6 +14,14 @@ const { sendWelcomeEmail, sendVerificationEmail, sendPasswordResetEmail } = requ
 const router = express.Router();
 const JWT_SECRET = process.env.JWT_SECRET || 'CHANGE_THIS_SECRET';
 
+function getPublicApiOrigin(req) {
+  return (
+    process.env.PUBLIC_API_ORIGIN ||
+    process.env.BACKEND_URL ||
+    `${req.protocol}://${req.get('host')}`
+  ).replace(/\/$/, '');
+}
+
 // Middleware: Verify Customer Token
 const verifyCustomerToken = async (req, res, next) => {
   const token = req.headers.authorization?.split(' ')[1];
@@ -124,8 +132,6 @@ router.post('/register', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email already registered' });
     }
 
-    const isDev = process.env.NODE_ENV !== 'production';
-
     // Create new user (email not verified yet)
     const verificationToken = crypto.randomBytes(20).toString('hex');
     const verificationExpiry = Date.now() + 24 * 60 * 60 * 1000; // 24 hours
@@ -140,7 +146,7 @@ router.post('/register', async (req, res) => {
       password,
       name,
       phone,
-      emailVerified: isDev ? true : false, // Auto-verify in dev for easier testing
+      emailVerified: false,
       verificationToken,
       verificationTokenExpiry: verificationExpiry,
       referralCode: await generateReferralCode(),
@@ -168,8 +174,7 @@ router.post('/register', async (req, res) => {
     try { await AuditLog.create({ userId: user._id, action: 'register', status: 'success', ipAddress: req.ip, userAgent: req.headers['user-agent'] }); } catch (e) { console.warn('[AUDIT] register log failed', e.message || e); }
 
     // Send verification email
-    const frontend = process.env.FRONTEND_ORIGIN || `http://localhost:${process.env.PORT || 5000}`;
-    const verificationLink = `${frontend}/verify-email?token=${verificationToken}&email=${encodeURIComponent(user.email)}`;
+    const verificationLink = `${getPublicApiOrigin(req)}/api/auth/verify-email?token=${verificationToken}&email=${encodeURIComponent(user.email)}`;
     let emailResult = { success: false };
     try {
       emailResult = await sendVerificationEmail(user.email, user.name, verificationLink);
@@ -180,9 +185,12 @@ router.post('/register', async (req, res) => {
     // Do not auto-login; require email verification first
     res.status(201).json({
       success: true,
-      message: 'Account created. Please verify your email before logging in.',
+      message: emailResult.success
+        ? 'Account created. Please verify your email before logging in.'
+        : 'Account created, but the verification email could not be sent. Please request another verification email.',
       user: user.toJSON(),
-      emailSent: emailResult.success || false
+      emailSent: emailResult.success || false,
+      verificationRequired: true
     });
   } catch (error) {
     console.error('Registration error:', error);
@@ -230,9 +238,8 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid email or password' });
     }
 
-    // Prevent login if email not verified (except in development)
-    const isDev2 = process.env.NODE_ENV !== 'production';
-    if (!user.emailVerified && !isDev2) {
+    // Prevent login until the email address is verified
+    if (!user.emailVerified) {
       return res.status(401).json({ success: false, message: 'Email not verified. Please check your inbox.' });
     }
 
@@ -330,6 +337,45 @@ router.get('/verify-email', async (req, res) => {
   } catch (err) {
     console.error('[AUTH-VERIFY] Error:', err);
     res.status(500).json({ success: false, message: 'Verification failed' });
+  }
+});
+
+// Resend the email verification link
+router.post('/resend-verification', async (req, res) => {
+  try {
+    const email = xss(String(req.body?.email || '').trim().toLowerCase());
+    if (!email) {
+      return res.status(400).json({ success: false, message: 'Email is required' });
+    }
+
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'Account not found' });
+    }
+    if (user.emailVerified) {
+      return res.json({ success: true, message: 'Email is already verified' });
+    }
+
+    const verificationToken = crypto.randomBytes(20).toString('hex');
+    user.verificationToken = verificationToken;
+    user.verificationTokenExpiry = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    await user.save();
+
+    const verificationLink = `${getPublicApiOrigin(req)}/api/auth/verify-email?token=${verificationToken}&email=${encodeURIComponent(user.email)}`;
+    const emailResult = await sendVerificationEmail(user.email, user.name, verificationLink);
+
+    if (!emailResult.success) {
+      return res.status(502).json({
+        success: false,
+        message: 'Verification email could not be sent',
+        error: emailResult.error
+      });
+    }
+
+    res.json({ success: true, message: 'Verification email resent' });
+  } catch (err) {
+    console.error('[AUTH-RESEND] Error:', err);
+    res.status(500).json({ success: false, message: 'Could not resend verification email' });
   }
 });
 
