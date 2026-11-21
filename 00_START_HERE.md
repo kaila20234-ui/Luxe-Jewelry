@@ -39,7 +39,7 @@
 
 ### Infrastructure Ready
 ✅ **Docker Stack** - 5 services orchestrated
-✅ **CI/CD Pipeline** - 5-stage automated deployment
+✅ **CI Pipeline** - Automated tests and security checks; Vercel handles deployment
 ✅ **Monitoring** - Prometheus + Grafana
 ✅ **Health Checks** - All services monitored
 
