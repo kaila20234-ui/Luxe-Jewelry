@@ -309,8 +309,13 @@ router.get('/verify-email', async (req, res) => {
       return res.status(400).json({ success: false, message: 'Missing token or email' });
     }
 
-    const user = await User.findOne({ email: String(email).toLowerCase(), verificationToken: token });
+    const normalizedEmail = String(email).trim().toLowerCase();
+    const user = await User.findOne({ email: normalizedEmail, verificationToken: token });
     if (!user) {
+      const verifiedUser = await User.findOne({ email: normalizedEmail, emailVerified: true });
+      if (verifiedUser) {
+        return res.json({ success: true, message: 'Email is already verified' });
+      }
       return res.status(400).json({ success: false, message: 'Invalid verification link' });
     }
 
