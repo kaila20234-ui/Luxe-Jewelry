@@ -230,6 +230,19 @@
       border: 1px solid #f5c6cb;
     }
 
+    .resend-verification-btn {
+      display: none;
+      margin: -8px 0 20px;
+      padding: 0;
+      border: 0;
+      background: none;
+      color: #8a6d12;
+      font: inherit;
+      font-weight: 600;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
     .back-link {
       display: flex;
       align-items: center;
@@ -403,6 +416,9 @@
       </div>
 
       <div id="loginAlert" class="alert"></div>
+      <button type="button" id="resendVerificationBtn" class="resend-verification-btn">
+        Resend verification email
+      </button>
 
       <form id="loginFormElement">
         <div class="form-group">
@@ -498,9 +514,50 @@
       modal.classList.remove('show');
     }
 
+    async function getCsrfToken() {
+      const response = await fetch('/api/csrf-token', { credentials: 'same-origin' });
+      if (!response.ok) return null;
+      const data = await response.json();
+      return data.csrfToken || null;
+    }
+
+    const resendVerificationBtn = document.getElementById('resendVerificationBtn');
+
+    resendVerificationBtn.addEventListener('click', async () => {
+      const email = document.getElementById('loginEmail').value.trim();
+      if (!email) {
+        showAlert('loginAlert', 'Enter your email address to resend the verification email.', 'error');
+        return;
+      }
+
+      resendVerificationBtn.disabled = true;
+      resendVerificationBtn.textContent = 'Sending...';
+      try {
+        const csrfToken = await getCsrfToken();
+        const response = await fetch(`${API_URL}/auth/resend-verification`, {
+          method: 'POST',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+            ...(csrfToken ? { 'X-CSRF-Token': csrfToken } : {})
+          },
+          body: JSON.stringify({ email })
+        });
+        const data = await response.json();
+        showAlert('loginAlert', data.message || 'Could not resend verification email.', response.ok ? 'success' : 'error');
+      } catch (error) {
+        console.error('[CUSTOMER-LOGIN] Resend verification error:', error);
+        showAlert('loginAlert', 'Could not resend verification email. Please try again.', 'error');
+      } finally {
+        resendVerificationBtn.disabled = false;
+        resendVerificationBtn.textContent = 'Resend verification email';
+      }
+    });
+
     // Login Handler
     document.getElementById('loginFormElement').addEventListener('submit', async (e) => {
       e.preventDefault();
+      resendVerificationBtn.style.display = 'none';
       const btn = document.getElementById('loginSubmitBtn');
       btn.classList.add('loading');
       btn.textContent = 'Signing in...';
@@ -513,12 +570,7 @@
         console.log('[CUSTOMER-LOGIN] Calling endpoint:', `${API_URL}/auth/login`);
 
         // Obtain CSRF token and ensure cookie is set
-        const csrfResp = await fetch('/api/csrf-token', { credentials: 'same-origin' });
-        let csrfToken = null;
-        if (csrfResp.ok) {
-          const j = await csrfResp.json().catch(()=>null);
-          csrfToken = j && j.csrfToken;
-        }
+        const csrfToken = await getCsrfToken();
 
         const response = await fetch(`${API_URL}/auth/login`, {
           method: 'POST',
@@ -557,6 +609,9 @@
         } else {
           console.log('[CUSTOMER-LOGIN] Login failed:', data.message);
           showAlert('loginAlert', data.message || 'Login failed', 'error');
+          if (data.message && data.message.toLowerCase().includes('email not verified')) {
+            resendVerificationBtn.style.display = 'block';
+          }
         }
       } catch (error) {
         console.error('[CUSTOMER-LOGIN] Login error:', error);
