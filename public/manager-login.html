@@ -245,9 +245,9 @@
           success.textContent = "✓ Login successful! Redirecting...";
           success.style.display = "block";
 
-          // Redirect to manager dashboard section in the shared admin page
+          // Keep the manager workspace separate from the admin dashboard.
           setTimeout(() => {
-            globalThis.location.href = "/admin.html#complaints";
+            globalThis.location.href = "/manager-dashboard.html";
           }, 1000);
         } catch (e) {
           console.error(e);

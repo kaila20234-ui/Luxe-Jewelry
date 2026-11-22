@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Manager Workspace | Luxe Jewelry</title>
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: Arial, sans-serif;
+        color: #242424;
+        background: #f5f3ed;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+      }
+
+      header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 20px;
+        padding: 18px max(24px, calc((100% - 1180px) / 2));
+        color: #fff;
+        background: #202020;
+        border-bottom: 4px solid #d4af37;
+      }
+
+      header h1 {
+        margin: 0;
+        font-size: 1.3rem;
+      }
+
+      header p {
+        margin: 5px 0 0;
+        color: #dedede;
+        font-size: 0.9rem;
+      }
+
+      button,
+      a.button {
+        border: 0;
+        border-radius: 6px;
+        padding: 10px 14px;
+        color: #202020;
+        background: #d4af37;
+        font: inherit;
+        font-weight: 700;
+        text-decoration: none;
+        cursor: pointer;
+      }
+
+      button:hover,
+      a.button:hover {
+        background: #c39b22;
+      }
+
+      .logout {
+        color: #fff;
+        background: transparent;
+        border: 1px solid #aaa;
+      }
+
+      .logout:hover {
+        background: #383838;
+      }
+
+      main {
+        width: min(1180px, calc(100% - 32px));
+        margin: 28px auto;
+      }
+
+      .intro {
+        margin-bottom: 22px;
+      }
+
+      .intro h2 {
+        margin: 0 0 6px;
+      }
+
+      .intro p {
+        margin: 0;
+        color: #666;
+      }
+
+      .notice {
+        display: none;
+        margin: 16px 0;
+        padding: 12px 14px;
+        border-radius: 6px;
+        background: #fff3cd;
+        color: #664d03;
+      }
+
+      .notice.error {
+        display: block;
+        background: #f8d7da;
+        color: #842029;
+      }
+
+      .notice.success {
+        display: block;
+        background: #d1e7dd;
+        color: #0f5132;
+      }
+
+      .nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 18px;
+      }
+
+      .nav button,
+      .nav a {
+        color: #3a3a3a;
+        background: #fff;
+        border: 1px solid #ddd;
+      }
+
+      .nav [aria-current="page"] {
+        color: #202020;
+        background: #e9d99d;
+        border-color: #d4af37;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+
+      .stat,
+      .panel {
+        padding: 20px;
+        border: 1px solid #e8e4d8;
+        border-radius: 10px;
+        background: #fff;
+        box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+      }
+
+      .stat strong {
+        display: block;
+        margin-bottom: 6px;
+        color: #9c7911;
+        font-size: 1.8rem;
+      }
+
+      .panel[hidden] {
+        display: none;
+      }
+
+      .panel h2 {
+        margin: 0 0 16px;
+        font-size: 1.2rem;
+      }
+
+      .panel p {
+        color: #666;
+      }
+
+      .table-wrap {
+        overflow-x: auto;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        min-width: 700px;
+      }
+
+      th,
+      td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        text-align: left;
+        vertical-align: top;
+      }
+
+      th {
+        color: #555;
+        background: #faf9f5;
+      }
+
+      td .description {
+        display: block;
+        max-width: 370px;
+        margin-top: 4px;
+        color: #666;
+        white-space: normal;
+        overflow-wrap: anywhere;
+      }
+
+      .ticket-controls {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+
+      select {
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background: white;
+        font: inherit;
+      }
+
+      .empty {
+        padding: 22px;
+        color: #777;
+        text-align: center;
+      }
+
+      @media (max-width: 600px) {
+        header {
+          align-items: flex-start;
+          padding: 16px;
+        }
+
+        header h1 {
+          font-size: 1.1rem;
+        }
+
+        main {
+          width: calc(100% - 24px);
+          margin: 18px auto;
+        }
+
+        .stat,
+        .panel {
+          padding: 16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div>
+        <h1>Luxe Jewelry - Manager Workspace</h1>
+        <p id="managerIdentity">Manager account</p>
+      </div>
+      <button class="logout" id="logoutButton" type="button">Sign out</button>
+    </header>
+
+    <main>
+      <section class="intro">
+        <h2>Manager dashboard</h2>
+        <p>Handle customer complaints, support tickets, and admin messages.</p>
+      </section>
+
+      <div id="notice" class="notice" role="status" aria-live="polite"></div>
+
+      <nav class="nav" aria-label="Manager workspace">
+        <button type="button" data-panel="overview" aria-current="page">Overview</button>
+        <button type="button" data-panel="complaints">Complaints</button>
+        <button type="button" data-panel="tickets">Support tickets</button>
+        <a class="button" href="/messages.html">Messages</a>
+      </nav>
+
+      <section class="panel" id="overviewPanel">
+        <h2>Overview</h2>
+        <div class="stats">
+          <div class="stat"><strong id="complaintCount">-</strong>Customer complaints</div>
+          <div class="stat"><strong id="ticketCount">-</strong>Support tickets</div>
+          <div class="stat"><strong id="openTicketCount">-</strong>Open tickets</div>
+          <div class="stat"><strong id="unreadMessageCount">-</strong>Unread messages</div>
+        </div>
+        <p>Use the workspace tabs to review complaints and update ticket statuses. Messages opens the staff inbox.</p>
+      </section>
+
+      <section class="panel" id="complaintsPanel" hidden>
+        <h2>Customer complaints</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Customer</th><th>Complaint</th><th>Received</th><th>Action</th></tr>
+            </thead>
+            <tbody id="complaintsTable"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="panel" id="ticketsPanel" hidden>
+        <h2>Support tickets</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Ticket</th><th>Customer</th><th>Priority</th><th>Status</th><th>Update</th></tr>
+            </thead>
+            <tbody id="ticketsTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      const token = localStorage.getItem("authToken");
+      const role = localStorage.getItem("authRole");
+      if (!token || role !== "manager") {
+        if (role === "admin" && token) {
+          globalThis.location.replace("/admin.html");
+        } else {
+          globalThis.location.replace("/manager-login.html");
+        }
+        throw new Error("Manager authentication required");
+      }
+
+      const identity = localStorage.getItem("authUser") || "Manager";
+      document.getElementById("managerIdentity").textContent = identity;
+
+      const state = { complaints: [], tickets: [] };
+      const notice = document.getElementById("notice");
+
+      function escapeHtml(value) {
+        return String(value == null ? "" : value).replace(/[&<>"']/g, (char) => ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          '"': "&quot;",
+          "'": "&#39;",
+        })[char]);
+      }
+
+      function setNotice(message, type) {
+        notice.textContent = message;
+        notice.className = "notice" + (type ? " " + type : "");
+      }
+
+      async function requestJson(url, options) {
+        const response = await fetch(url, {
+          ...options,
+          headers: {
+            ...(options && options.headers ? options.headers : {}),
+            Authorization: "Bearer " + token,
+          },
+        });
+        const data = await response.json().catch(() => null);
+        if (response.status === 401 || response.status === 403) {
+          localStorage.removeItem("authToken");
+          localStorage.removeItem("authRole");
+          localStorage.removeItem("authUser");
+          globalThis.location.replace("/manager-login.html");
+          throw new Error("Your manager session is invalid. Please sign in again.");
+        }
+        if (!response.ok) {
+          throw new Error((data && data.message) || "Request failed (HTTP " + response.status + ").");
+        }
+        return data;
+      }
+
+      function formatDate(value) {
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString();
+      }
+
+      function renderComplaints() {
+        const target = document.getElementById("complaintsTable");
+        if (!state.complaints.length) {
+          target.innerHTML = '<tr><td class="empty" colspan="4">No customer complaints found.</td></tr>';
+          return;
+        }
+        target.innerHTML = state.complaints.map((complaint) => `
+          <tr>
+            <td>${escapeHtml(complaint.name || complaint.email || "Customer")}
+              <span class="description">${escapeHtml(complaint.email || "")}</span></td>
+            <td>${escapeHtml(complaint.product || complaint.subject || "Complaint")}
+              <span class="description">${escapeHtml(complaint.message || "")}</span></td>
+            <td>${escapeHtml(formatDate(complaint.createdAt))}</td>
+            <td><button type="button" data-reply-id="${escapeHtml(complaint._id)}">Reply</button></td>
+          </tr>
+        `).join("");
+      }
+
+      function renderTickets() {
+        const target = document.getElementById("ticketsTable");
+        if (!state.tickets.length) {
+          target.innerHTML = '<tr><td class="empty" colspan="5">No support tickets found.</td></tr>';
+          return;
+        }
+        target.innerHTML = state.tickets.map((ticket) => {
+          const currentStatus = ["pending", "inprogress", "closed"].includes(ticket.status)
+            ? ticket.status
+            : "pending";
+          return `
+            <tr>
+              <td>${escapeHtml(ticket.title || "Untitled")}
+                <span class="description">${escapeHtml(ticket.description || "")}</span></td>
+              <td>${escapeHtml(ticket.email || "—")}</td>
+              <td>${escapeHtml(ticket.priority || "normal")}</td>
+              <td>${escapeHtml(ticket.status || "pending")}</td>
+              <td><div class="ticket-controls">
+                <select aria-label="New ticket status" data-status-for="${escapeHtml(ticket._id)}">
+                  <option value="pending" ${currentStatus === "pending" ? "selected" : ""}>Pending</option>
+                  <option value="inprogress" ${currentStatus === "inprogress" ? "selected" : ""}>In progress</option>
+                  <option value="closed" ${currentStatus === "closed" ? "selected" : ""}>Closed</option>
+                </select>
+                <button type="button" data-update-id="${escapeHtml(ticket._id)}">Save</button>
+              </div></td>
+            </tr>
+          `;
+        }).join("");
+      }
+
+      async function loadWorkspace() {
+        setNotice("Loading manager workspace...");
+        try {
+          const [complaintData, ticketData, messageData] = await Promise.all([
+            requestJson("/api/complaints"),
+            requestJson("/api/tickets"),
+            requestJson("/api/messages/unread/count"),
+          ]);
+          state.complaints = Array.isArray(complaintData)
+            ? complaintData
+            : (complaintData.complaints || []);
+          state.tickets = Array.isArray(ticketData)
+            ? ticketData
+            : (ticketData.tickets || []);
+          document.getElementById("complaintCount").textContent = state.complaints.length;
+          document.getElementById("ticketCount").textContent = state.tickets.length;
+          document.getElementById("openTicketCount").textContent =
+            state.tickets.filter((ticket) => ticket.status !== "closed").length;
+          document.getElementById("unreadMessageCount").textContent =
+            messageData.unreadCount == null ? "0" : messageData.unreadCount;
+          renderComplaints();
+          renderTickets();
+          setNotice("");
+        } catch (error) {
+          console.error("Unable to load manager workspace:", error);
+          setNotice(error.message || "Unable to load manager workspace. Please try again.", "error");
+        }
+      }
+
+      document.querySelectorAll("[data-panel]").forEach((button) => {
+        button.addEventListener("click", () => {
+          document.querySelectorAll("[data-panel]").forEach((item) => item.removeAttribute("aria-current"));
+          button.setAttribute("aria-current", "page");
+          ["overview", "complaints", "tickets"].forEach((panel) => {
+            document.getElementById(panel + "Panel").hidden = panel !== button.dataset.panel;
+          });
+        });
+      });
+
+      document.getElementById("complaintsTable").addEventListener("click", async (event) => {
+        const button = event.target.closest("[data-reply-id]");
+        if (!button) return;
+        const message = globalThis.prompt("Enter your reply to this complaint:");
+        if (!message || !message.trim()) return;
+        try {
+          await requestJson("/api/complaints/" + encodeURIComponent(button.dataset.replyId) + "/reply", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ message: message.trim() }),
+          });
+          setNotice("Reply sent successfully.", "success");
+        } catch (error) {
+          setNotice(error.message || "Unable to send reply.", "error");
+        }
+      });
+
+      document.getElementById("ticketsTable").addEventListener("click", async (event) => {
+        const button = event.target.closest("[data-update-id]");
+        if (!button) return;
+        const ticketId = button.dataset.updateId;
+        const select = button.closest(".ticket-controls").querySelector("select");
+        if (!select) return;
+        try {
+          await requestJson("/api/tickets/" + encodeURIComponent(ticketId), {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: select.value }),
+          });
+          await loadWorkspace();
+          document.querySelector('[data-panel="tickets"]').click();
+          setNotice("Ticket status updated.", "success");
+        } catch (error) {
+          setNotice(error.message || "Unable to update ticket status.", "error");
+        }
+      });
+
+      document.getElementById("logoutButton").addEventListener("click", () => {
+        localStorage.removeItem("authToken");
+        localStorage.removeItem("authRole");
+        localStorage.removeItem("authUser");
+        localStorage.removeItem("user");
+        globalThis.location.replace("/manager-login.html");
+      });
+
+      loadWorkspace();
+    </script>
+  </body>
+</html>

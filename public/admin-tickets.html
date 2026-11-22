@@ -586,9 +586,15 @@
 
   <script>
     const token = localStorage.getItem("authToken");
-    if (!token) {
-      alert("Please sign in first");
+    const role = localStorage.getItem("authRole");
+    if (token && role === "manager") {
+      location.replace("/manager-dashboard.html");
+      throw new Error("Managers must use the manager workspace.");
+    }
+    if (!token || role !== "admin") {
+      alert("Please sign in as an admin");
       location.href = "/login.html";
+      throw new Error("Admin authentication required");
     }
 
     let allTickets = [];

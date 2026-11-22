@@ -22,8 +22,9 @@ A comprehensive internal messaging system has been implemented to enable secure 
   - Professional golden-themed UI
 
 **Manager Dashboard Integration**:
-- Added "Messages" tab to admin_complain.html
-- Added "Settings" tab for password management
+- Manager workspace: `public/manager-dashboard.html`
+- Manager login redirects to the separate manager workspace.
+- Supports complaint replies, support ticket status updates, and links to internal messages.
 - Direct link to full messaging interface
 
 **Admin Dashboard Integration**:
@@ -187,7 +188,7 @@ A comprehensive internal messaging system has been implemented to enable secure 
 ### Staff-Facing
 - `login.html` - Staff login (admin/manager)
 - `admin.html` - Admin dashboard
-- `admin_complain.html` - Manager dashboard
+- `manager-dashboard.html` - Manager workspace
 - `messages.html` - Internal messaging
 - `setup.html` - System configuration guide
 - `init-admin.html` - Admin account creation
