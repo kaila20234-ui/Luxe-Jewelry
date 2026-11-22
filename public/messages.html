@@ -429,6 +429,30 @@
     .navbar h1 {
       font-size: 24px;
       color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .title-icon {
+      width: 24px;
+      height: 24px;
+      flex: 0 0 auto;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .empty-state-icon svg {
+      width: 56px;
+      height: 56px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
 
     .navbar-right {
@@ -531,7 +555,13 @@
 </head>
 <body>
   <div class="navbar">
-    <h1>💌 Internal Messaging</h1>
+    <h1>
+      <svg class="title-icon" viewBox="0 0 24 24" aria-hidden="true">
+        <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+        <path d="m3 7 9 6 9-6"></path>
+      </svg>
+      Internal Messaging
+    </h1>
     <div class="navbar-right">
       <div class="user-info">
         <div id="userNameDisplay">User</div>
@@ -564,7 +594,13 @@
 
       <div class="message-list" id="messageList">
         <div class="empty-state">
-          <div class="empty-state-icon">📭</div>
+          <div class="empty-state-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48">
+              <path d="M7 25h10l4 5h7l4-5h9v14H7z"></path>
+              <path d="M10 25 15 10h18l5 15"></path>
+              <path d="M19 18h10"></path>
+            </svg>
+          </div>
           <p>No messages</p>
         </div>
       </div>
@@ -578,7 +614,12 @@
 
       <div class="message-view" id="messageView">
         <div class="empty-state">
-          <div class="empty-state-icon">✉️</div>
+          <div class="empty-state-icon" aria-hidden="true">
+            <svg viewBox="0 0 48 48">
+              <rect x="7" y="11" width="34" height="26" rx="3"></rect>
+              <path d="m8 14 16 12 16-12"></path>
+            </svg>
+          </div>
           <p>Select a message to read</p>
         </div>
       </div>
@@ -669,7 +710,7 @@
     let currentMessageId = null;
     let messages = [];
 
-    // ✅ Mandatory authentication check
+    // Mandatory authentication check
     const authToken = localStorage.getItem('authToken');
     const authRole = localStorage.getItem('authRole');
     const authUser = localStorage.getItem('authUser');
@@ -726,7 +767,13 @@
       if (messages.length === 0) {
         listContainer.innerHTML = `
           <div class="empty-state">
-            <div class="empty-state-icon">📭</div>
+            <div class="empty-state-icon" aria-hidden="true">
+              <svg viewBox="0 0 48 48">
+                <path d="M7 25h10l4 5h7l4-5h9v14H7z"></path>
+                <path d="M10 25 15 10h18l5 15"></path>
+                <path d="M19 18h10"></path>
+              </svg>
+            </div>
             <p>No messages</p>
           </div>
         `;
@@ -854,15 +901,15 @@
 
       // Validation
       if (!recipientId) {
-        alert('⚠️ Please select a recipient');
+        alert('Please select a recipient.');
         return;
       }
       if (!subject.trim()) {
-        alert('⚠️ Please enter a subject');
+        alert('Please enter a subject.');
         return;
       }
       if (!body.trim()) {
-        alert('⚠️ Please enter a message');
+        alert('Please enter a message.');
         return;
       }
 
@@ -878,13 +925,13 @@
 
         if (!response.ok) {
           const errorData = await response.json();
-          alert(`❌ Error: ${errorData.message || 'Failed to send message'}`);
+          alert(`Error: ${errorData.message || 'Failed to send message.'}`);
           return;
         }
 
         const data = await response.json();
         if (data.success) {
-          alert('✅ Message sent successfully!');
+          alert('Message sent successfully.');
           closeComposeModal();
           document.getElementById('composeForm').reset();
           setTimeout(() => {
@@ -892,11 +939,11 @@
             loadStaff();
           }, 500);
         } else {
-          alert(`❌ Error: ${data.message || 'Failed to send'}`);
+          alert(`Error: ${data.message || 'Failed to send message.'}`);
         }
       } catch (error) {
         console.error('Error sending message:', error);
-        alert(`❌ Error sending message: ${error.message}`);
+        alert(`Error sending message: ${error.message}`);
       }
     });
 
@@ -1068,16 +1115,16 @@
         });
         
         if (response.ok) {
-          alert('✅ Reply sent successfully!');
+          alert('Reply sent successfully.');
           closeReplyModal();
           loadMessages(); // Refresh the message list
         } else {
           const error = await response.json();
-          alert(`❌ Error: ${error.message || 'Failed to send reply'}`);
+          alert(`Error: ${error.message || 'Failed to send reply.'}`);
         }
       } catch (error) {
         console.error('Error sending reply:', error);
-        alert('❌ Error sending reply');
+        alert('Error sending reply.');
       }
     });
 
