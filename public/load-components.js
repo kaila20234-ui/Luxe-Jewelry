@@ -130,6 +130,58 @@ function initializeHeader() {
     }
   }
 
+  // The shared header is injected after pages finish parsing, so render auth
+  // state here rather than relying on page scripts that ran before it existed.
+  const authGroup = document.getElementById("authGroup");
+  const profileDropdown = document.getElementById("profileDropdown");
+  const profileToggle = document.getElementById("profileToggle");
+  const dropdownMenu = document.getElementById("dropdownMenu");
+  const logoutBtn = document.getElementById("logoutBtn");
+  const authToken = localStorage.getItem("authToken");
+  let user = null;
+
+  if (authToken) {
+    try {
+      user = JSON.parse(localStorage.getItem("user") || "null");
+    } catch (error) {
+      console.error("[INIT HEADER] Failed to parse stored user:", error);
+    }
+  }
+
+  if (authGroup && profileDropdown) {
+    const isAuthenticated = Boolean(authToken && user);
+    authGroup.style.display = isAuthenticated ? "none" : "flex";
+    profileDropdown.style.display = isAuthenticated ? "block" : "none";
+
+    if (isAuthenticated) {
+      const userNameDisplay = document.getElementById("userNameDisplay");
+      if (userNameDisplay) {
+        userNameDisplay.textContent = user.name || "User";
+      }
+    }
+  }
+
+  if (profileToggle && dropdownMenu) {
+    profileToggle.addEventListener("click", function () {
+      dropdownMenu.classList.toggle("active");
+    });
+
+    document.addEventListener("click", function (event) {
+      if (profileDropdown && !profileDropdown.contains(event.target)) {
+        dropdownMenu.classList.remove("active");
+      }
+    });
+  }
+
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function () {
+      localStorage.removeItem("authToken");
+      localStorage.removeItem("user");
+      localStorage.removeItem("authRole");
+      window.location.href = "/customer-login.html";
+    });
+  }
+
   // Search functionality
   const searchInput = document.getElementById("searchInput");
   if (searchInput) {
