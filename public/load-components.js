@@ -226,10 +226,7 @@ function initializeFooter() {
   // Newsletter subscription
   const newsletterForm = document.getElementById("newsletterForm");
   if (newsletterForm) {
-    newsletterForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      handleNewsletterSubscribe(e);
-    });
+    newsletterForm.onsubmit = handleNewsletterSubscribe;
   }
 }
 
@@ -711,12 +708,28 @@ async function handleNewsletterSubscribe(event) {
   }
 
   try {
+    const csrfResponse = await fetch("/api/csrf-token", {
+      credentials: "same-origin",
+    });
+    if (!csrfResponse.ok) {
+      throw new Error("Could not retrieve the security token.");
+    }
+
+    const csrfData = await csrfResponse.json();
+    if (!csrfData.csrfToken) {
+      throw new Error("The security token was missing from the response.");
+    }
+
     // Subscribe each email
     const results = await Promise.all(
       emails.map(email =>
         fetch("/api/newsletter/subscribe", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          credentials: "same-origin",
+          headers: {
+            "Content-Type": "application/json",
+            "X-CSRF-Token": csrfData.csrfToken,
+          },
           body: JSON.stringify({ email }),
         })
       )
@@ -754,7 +767,7 @@ async function handleNewsletterSubscribe(event) {
   } catch (error) {
     console.error("Newsletter subscription error:", error);
     showNewsletterMessage(
-      "An error occurred. Please try again later.",
+      error.message || "An error occurred. Please try again later.",
       "error"
     );
   }
