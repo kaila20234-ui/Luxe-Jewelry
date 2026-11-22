@@ -3,6 +3,12 @@
  * Dynamically loads header and footer components into pages
  */
 
+const componentDebugLog = (...args) => {
+  if (["localhost", "127.0.0.1"].includes(window.location.hostname)) {
+    console["log"](...args);
+  }
+};
+
 document.addEventListener("DOMContentLoaded", function () {
   // Load shared styles first
   if (!document.querySelector('link[href="/styles.css"]')) {
@@ -27,10 +33,10 @@ async function loadHeader() {
   try {
     // Avoid inserting duplicate header if one already exists
     if (document.querySelector('header')) {
-      console.log('[LOAD HEADER] Header already present in DOM — skipping insertion');
+      componentDebugLog('[LOAD HEADER] Header already present in DOM — skipping insertion');
       return;
     }
-    console.log("[LOAD HEADER] Starting to load header...");
+    componentDebugLog("[LOAD HEADER] Starting to load header...");
     const response = await fetch("/header.html");
     if (!response.ok) throw new Error("Failed to load header");
     const headerHTML = await response.text();
@@ -39,13 +45,13 @@ async function loadHeader() {
     const headerContainer = document.createElement("div");
     headerContainer.innerHTML = headerHTML;
     document.body.insertBefore(headerContainer, document.body.firstChild);
-    console.log("[LOAD HEADER] Header inserted into DOM");
+    componentDebugLog("[LOAD HEADER] Header inserted into DOM");
 
     // Initialize header functionality if needed
     initializeHeader();
     
     // Pre-render the cart so it's ready when user clicks
-    console.log("[LOAD HEADER] Pre-rendering cart...");
+    componentDebugLog("[LOAD HEADER] Pre-rendering cart...");
     setTimeout(() => {
       renderCart();
     }, 100);
@@ -58,7 +64,7 @@ async function loadFooter() {
   try {
     // Avoid inserting duplicate footer if one already exists
     if (document.querySelector('footer')) {
-      console.log('[LOAD FOOTER] Footer already present in DOM — skipping insertion');
+      componentDebugLog('[LOAD FOOTER] Footer already present in DOM — skipping insertion');
       return;
     }
     const response = await fetch("/footer.html");
@@ -78,21 +84,21 @@ async function loadFooter() {
 }
 
 function initializeHeader() {
-  console.log("[INIT HEADER] Initializing header...");
+  componentDebugLog("[INIT HEADER] Initializing header...");
   
   // Toggle cart
   const cartToggle = document.getElementById("cartToggle");
-  console.log("[INIT HEADER] cartToggle element found:", !!cartToggle);
+  componentDebugLog("[INIT HEADER] cartToggle element found:", !!cartToggle);
   
   if (cartToggle) {
     cartToggle.addEventListener("click", function () {
-      console.log("[INIT HEADER] Cart toggle clicked!");
+      componentDebugLog("[INIT HEADER] Cart toggle clicked!");
       const cartPanel = document.querySelector(".cart-panel");
-      console.log("[INIT HEADER] cartPanel found:", !!cartPanel);
+      componentDebugLog("[INIT HEADER] cartPanel found:", !!cartPanel);
       
       if (cartPanel) {
         cartPanel.classList.toggle("active");
-        console.log("[INIT HEADER] Cart panel toggled, active:", cartPanel.classList.contains("active"));
+        componentDebugLog("[INIT HEADER] Cart panel toggled, active:", cartPanel.classList.contains("active"));
         // Add a small delay to ensure DOM is ready
         setTimeout(() => renderCart(), 50);
       }
@@ -101,11 +107,11 @@ function initializeHeader() {
 
   // Close cart button
   const cartClose = document.getElementById("cartClose");
-  console.log("[INIT HEADER] cartClose element found:", !!cartClose);
+  componentDebugLog("[INIT HEADER] cartClose element found:", !!cartClose);
   
   if (cartClose) {
     cartClose.addEventListener("click", function () {
-      console.log("[INIT HEADER] Cart close clicked!");
+      componentDebugLog("[INIT HEADER] Cart close clicked!");
       const cartPanel = document.querySelector(".cart-panel");
       if (cartPanel) {
         cartPanel.classList.remove("active");
@@ -188,7 +194,7 @@ function initializeHeader() {
     searchInput.addEventListener("keyup", function (e) {
       if (e.key === "Enter") {
         // Handle search - can be extended with actual search logic
-        console.log("Search for:", this.value);
+        componentDebugLog("Search for:", this.value);
       }
     });
   }
@@ -198,25 +204,25 @@ function initializeHeader() {
   
   // Listen for cart updates from CartManager (on both window and document for compatibility)
   window.addEventListener('cartUpdated', function() {
-    console.log("[INIT HEADER] 🛒 Cart updated event received");
+    componentDebugLog("[INIT HEADER] 🛒 Cart updated event received");
     updateCartCount();
     
     // If cart is visible, re-render it
     const cartPanel = document.querySelector(".cart-panel");
     if (cartPanel && cartPanel.classList.contains("active")) {
-      console.log("[INIT HEADER] Cart is open, re-rendering items");
+      componentDebugLog("[INIT HEADER] Cart is open, re-rendering items");
       renderCart();
     }
   });
   
   document.addEventListener('cartUpdated', function() {
-    console.log("[INIT HEADER] 🛒 Cart updated event received (document)");
+    componentDebugLog("[INIT HEADER] 🛒 Cart updated event received (document)");
     updateCartCount();
     
     // If cart is visible, re-render it
     const cartPanel = document.querySelector(".cart-panel");
     if (cartPanel && cartPanel.classList.contains("active")) {
-      console.log("[INIT HEADER] Cart is open, re-rendering items");
+      componentDebugLog("[INIT HEADER] Cart is open, re-rendering items");
       renderCart();
     }
   });
@@ -251,24 +257,24 @@ function updateCartCount() {
 }
 
 function renderCart() {
-  console.log("[RENDER CART] 📍 Starting renderCart()...");
+  componentDebugLog("[RENDER CART] 📍 Starting renderCart()...");
   
   // Wait for cart elements to exist
   waitForCartElements().then(({ cartItems, cartEmpty, cartSummary }) => {
-    console.log("[RENDER CART] ✅ Cart elements found, proceeding...");
+    componentDebugLog("[RENDER CART] ✅ Cart elements found, proceeding...");
     
     const authToken = localStorage.getItem("authToken");
-    console.log("[RENDER CART] Auth token exists:", !!authToken);
+    componentDebugLog("[RENDER CART] Auth token exists:", !!authToken);
     
     if (authToken) {
-      console.log("[RENDER CART] 🔄 Loading cart from backend...");
+      componentDebugLog("[RENDER CART] 🔄 Loading cart from backend...");
       loadCartFromBackend().then(cart => {
-        console.log("[RENDER CART] ✅ Backend cart data received:", cart);
+        componentDebugLog("[RENDER CART] ✅ Backend cart data received:", cart);
         
         if (cart && cart.length > 0) {
-          console.log("[RENDER CART] 📦 Found", cart.length, 'items in backend');
+          componentDebugLog("[RENDER CART] 📦 Found", cart.length, 'items in backend');
         } else {
-          console.log("[RENDER CART] 📭 Backend cart is empty or null");
+          componentDebugLog("[RENDER CART] 📭 Backend cart is empty or null");
         }
         
         displayCartItems(cart, cartItems, cartEmpty, cartSummary);
@@ -276,13 +282,13 @@ function renderCart() {
         console.error("[RENDER CART] ❌ Error loading from backend:", error);
         // Fallback to localStorage
         const cart = JSON.parse(localStorage.getItem("CART_v1") || "[]");
-        console.log("[RENDER CART] 📚 Falling back to localStorage:", cart.length, 'items');
+        componentDebugLog("[RENDER CART] 📚 Falling back to localStorage:", cart.length, 'items');
         displayCartItems(cart, cartItems, cartEmpty, cartSummary);
       });
     } else {
-      console.log("[RENDER CART] 👤 No auth token, loading from localStorage...");
+      componentDebugLog("[RENDER CART] 👤 No auth token, loading from localStorage...");
       const cart = JSON.parse(localStorage.getItem("CART_v1") || "[]");
-      console.log("[RENDER CART] 📚 LocalStorage cart:", cart.length, 'items');
+      componentDebugLog("[RENDER CART] 📚 LocalStorage cart:", cart.length, 'items');
       displayCartItems(cart, cartItems, cartEmpty, cartSummary);
     }
   }).catch(error => {
@@ -296,14 +302,14 @@ function waitForCartElements(maxAttempts = 20) {
     
     const checkElements = () => {
       attempts++;
-      console.log("[WAIT ELEMENTS] Attempt", attempts, "checking for cart elements...");
+      componentDebugLog("[WAIT ELEMENTS] Attempt", attempts, "checking for cart elements...");
       
       const cartItems = document.getElementById("cartItems");
       const cartEmpty = document.getElementById("cartEmpty");
       const cartSummary = document.getElementById("cartSummary");
       
       if (cartItems && cartEmpty && cartSummary) {
-        console.log("[WAIT ELEMENTS] All cart elements found!");
+        componentDebugLog("[WAIT ELEMENTS] All cart elements found!");
         resolve({ cartItems, cartEmpty, cartSummary });
         return;
       }
@@ -325,15 +331,15 @@ function waitForCartElements(maxAttempts = 20) {
 async function loadCartFromBackend() {
   try {
     const authToken = localStorage.getItem("authToken");
-    console.log("[CART API] 📍 Starting loadCartFromBackend()");
-    console.log("[CART API] Auth token:", authToken ? authToken.substring(0, 20) + "..." : "null");
+    componentDebugLog("[CART API] 📍 Starting loadCartFromBackend()");
+    componentDebugLog("[CART API] Auth token present:", Boolean(authToken));
     
     if (!authToken) {
-      console.log("[CART API] ❌ No auth token found - returning empty array");
+      componentDebugLog("[CART API] ❌ No auth token found - returning empty array");
       return [];
     }
 
-    console.log("[CART API] 🔄 Fetching cart from /api/customer/cart");
+    componentDebugLog("[CART API] 🔄 Fetching cart from /api/customer/cart");
     const response = await fetch("/api/customer/cart", {
       method: "GET",
       headers: {
@@ -343,9 +349,9 @@ async function loadCartFromBackend() {
       credentials: "same-origin"
     });
 
-    console.log("[CART API] 📊 Response status:", response.status);
-    console.log("[CART API] Response type:", response.type);
-    console.log("[CART API] Response OK:", response.ok);
+    componentDebugLog("[CART API] 📊 Response status:", response.status);
+    componentDebugLog("[CART API] Response type:", response.type);
+    componentDebugLog("[CART API] Response OK:", response.ok);
     
     if (!response.ok) {
       const errorText = await response.text();
@@ -355,26 +361,26 @@ async function loadCartFromBackend() {
     }
 
     const text = await response.text();
-    console.log("[CART API] 📝 Raw response text:", text);
+    componentDebugLog("[CART API] 📝 Raw response text:", text);
     
     const data = JSON.parse(text);
-    console.log("[CART API] ✅ Parsed JSON:", JSON.stringify(data, null, 2));
+    componentDebugLog("[CART API] ✅ Parsed JSON:", JSON.stringify(data, null, 2));
     
     // Handle different response formats
     if (Array.isArray(data)) {
-      console.log("[CART API] ✅ Response is array, returning directly with", data.length, 'items');
+      componentDebugLog("[CART API] ✅ Response is array, returning directly with", data.length, 'items');
       return data;
     }
     if (data.items && Array.isArray(data.items)) {
-      console.log("[CART API] ✅ Found data.items array with", data.items.length, "items");
+      componentDebugLog("[CART API] ✅ Found data.items array with", data.items.length, "items");
       return data.items;
     }
     if (data.cart && Array.isArray(data.cart)) {
-      console.log("[CART API] ✅ Found data.cart array with", data.cart.length, "items");
+      componentDebugLog("[CART API] ✅ Found data.cart array with", data.cart.length, "items");
       return data.cart;
     }
     if (data.data && Array.isArray(data.data)) {
-      console.log("[CART API] ✅ Found data.data array with", data.data.length, "items");
+      componentDebugLog("[CART API] ✅ Found data.data array with", data.data.length, "items");
       return data.data;
     }
     
@@ -390,61 +396,61 @@ async function loadCartFromBackend() {
 }
 
 function displayCartItems(cart, cartItems, cartEmpty, cartSummary) {
-  console.log("[DISPLAY CART] 📍 Starting displayCartItems()");
-  console.log("[DISPLAY CART] Cart data:", cart);
-  console.log("[DISPLAY CART] Cart length:", cart?.length || 0);
-  console.log("[DISPLAY CART] cartItems element:", !!cartItems, "(type:", typeof cartItems, ")");
-  console.log("[DISPLAY CART] cartEmpty element:", !!cartEmpty);
-  console.log("[DISPLAY CART] cartSummary element:", !!cartSummary);
+  componentDebugLog("[DISPLAY CART] 📍 Starting displayCartItems()");
+  componentDebugLog("[DISPLAY CART] Cart data:", cart);
+  componentDebugLog("[DISPLAY CART] Cart length:", cart?.length || 0);
+  componentDebugLog("[DISPLAY CART] cartItems element:", !!cartItems, "(type:", typeof cartItems, ")");
+  componentDebugLog("[DISPLAY CART] cartEmpty element:", !!cartEmpty);
+  componentDebugLog("[DISPLAY CART] cartSummary element:", !!cartSummary);
   
   // Double check elements exist
   if (!cartItems) {
     console.error("[DISPLAY CART] ❌ cartItems element missing, trying to find it...");
     cartItems = document.getElementById("cartItems");
-    console.log("[DISPLAY CART] After querySelector:", !!cartItems);
+    componentDebugLog("[DISPLAY CART] After querySelector:", !!cartItems);
   }
   if (!cartEmpty) {
-    console.log("[DISPLAY CART] ⚠️ cartEmpty element missing, trying to find it...");
+    componentDebugLog("[DISPLAY CART] ⚠️ cartEmpty element missing, trying to find it...");
     cartEmpty = document.getElementById("cartEmpty");
   }
   if (!cartSummary) {
-    console.log("[DISPLAY CART] ⚠️ cartSummary element missing, trying to find it...");
+    componentDebugLog("[DISPLAY CART] ⚠️ cartSummary element missing, trying to find it...");
     cartSummary = document.getElementById("cartSummary");
   }
   
   if (!cart || cart.length === 0) {
-    console.log("[DISPLAY CART] 📭 Cart is empty, showing empty state");
+    componentDebugLog("[DISPLAY CART] 📭 Cart is empty, showing empty state");
     if (cartItems) {
       cartItems.innerHTML = "";
-      console.log("[DISPLAY CART] ✅ Cleared cartItems HTML");
+      componentDebugLog("[DISPLAY CART] ✅ Cleared cartItems HTML");
     }
     if (cartEmpty) {
       cartEmpty.style.display = "block";
-      console.log("[DISPLAY CART] ✅ Showed cartEmpty message");
+      componentDebugLog("[DISPLAY CART] ✅ Showed cartEmpty message");
     }
     if (cartSummary) {
       cartSummary.style.display = "none";
-      console.log("[DISPLAY CART] ✅ Hid cartSummary");
+      componentDebugLog("[DISPLAY CART] ✅ Hid cartSummary");
     }
     
     // Update total to 0
     const totalEl = document.getElementById("cartTotal");
     if (totalEl) {
       totalEl.textContent = "₦0.00";
-      console.log("[DISPLAY CART] ✅ Updated total to 0");
+      componentDebugLog("[DISPLAY CART] ✅ Updated total to 0");
     }
     
     return;
   }
 
-  console.log("[DISPLAY CART] 📦 Rendering", cart.length, "items");
+  componentDebugLog("[DISPLAY CART] 📦 Rendering", cart.length, "items");
   if (cartEmpty) {
     cartEmpty.style.display = "none";
-    console.log("[DISPLAY CART] ✅ Hid cartEmpty");
+    componentDebugLog("[DISPLAY CART] ✅ Hid cartEmpty");
   }
   if (cartSummary) {
     cartSummary.style.display = "block";
-    console.log("[DISPLAY CART] ✅ Showed cartSummary");
+    componentDebugLog("[DISPLAY CART] ✅ Showed cartSummary");
   }
 
   if (!cartItems) {
@@ -458,7 +464,7 @@ function displayCartItems(cart, cartItems, cartEmpty, cartSummary) {
     const price = item.price || 0;
     const name = item.name || 'Product';
     
-    console.log("[DISPLAY CART] Rendering item:", name, "- Qty:", qty, "- Price:", price);
+    componentDebugLog("[DISPLAY CART] Rendering item:", name, "- Qty:", qty, "- Price:", price);
     
     return `
       <li class="cart-item">
@@ -476,20 +482,20 @@ function displayCartItems(cart, cartItems, cartEmpty, cartSummary) {
     `;
   }).join("");
   
-  console.log("[DISPLAY CART] 📝 Generated HTML length:", itemsHTML.length);
+  componentDebugLog("[DISPLAY CART] 📝 Generated HTML length:", itemsHTML.length);
   cartItems.innerHTML = itemsHTML;
-  console.log("[DISPLAY CART] ✅ Items HTML set into DOM");
+  componentDebugLog("[DISPLAY CART] ✅ Items HTML set into DOM");
 
   // Update total
   const total = cart.reduce((sum, item) => sum + ((item.price || 0) * (item.qty || 1)), 0);
   const totalEl = document.getElementById("cartTotal");
-  console.log("[DISPLAY CART] 💰 Calculated total:", total, "- Total element exists:", !!totalEl);
+  componentDebugLog("[DISPLAY CART] 💰 Calculated total:", total, "- Total element exists:", !!totalEl);
   
   if (totalEl) {
     const formattedTotal = "₦" + total.toLocaleString('en-US');
     totalEl.textContent = formattedTotal;
-    console.log("[DISPLAY CART] ✅ Updated cartTotal to:", formattedTotal);
-    console.log("[DISPLAY CART] Total updated to:", formattedTotal);
+    componentDebugLog("[DISPLAY CART] ✅ Updated cartTotal to:", formattedTotal);
+    componentDebugLog("[DISPLAY CART] Total updated to:", formattedTotal);
   } else {
     console.error("[DISPLAY CART] cartTotal element not found!");
   }
@@ -582,36 +588,36 @@ async function removeFromCartBackend(productId) {
 
 // Listen for cart updates
 window.addEventListener("cartUpdated", function () {
-  console.log("[EVENT] cartUpdated event received");
+  componentDebugLog("[EVENT] cartUpdated event received");
   updateCartCount();
   // Also re-render cart if it's visible
   const cartPanel = document.querySelector(".cart-panel");
   if (cartPanel && cartPanel.classList.contains("active")) {
-    console.log("[EVENT] Cart panel is active, re-rendering...");
+    componentDebugLog("[EVENT] Cart panel is active, re-rendering...");
     renderCart();
   }
 });
 
 // Debug function for console testing
 window.debugCart = async function() {
-  console.log("=== CART DEBUG ===");
+  componentDebugLog("=== CART DEBUG ===");
   const authToken = localStorage.getItem("authToken");
-  console.log("Auth Token:", authToken ? authToken.substring(0, 20) + "..." : "null");
+  componentDebugLog("Auth token present:", Boolean(authToken));
   
   if (authToken) {
-    console.log("Fetching cart from backend...");
+    componentDebugLog("Fetching cart from backend...");
     const result = await loadCartFromBackend();
-    console.log("Backend cart result:", result);
+    componentDebugLog("Backend cart result:", result);
   }
   
   const localCart = JSON.parse(localStorage.getItem("CART_v1") || "[]");
-  console.log("Local storage cart:", localCart);
+  componentDebugLog("Local storage cart:", localCart);
   
   const cartItems = document.getElementById("cartItems");
-  console.log("cartItems element:", cartItems);
-  console.log("cartItems HTML:", cartItems?.innerHTML || "N/A");
+  componentDebugLog("cartItems element:", cartItems);
+  componentDebugLog("cartItems HTML:", cartItems?.innerHTML || "N/A");
   
-  console.log("=== END DEBUG ===");
+  componentDebugLog("=== END DEBUG ===");
 };
 function addEmailInput() {
   const container = document.getElementById("emailInputsContainer");
@@ -791,21 +797,18 @@ function showNewsletterMessage(message, type) {
 
 // Debug cart function for console
 window.debugCart = async function() {
-  console.log("=== CART DEBUG INFO ===");
+  componentDebugLog("=== CART DEBUG INFO ===");
   
   const authToken = localStorage.getItem("authToken");
-  console.log("Auth Token Present:", !!authToken);
-  if (authToken) {
-    console.log("Token Preview:", authToken.substring(0, 30) + "...");
-  }
+  componentDebugLog("Auth Token Present:", !!authToken);
   
   const localCart = JSON.parse(localStorage.getItem("CART_v1") || "[]");
-  console.log("LocalStorage Cart:", localCart);
+  componentDebugLog("LocalStorage Cart:", localCart);
   
   if (authToken) {
-    console.log("Fetching backend cart...");
+    componentDebugLog("Fetching backend cart...");
     const backendCart = await loadCartFromBackend();
-    console.log("Backend Cart:", backendCart);
+    componentDebugLog("Backend Cart:", backendCart);
   }
   
   const cartElements = {
@@ -816,7 +819,7 @@ window.debugCart = async function() {
     cartSummary: !!document.getElementById("cartSummary"),
     cartTotal: !!document.getElementById("cartTotal"),
   };
-  console.log("Cart Elements Found:", cartElements);
+  componentDebugLog("Cart Elements Found:", cartElements);
   
-  console.log("=== END DEBUG ===");
+  componentDebugLog("=== END DEBUG ===");
 };

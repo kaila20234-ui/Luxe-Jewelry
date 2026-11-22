@@ -1084,20 +1084,25 @@
 
     <script>
       const API_URL = "/api";
+      const dashboardDebugLog = (...args) => {
+        if (["localhost", "127.0.0.1"].includes(window.location.hostname)) {
+          console["log"](...args);
+        }
+      };
 
       // ==================== GLOBAL FUNCTIONS (moved out of initializeDashboard) ====================
 
       // Load Profile - MOVED OUT OF NESTED SCOPE
       async function loadProfile() {
         try {
-          console.log("[PROFILE] Starting fetch to /api/customer/profile");
+          dashboardDebugLog("[PROFILE] Starting fetch to /api/customer/profile");
           const token = localStorage.getItem("authToken");
           const userCache = JSON.parse(localStorage.getItem("user") || "{}");
-          console.log("[PROFILE] Token present:", !!token);
+          dashboardDebugLog("[PROFILE] Token present:", !!token);
           
           // If no token, skip fetch and use cached data
           if (!token) {
-            console.log("[PROFILE] No token available, using cached user data");
+            dashboardDebugLog("[PROFILE] No token available, using cached user data");
             if (userCache && userCache.name) {
               displayProfile(userCache);
             }
@@ -1120,13 +1125,13 @@
             headers: { Authorization: `Bearer ${token}` },
           });
 
-          console.log("[PROFILE] Response status:", response.status);
+          dashboardDebugLog("[PROFILE] Response status:", response.status);
 
           // Check for suspension (403 Forbidden)
           if (response.status === 403) {
             const data = await response.json().catch(() => ({}));
             if (data.suspended) {
-              console.log("[PROFILE] Customer account is suspended");
+              dashboardDebugLog("[PROFILE] Customer account is suspended");
               // Clear auth data and redirect to login with suspension message
               localStorage.removeItem("authToken");
               localStorage.removeItem("user");
@@ -1139,7 +1144,7 @@
           }
 
           if (response.status === 401) {
-            console.log(
+            dashboardDebugLog(
               "[PROFILE] 401 Unauthorized - but will use cached user data"
             );
             try {
@@ -1160,7 +1165,7 @@
           }
 
           if (!response.ok) {
-            console.log("[PROFILE] Error response:", response.status);
+            dashboardDebugLog("[PROFILE] Error response:", response.status);
             try {
               document.getElementById(
                 "debugProfile"
@@ -1174,13 +1179,13 @@
           }
 
           const data = await response.json();
-          console.log("[PROFILE] Profile data received:", data);
+          dashboardDebugLog("[PROFILE] Profile data received:", data);
           try {
             document.getElementById("debugProfile").textContent =
               "Profile fetch: 200 OK";
           } catch (e) {}
           const user = data.user || data;
-          console.log("[PROFILE] Extracted user:", user);
+          dashboardDebugLog("[PROFILE] Extracted user:", user);
           displayProfile(user);
           displayReferralInfo(user);
 
@@ -1207,7 +1212,7 @@
 
       // Display Profile
       function displayProfile(user) {
-        console.log("[PROFILE] Displaying profile for user:", user.email);
+        dashboardDebugLog("[PROFILE] Displaying profile for user:", user.email);
         const profileName = document.getElementById("profileName");
         if (profileName) profileName.textContent = user.name || "-";
         const profileEmail = document.getElementById("profileEmail");
@@ -1221,25 +1226,25 @@
       }
 
       function displayReferralInfo(user) {
-        console.log("[REFERRAL] Displaying referral info for user:", user.email, user);
+        dashboardDebugLog("[REFERRAL] Displaying referral info for user:", user.email, user);
         const referralCode = document.getElementById("customerReferralCode");
         if (referralCode) {
           referralCode.textContent = user.referralCode || "-";
-          console.log("[REFERRAL] Set referral code:", user.referralCode || "not found");
+          dashboardDebugLog("[REFERRAL] Set referral code:", user.referralCode || "not found");
         }
 
         const referralCount = document.getElementById("customerReferralCount");
         if (referralCount) {
           const count = typeof user.referralCount === "number" ? user.referralCount : (user.referralCount || 0);
           referralCount.textContent = count;
-          console.log("[REFERRAL] Set referral count:", count);
+          dashboardDebugLog("[REFERRAL] Set referral count:", count);
         }
 
         const storeCredit = document.getElementById("customerStoreCredit");
         if (storeCredit) {
           const credit = typeof user.storeCredit === "number" ? user.storeCredit : (user.storeCredit || 0);
           storeCredit.textContent = `₦ ${credit.toLocaleString()}`;
-          console.log("[REFERRAL] Set customer store credit:", credit);
+          dashboardDebugLog("[REFERRAL] Set customer store credit:", credit);
         }
 
         const referralLink = document.getElementById("customerReferralLink");
@@ -1249,19 +1254,19 @@
           referralLink.textContent = code
             ? `${origin}/customer-signup.html?ref=${encodeURIComponent(code)}`
             : "Referral code not available yet.";
-          console.log("[REFERRAL] Set referral link:", referralLink.textContent);
+          dashboardDebugLog("[REFERRAL] Set referral link:", referralLink.textContent);
         }
       }
 
       // Load Orders - MOVED OUT OF NESTED SCOPE
       async function loadOrders() {
         try {
-          console.log("[ORDERS] Starting fetch to /api/customer/orders");
+          dashboardDebugLog("[ORDERS] Starting fetch to /api/customer/orders");
           const token = localStorage.getItem("authToken");
 
           // If no token, skip fetch
           if (!token) {
-            console.log("[ORDERS] No token available, skipping fetch");
+            dashboardDebugLog("[ORDERS] No token available, skipping fetch");
             displayOrders([]);
             return;
           }
@@ -1270,10 +1275,10 @@
             headers: { Authorization: `Bearer ${token}` },
           });
 
-          console.log("[ORDERS] Response status:", response.status);
+          dashboardDebugLog("[ORDERS] Response status:", response.status);
 
           if (response.status === 401) {
-            console.log(
+            dashboardDebugLog(
               "[ORDERS] 401 Unauthorized - clearing token and redirecting to login"
             );
             localStorage.removeItem("authToken");
@@ -1283,15 +1288,15 @@
           }
 
           if (!response.ok) {
-            console.log("[ORDERS] Error:", response.status);
+            dashboardDebugLog("[ORDERS] Error:", response.status);
             displayOrders([]);
             return;
           }
 
           const data = await response.json();
           const orders = Array.isArray(data) ? data : data.orders || [];
-          console.log("[ORDERS] Found", orders.length, "orders");
-          console.log("[ORDERS] Orders data:", orders);
+          dashboardDebugLog("[ORDERS] Found", orders.length, "orders");
+          dashboardDebugLog("[ORDERS] Orders data:", orders);
           displayOrders(orders);
         } catch (err) {
           console.error("[ORDERS] Error:", err);
@@ -1301,7 +1306,7 @@
 
       // Display Orders
       function displayOrders(orders) {
-        console.log("[ORDERS] Displaying", orders.length, "orders");
+        dashboardDebugLog("[ORDERS] Displaying", orders.length, "orders");
         const container = document.getElementById("ordersContainer");
 
         // Filter to ensure only current customer's orders
@@ -1311,7 +1316,7 @@
             !order.userId ||
             order.userId === currentUser._id ||
             order.email === currentUser.email;
-          console.log(
+          dashboardDebugLog(
             "[ORDERS] Order",
             order._id,
             "belongs to current user:",
@@ -1325,7 +1330,7 @@
         });
 
         if (!filteredOrders || filteredOrders.length === 0) {
-          console.log("[ORDERS] No orders to display");
+          dashboardDebugLog("[ORDERS] No orders to display");
           container.innerHTML = `
           <div class="empty-state" style="grid-column: 1 / -1;">
             <i class="fas fa-shopping-cart"></i>
@@ -1477,12 +1482,12 @@
       // Load Addresses - MOVED OUT OF NESTED SCOPE
       async function loadAddresses() {
         try {
-          console.log("[ADDRESSES] Starting fetch to /api/customer/addresses");
+          dashboardDebugLog("[ADDRESSES] Starting fetch to /api/customer/addresses");
           const token = localStorage.getItem("authToken");
 
           // If no token, skip fetch
           if (!token) {
-            console.log("[ADDRESSES] No token available, skipping fetch");
+            dashboardDebugLog("[ADDRESSES] No token available, skipping fetch");
             displayAddresses([]);
             return;
           }
@@ -1491,10 +1496,10 @@
             headers: { Authorization: `Bearer ${token}` },
           });
 
-          console.log("[ADDRESSES] Response status:", response.status);
+          dashboardDebugLog("[ADDRESSES] Response status:", response.status);
 
           if (response.status === 401) {
-            console.log(
+            dashboardDebugLog(
               "[ADDRESSES] 401 Unauthorized - clearing token and redirecting to login"
             );
             localStorage.removeItem("authToken");
@@ -1504,18 +1509,18 @@
           }
 
           if (!response.ok) {
-            console.log("[ADDRESSES] Error:", response.status);
+            dashboardDebugLog("[ADDRESSES] Error:", response.status);
             displayAddresses([]);
             return;
           }
 
           const data = await response.json();
-          console.log("[ADDRESSES] Response data:", data);
+          dashboardDebugLog("[ADDRESSES] Response data:", data);
           const addresses = Array.isArray(data)
             ? data
             : data.data || data.addresses || [];
-          console.log("[ADDRESSES] Found", addresses.length, "addresses");
-          console.log("[ADDRESSES] Addresses data:", addresses);
+          dashboardDebugLog("[ADDRESSES] Found", addresses.length, "addresses");
+          dashboardDebugLog("[ADDRESSES] Addresses data:", addresses);
           displayAddresses(addresses);
         } catch (err) {
           console.error("[ADDRESSES] Error:", err);
@@ -1525,11 +1530,11 @@
 
       // Display Addresses
       function displayAddresses(addresses) {
-        console.log("[ADDRESSES] Displaying", addresses.length, "addresses");
+        dashboardDebugLog("[ADDRESSES] Displaying", addresses.length, "addresses");
         const container = document.getElementById("addressesContainer");
 
         if (!addresses || addresses.length === 0) {
-          console.log("[ADDRESSES] No addresses to display");
+          dashboardDebugLog("[ADDRESSES] No addresses to display");
           container.innerHTML = `
           <div class="empty-state" style="grid-column: 1 / -1;">
             <i class="fas fa-home"></i>
@@ -1668,15 +1673,15 @@
       // Load Complaints - MOVED OUT OF NESTED SCOPE
       async function loadComplaints() {
         try {
-          console.log(
+          dashboardDebugLog(
             "[COMPLAINT-FETCH] Starting fetch to /api/complaints/customer"
           );
           const token = localStorage.getItem("authToken");
-          console.log("[COMPLAINT-FETCH] Token present:", !!token);
+          dashboardDebugLog("[COMPLAINT-FETCH] Token present:", !!token);
 
           // If no token, skip fetch
           if (!token) {
-            console.log("[COMPLAINT-FETCH] No token available, skipping fetch");
+            dashboardDebugLog("[COMPLAINT-FETCH] No token available, skipping fetch");
             displayComplaints([]);
             return;
           }
@@ -1685,10 +1690,10 @@
             headers: { Authorization: `Bearer ${token}` },
           });
 
-          console.log("[COMPLAINT-FETCH] Response status:", response.status);
+          dashboardDebugLog("[COMPLAINT-FETCH] Response status:", response.status);
 
           if (response.status === 401) {
-            console.log(
+            dashboardDebugLog(
               "[COMPLAINT-FETCH] 401 Unauthorized - clearing token and redirecting to login"
             );
             localStorage.removeItem("authToken");
@@ -1698,19 +1703,19 @@
           }
 
           if (!response.ok) {
-            console.log("[COMPLAINT-FETCH] Error:", response.status);
+            dashboardDebugLog("[COMPLAINT-FETCH] Error:", response.status);
             displayComplaints([]);
             return;
           }
 
           const data = await response.json();
           const complaints = Array.isArray(data) ? data : data.complaints || [];
-          console.log(
+          dashboardDebugLog(
             "[COMPLAINT-FETCH] Found",
             complaints.length,
             "complaints"
           );
-          console.log("[COMPLAINT-FETCH] Complaints data:", complaints);
+          dashboardDebugLog("[COMPLAINT-FETCH] Complaints data:", complaints);
           displayComplaints(complaints);
         } catch (err) {
           console.error("[COMPLAINT-FETCH] Error:", err);
@@ -1720,7 +1725,7 @@
 
       // Display Complaints
       function displayComplaints(complaints) {
-        console.log(
+        dashboardDebugLog(
           "[COMPLAINT-FETCH] Displaying",
           complaints.length,
           "complaints"
@@ -1728,7 +1733,7 @@
         const container = document.getElementById("complaintsContainer");
 
         if (!complaints || complaints.length === 0) {
-          console.log("[COMPLAINT-FETCH] No complaints to display");
+          dashboardDebugLog("[COMPLAINT-FETCH] No complaints to display");
           container.innerHTML = `
           <div class="empty-state">
             <i class="fas fa-comment-slash"></i>
@@ -1918,7 +1923,7 @@
           e.preventDefault();
 
           try {
-            console.log("[SUBMIT-COMPLAINT] Form submitted");
+            dashboardDebugLog("[SUBMIT-COMPLAINT] Form submitted");
             const token = localStorage.getItem("authToken");
             const subject = document
               .getElementById("complaintSubject")
@@ -1930,7 +1935,7 @@
               .getElementById("complaintMessage")
               .value.trim();
 
-            console.log(
+            dashboardDebugLog(
               "[SUBMIT-COMPLAINT] Complaint data - subject:",
               subject,
               "product:",
@@ -1940,7 +1945,7 @@
             );
 
             if (!subject || !message) {
-              console.log(
+              dashboardDebugLog(
                 "[SUBMIT-COMPLAINT] Validation failed - missing required fields"
               );
               showAlert("Please fill in all required fields", "error");
@@ -1951,14 +1956,14 @@
             const user = JSON.parse(localStorage.getItem("user") || "{}");
             const email = user.email || "";
             const phone = user.phone || "";
-            console.log(
+            dashboardDebugLog(
               "[SUBMIT-COMPLAINT] User email:",
               email,
               "phone:",
               phone
             );
 
-            console.log("[SUBMIT-COMPLAINT] Submitting to /api/complaints");
+            dashboardDebugLog("[SUBMIT-COMPLAINT] Submitting to /api/complaints");
             const response = await fetch(`${API_URL}/complaints`, {
               method: "POST",
               headers: {
@@ -1968,17 +1973,17 @@
               body: JSON.stringify({ subject, message, email, phone, product }),
             });
 
-            console.log("[SUBMIT-COMPLAINT] Response status:", response.status);
+            dashboardDebugLog("[SUBMIT-COMPLAINT] Response status:", response.status);
             const data = await response.json();
-            console.log("[SUBMIT-COMPLAINT] Response data:", data);
+            dashboardDebugLog("[SUBMIT-COMPLAINT] Response data:", data);
 
             if (data.success) {
-              console.log("[SUBMIT-COMPLAINT] Success - complaint submitted");
+              dashboardDebugLog("[SUBMIT-COMPLAINT] Success - complaint submitted");
               showAlert("Complaint submitted successfully!", "success");
               document.getElementById("complaintForm").reset();
               loadComplaints();
             } else {
-              console.log("[SUBMIT-COMPLAINT] Failed:", data.message);
+              dashboardDebugLog("[SUBMIT-COMPLAINT] Failed:", data.message);
               showAlert(data.message || "Failed to submit complaint", "error");
             }
           } catch (err) {
@@ -2001,7 +2006,7 @@
           const tabName = btn.getAttribute("data-tab");
           document.getElementById(tabName).classList.add("active");
 
-          console.log("[DASHBOARD] Tab switched to:", tabName);
+          dashboardDebugLog("[DASHBOARD] Tab switched to:", tabName);
         });
       });
 
@@ -2009,13 +2014,13 @@
       const dashboardLogoutBtn = document.getElementById("logoutBtn");
       if (dashboardLogoutBtn) {
         dashboardLogoutBtn.addEventListener("click", () => {
-          console.log("[DASHBOARD] Logout clicked");
+          dashboardDebugLog("[DASHBOARD] Logout clicked");
           localStorage.removeItem("authToken");
           localStorage.removeItem("user");
           window.location.href = "/customer-login.html";
         });
       } else {
-        console.log("[DASHBOARD] logoutBtn not found yet; header may load later");
+        dashboardDebugLog("[DASHBOARD] logoutBtn not found yet; header may load later");
       }
 
       // Initialize Dashboard on DOMContentLoaded
@@ -2042,7 +2047,7 @@
       }
 
       document.addEventListener("DOMContentLoaded", () => {
-        console.log("[DASHBOARD] DOMContentLoaded fired");
+        dashboardDebugLog("[DASHBOARD] DOMContentLoaded fired");
         const token = localStorage.getItem("authToken");
         const authRole = localStorage.getItem("authRole");
         let user = {};
@@ -2053,7 +2058,7 @@
           console.warn("[DASHBOARD] Failed to parse stored user", e);
         }
 
-        console.log(
+        dashboardDebugLog(
           "[DASHBOARD] Checking auth - token:",
           !!token,
           "authRole:",
@@ -2063,41 +2068,41 @@
         );
 
         if (!isCustomerSession()) {
-          console.log("[DASHBOARD] Invalid or non-customer session detected, redirecting to customer login");
+          dashboardDebugLog("[DASHBOARD] Invalid or non-customer session detected, redirecting to customer login");
           redirectToCustomerLogin();
           return;
         }
 
-        console.log("[DASHBOARD] Customer auth verified, initializing dashboard");
+        dashboardDebugLog("[DASHBOARD] Customer auth verified, initializing dashboard");
         initializeDashboard();
       });
 
       // Initialize Dashboard
       function initializeDashboard() {
-        console.log("[DASHBOARD] initializeDashboard started");
+        dashboardDebugLog("[DASHBOARD] initializeDashboard started");
         const user = JSON.parse(localStorage.getItem("user") || "{}");
-        console.log("[DASHBOARD] User data from localStorage:", user);
+        dashboardDebugLog("[DASHBOARD] User data from localStorage:", user);
 
-        console.log("[DASHBOARD] Calling loadProfile");
+        dashboardDebugLog("[DASHBOARD] Calling loadProfile");
         loadProfile();
 
-        console.log("[DASHBOARD] Calling loadOrders");
+        dashboardDebugLog("[DASHBOARD] Calling loadOrders");
         loadOrders();
 
-        console.log("[DASHBOARD] Calling loadAddresses");
+        dashboardDebugLog("[DASHBOARD] Calling loadAddresses");
         loadAddresses();
 
-        console.log("[DASHBOARD] Calling loadComplaints");
+        dashboardDebugLog("[DASHBOARD] Calling loadComplaints");
         loadComplaints();
 
-        console.log("[DASHBOARD] initializeDashboard completed");
+        dashboardDebugLog("[DASHBOARD] initializeDashboard completed");
 
         // Handle hash-based tab navigation
         if (window.location.hash) {
           const tabName = window.location.hash.substring(1); // Remove '#'
           const tabBtn = document.querySelector(`[data-tab="${tabName}"]`);
           if (tabBtn) {
-            console.log("[DASHBOARD] Switching to hash tab:", tabName);
+            dashboardDebugLog("[DASHBOARD] Switching to hash tab:", tabName);
             tabBtn.click();
           }
         }
@@ -2130,7 +2135,7 @@
             : '<i class="fas fa-moon"></i>';
         });
       } else {
-        console.log("[DASHBOARD] darkToggle not found yet; header may load later");
+        dashboardDebugLog("[DASHBOARD] darkToggle not found yet; header may load later");
       }
 
       // Profile dropdown toggle
@@ -2139,7 +2144,7 @@
           dropdownMenu.classList.toggle("active");
         });
       } else {
-        console.log("[DASHBOARD] profile toggle elements not found yet; header may load later");
+        dashboardDebugLog("[DASHBOARD] profile toggle elements not found yet; header may load later");
       }
 
       // Close dropdown when clicking outside
