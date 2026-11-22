@@ -1532,6 +1532,34 @@
       let menuItems = [];
       let sections = [];
 
+      function updateNetworkStatus() {
+        let banner = document.getElementById("networkStatusBanner");
+        if (!banner) {
+          banner = document.createElement("div");
+          banner.id = "networkStatusBanner";
+          banner.setAttribute("role", "alert");
+          banner.style.cssText =
+            "position:fixed;z-index:10000;top:12px;left:50%;transform:translateX(-50%);" +
+            "max-width:calc(100% - 24px);padding:10px 14px;border-radius:8px;" +
+            "background:#b91c1c;color:#fff;box-shadow:0 4px 14px rgba(0,0,0,.25);" +
+            "font-weight:700;text-align:center";
+          document.body.appendChild(banner);
+        }
+
+        if (navigator.onLine) {
+          banner.style.display = "none";
+          banner.textContent = "";
+        } else {
+          banner.style.display = "block";
+          banner.textContent =
+            "You are offline. Reconnect to the internet to load admin data.";
+        }
+      }
+
+      window.addEventListener("offline", updateNetworkStatus);
+      window.addEventListener("online", updateNetworkStatus);
+      updateNetworkStatus();
+
       function getAdminToken() {
         return (
           localStorage.getItem("authToken") ||
@@ -1562,11 +1590,25 @@
           Authorization: `Bearer ${token}`,
         };
 
-        const response = await fetch(url, {
-          credentials: "same-origin",
-          ...options,
-          headers,
-        });
+        let response;
+        try {
+          if (!navigator.onLine) {
+            throw new Error("You are offline.");
+          }
+          response = await fetch(url, {
+            credentials: "same-origin",
+            ...options,
+            headers,
+          });
+        } catch (error) {
+          updateNetworkStatus();
+          if (error instanceof TypeError || error.message === "You are offline.") {
+            throw new Error(
+              "Unable to reach the Luxe Jewelry server. Check your internet connection and try again."
+            );
+          }
+          throw error;
+        }
 
         if (response.status === 401 || response.status === 403) {
           return redirectToLogin("Your session is invalid. Please sign in again.");
