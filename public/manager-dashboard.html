@@ -262,6 +262,7 @@
         <button type="button" data-panel="overview" aria-current="page">Overview</button>
         <button type="button" data-panel="complaints">Complaints</button>
         <button type="button" data-panel="tickets">Support tickets</button>
+        <button type="button" data-panel="orders">Order history</button>
         <a class="button" href="/messages.html">Messages</a>
       </nav>
 
@@ -299,6 +300,18 @@
           </table>
         </div>
       </section>
+
+      <section class="panel" id="ordersPanel" hidden>
+        <h2>Order history</h2>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Order</th><th>Customer</th><th>Items</th><th>Amount</th><th>Status</th><th>Date</th></tr>
+            </thead>
+            <tbody id="ordersTable"></tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
     <script>
@@ -316,7 +329,7 @@
       const identity = localStorage.getItem("authUser") || "Manager";
       document.getElementById("managerIdentity").textContent = identity;
 
-      const state = { complaints: [], tickets: [] };
+      const state = { complaints: [], tickets: [], orders: [] };
       const notice = document.getElementById("notice");
 
       function escapeHtml(value) {
@@ -358,7 +371,7 @@
 
       function formatDate(value) {
         const date = new Date(value);
-        return Number.isNaN(date.getTime()) ? "—" : date.toLocaleDateString();
+        return Number.isNaN(date.getTime()) ? "-" : date.toLocaleDateString();
       }
 
       function renderComplaints() {
@@ -409,13 +422,45 @@
         }).join("");
       }
 
+      function renderOrders() {
+        const target = document.getElementById("ordersTable");
+        if (!state.orders.length) {
+          target.innerHTML = '<tr><td class="empty" colspan="6">No orders found.</td></tr>';
+          return;
+        }
+        target.innerHTML = state.orders.map((order) => {
+          const itemSummary = Array.isArray(order.items)
+            ? order.items.map((item) => {
+              const quantity = Number(item.quantity || 1);
+              return `${escapeHtml(item.productName || "Item")} x ${quantity}`;
+            }).join(", ")
+            : "";
+          const amount = Number(order.amount);
+          return `
+            <tr>
+              <td>${escapeHtml(order.reference || order._id || "Order")}</td>
+              <td>${escapeHtml(order.name || order.email || "Guest")}
+                <span class="description">${escapeHtml(order.email || "")}</span></td>
+              <td>${itemSummary || "-"}</td>
+              <td>${Number.isFinite(amount) ? "NGN " + amount.toLocaleString() : "-"}</td>
+              <td>${escapeHtml(order.status || "paid")}</td>
+              <td>${escapeHtml(formatDate(order.date || order.paidAt))}</td>
+            </tr>
+          `;
+        }).join("");
+      }
+
       async function loadWorkspace() {
         setNotice("Loading manager workspace...");
         try {
-          const [complaintData, ticketData, messageData] = await Promise.all([
+          const [complaintData, ticketData, orderData, messageData] = await Promise.all([
             requestJson("/api/complaints"),
             requestJson("/api/tickets"),
-            requestJson("/api/messages/unread/count"),
+            requestJson("/api/sales"),
+            requestJson("/api/messages/unread/count").catch((error) => {
+              console.error("Unable to load unread message count:", error);
+              return null;
+            }),
           ]);
           state.complaints = Array.isArray(complaintData)
             ? complaintData
@@ -423,14 +468,20 @@
           state.tickets = Array.isArray(ticketData)
             ? ticketData
             : (ticketData.tickets || []);
+          state.orders = Array.isArray(orderData)
+            ? orderData
+            : (orderData.sales || []);
           document.getElementById("complaintCount").textContent = state.complaints.length;
           document.getElementById("ticketCount").textContent = state.tickets.length;
           document.getElementById("openTicketCount").textContent =
             state.tickets.filter((ticket) => ticket.status !== "closed").length;
           document.getElementById("unreadMessageCount").textContent =
-            messageData.unreadCount == null ? "0" : messageData.unreadCount;
+            messageData && Number.isFinite(Number(messageData.unreadCount))
+              ? messageData.unreadCount
+              : "Unavailable";
           renderComplaints();
           renderTickets();
+          renderOrders();
           setNotice("");
         } catch (error) {
           console.error("Unable to load manager workspace:", error);
@@ -438,15 +489,23 @@
         }
       }
 
-      document.querySelectorAll("[data-panel]").forEach((button) => {
-        button.addEventListener("click", () => {
-          document.querySelectorAll("[data-panel]").forEach((item) => item.removeAttribute("aria-current"));
-          button.setAttribute("aria-current", "page");
-          ["overview", "complaints", "tickets"].forEach((panel) => {
-            document.getElementById(panel + "Panel").hidden = panel !== button.dataset.panel;
-          });
+      function activatePanel(panel, updateUrl) {
+        const panelNames = ["overview", "complaints", "tickets", "orders"];
+        if (!panelNames.includes(panel)) panel = "overview";
+        document.querySelectorAll("[data-panel]").forEach((item) => {
+          if (item.dataset.panel === panel) item.setAttribute("aria-current", "page");
+          else item.removeAttribute("aria-current");
         });
+        panelNames.forEach((name) => {
+          document.getElementById(name + "Panel").hidden = name !== panel;
+        });
+        if (updateUrl) history.replaceState(null, "", "#" + panel);
+      }
+
+      document.querySelectorAll("[data-panel]").forEach((button) => {
+        button.addEventListener("click", () => activatePanel(button.dataset.panel, true));
       });
+      activatePanel(globalThis.location.hash.slice(1), false);
 
       document.getElementById("complaintsTable").addEventListener("click", async (event) => {
         const button = event.target.closest("[data-reply-id]");

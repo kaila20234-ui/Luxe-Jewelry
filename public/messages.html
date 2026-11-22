@@ -437,6 +437,41 @@
       align-items: center;
     }
 
+    .manager-workspace-nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      margin: 0 auto 16px;
+      padding: 10px;
+      border-radius: 10px;
+      background: #fff;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
+    }
+
+    .manager-workspace-nav[hidden] {
+      display: none;
+    }
+
+    .manager-workspace-nav a {
+      flex: 0 0 auto;
+      padding: 9px 12px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      color: #333;
+      background: #fff;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .manager-workspace-nav a[aria-current="page"] {
+      border-color: #d4af37;
+      background: #f7edc9;
+    }
+
     .user-info {
       font-size: 14px;
       text-align: right;
@@ -460,27 +495,36 @@
     /* Responsive */
     @media (max-width: 768px) {
       .container {
-        height: auto;
         flex-direction: column;
+        height: calc(100vh - 190px);
+        min-height: 540px;
       }
 
       .sidebar {
         width: 100%;
-        height: 200px;
-        display: flex;
-        flex-direction: row;
+        height: auto;
+        max-height: 280px;
+        flex: 0 0 auto;
+        border-right: 0;
+        border-bottom: 1px solid #ddd;
       }
 
       .tabs {
-        flex: 1;
+        flex: 0 0 auto;
       }
 
       .message-list {
-        display: none;
+        display: block;
+        max-height: 190px;
+        min-height: 90px;
       }
 
-      .message-list.active {
-        display: block;
+      .main-content {
+        min-height: 280px;
+      }
+
+      .manager-workspace-nav {
+        margin-bottom: 12px;
       }
     }
   </style>
@@ -496,6 +540,14 @@
       <button class="logout-btn" onclick="logout()">Logout</button>
     </div>
   </div>
+
+  <nav class="manager-workspace-nav" id="managerWorkspaceNav" aria-label="Manager workspace" hidden>
+    <a href="/manager-dashboard.html">Overview</a>
+    <a href="/manager-dashboard.html#complaints">Complaints</a>
+    <a href="/manager-dashboard.html#tickets">Support tickets</a>
+    <a href="/manager-dashboard.html#orders">Order history</a>
+    <a href="/messages.html" aria-current="page">Messages</a>
+  </nav>
 
   <div class="container">
     <!-- Sidebar -->
@@ -629,6 +681,9 @@
     // Initialize
     document.addEventListener('DOMContentLoaded', () => {
       displayUserInfo();
+      if (authRole === 'manager') {
+        document.getElementById('managerWorkspaceNav').hidden = false;
+      }
       loadMessages();
       loadStaff();
       setInterval(loadMessages, 30000); // Refresh every 30 seconds
@@ -1033,7 +1088,5 @@
       }
     }
   </script>
-  <script src="/cart-manager.js"></script>
-  <script src="/load-components.js"></script>
 </body>
 </html>

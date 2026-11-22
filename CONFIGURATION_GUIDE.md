@@ -24,7 +24,7 @@ A comprehensive internal messaging system has been implemented to enable secure 
 **Manager Dashboard Integration**:
 - Manager workspace: `public/manager-dashboard.html`
 - Manager login redirects to the separate manager workspace.
-- Supports complaint replies, support ticket status updates, and links to internal messages.
+- Supports complaint replies, support ticket status updates, order history, and internal messages.
 - Direct link to full messaging interface
 
 **Admin Dashboard Integration**:
